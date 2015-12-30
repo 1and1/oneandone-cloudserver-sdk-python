@@ -1,8 +1,8 @@
-# 1&amp;1 Python SDK
+# 1&1 Python SDK
 
-The 1&amp;1 Python SDK is a Python library used for interacting with the 1&amp;1 platform over the REST API.
+The 1&1 Python SDK is a Python library used for interacting with the 1&1 platform over the REST API.
 
-This guide will show you how to programmatically use the 1&amp;1 library to perform common management tasks also available through the 1&amp;1 Control Panel.
+This guide will show you how to programmatically use the 1&1 library to perform common management tasks also available through the 1&1 Control Panel.
 
 ## Table of Contents
 
@@ -10,27 +10,27 @@ This guide will show you how to programmatically use the 1&amp;1 library to perf
 - [Getting Started](#getting-started)
 - [Installation](#installation)
 - [Authentication](#authentication)
-- [Resources &amp; Using the Module](#using-module)
-- [How To: Create a Server](#create-server)
-- [How To: Create a Firewall Policy](#create-fp)
-- [How To: Create a Load Balancer](#create-lb)
-- [How To: Create a Monitoring Policy](#create-mp)
-- [How To: Update Server Cores, Memory, and Disk](#update-hardware)
-- [How To: List Servers, Images, Shared Storages, etc.](#list-things)
-- [Example App](#app)
+- [Resources and Using the Module](#resources-and-using-the-module)
+- [Creating a Server](#creating-a-server)
+- [Creating a Firewall Policy](#creating-a-firewall-policy)
+- [Creating a Load Balancer](#creating-a-load-balancer)
+- [Creating a Monitoring Policy](#creating-a-monitoring-policy)
+- [Updating Server Cores, Memory, and Disk](#updating-server-cores,-memory,-and-disk)
+- [Listing Servers, Images, Shared Storages, etc.](#listing-servers,-images,-shared-storages,-etc.)
+- [Example App](#example-app)
 
 
-## <a name="concepts"></a> Concepts
+## Concepts
 
-The Python Client Library wraps the latest version of the 1&amp;1 REST API. All API operations are performed over SSL and authenticated using your 1&amp;1 API Token. The API can be accessed within an instance running in 1&amp;1 or directly over the Internet from any application that can send an HTTPS request and receive an HTTPS response.
-
-
-## <a name="getting-started"></a> Getting Started
-
-Before you begin you will need to have signed-up for a 1&amp;1 account. The credentials you setup during sign-up will be used to authenticate against the API.
+The Python Client Library wraps the latest version of the 1&1 REST API. All API operations are performed over SSL and authenticated using your 1&1 API Token. The API can be accessed within an instance running in 1&1 or directly over the Internet from any application that can send an HTTPS request and receive an HTTPS response.
 
 
-## <a name="installation"></a> Installation
+## Getting Started
+
+Before you begin you will need to have signed up for a 1&1 account. The credentials you create during sign-up will be used to authenticate against the API. 
+
+
+## Installation
 
 The Python Client Library is available on <a href='https://pypi.python.org/pypi/1and1'>PyPi</a>. You can install the latest stable version using pip:
 
@@ -39,9 +39,9 @@ The Python Client Library is available on <a href='https://pypi.python.org/pypi/
 Done!
 
 
-## <a name="authentication"></a> Authentication
+## Authentication
 
-Connecting to 1&amp;1 is handled by first setting up your authentication.
+Connecting to 1&1 is handled by first setting up your authentication.
 
 ```
 from oneandone.client import OneAndOneService
@@ -53,7 +53,7 @@ You can now use `client` for any future requests.
 
 
 
-## <a name="using-module"></a> Resources &amp; Using the Module
+## Resources and Using the Module
 
 **Resources**
 
@@ -66,7 +66,7 @@ Official 1&amp;1 REST API Documentation: <a href='https://cloudpanel-api.1and1.c
 The following "**How To's**" are meant to give you a general overview of some of the things you can do with the 1&amp;1 Python SDK.  For a detailed list of all methods and functionality, please visit the <a href='docs/reference.md'>reference.md</a> file.
 
 
-## <a name="create-server"></a> How To: Create a Server
+## Creating a Server
 
 ```
 from oneandone.client import OneAndOneService
@@ -92,7 +92,7 @@ new_server = client.create_server(server=server1, hdds=hdds)
 ```
 
 
-## <a name="create-fp"></a> How To: Create a Firewall Policy
+## Creating a Firewall Policy
 
 ```
 from oneandone.client import OneAndOneService
@@ -125,7 +125,7 @@ new_firewall = client.create_firewall_policy(firewall_policy=fp1, firewall_polic
 ```
 
 
-## <a name="create-lb"></a> How To: Create a Load Balancer
+## Creating a Load Balancer
 
 ```
 from oneandone.client import OneAndOneService
@@ -160,7 +160,7 @@ new_load_balancer = client.create_load_balancer(load_balancer=lb1, load_balancer
 ```
 
 
-## <a name="create-mp"></a> How To: Create a Monitoring Policy
+## Creating a Monitoring Policy
 
 
 First, create the monitoring policy:
@@ -270,9 +270,9 @@ response = client.attach_monitoring_policy_server(monitoring_policy_id='<MONITOR
 ```
 
 
-## <a name="update-hardware"></a> How To: Update Server Cores, Memory, and Disk
+## Updating Server Cores, Memory, and Disk
 
-1&amp;1 allows users to dynamically update cores, memory, and disk independently of each other. This removes the restriction of needing to upgrade to the next size up to receive an increase in memory. You can now simply increase the instances memory keeping your costs in-line with your resource needs.
+1&amp;1 allows users to dynamically update cores, memory, and disk independently of each other. This means you will no longer have to upgrade your server to receive an increase in memory. You can now simply increase the instance's memory, which keeps your costs in-line with your resource needs.
 
 The following code illustrates how you can update cores and memory:
 ```
@@ -296,11 +296,11 @@ response = client.modify_hdd(server_id='<SERVER_ID>',
 ```
 
 
-## <a name="list-things"></a> How To: List Servers, Images, Shared Storages, etc.
+## Listing Servers, Images, Shared Storages, etc.
 
 Generating a list of resources is fairly straight forward.  Each "list" method follows this general format: `list_*()` where the `*` is `servers`, `images`, `load_balancers`, etc.  You may also pass optional query parameters to help filter your results.  By default, these parameters are all set to `None`.
 
-**Here are the parameters available to you:**
+### Available Parameters
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-`page` (integer): Allows to the use of pagination. Indicate which page to start on.
 
@@ -313,7 +313,7 @@ Generating a list of resources is fairly straight forward.  Each "list" method f
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-`fields` (string): Returns only the parameters requested. (i.e. fields='id, name, description, hardware.ram')
 
 
-**Here are a few examples of how you would list resources:**
+### Examples of Listing Resources
 ```
 from oneandone.client import OneAndOneService
 
@@ -336,13 +336,13 @@ monitoring_policies = client.list_monitoring_policies()
 ```
 
 
-## <a name="app"></a> Example App
+## Example App
 
 This simple app creates a load balancer, firewall policy, and server.  It then creates a new IP for the server and attaches the load balancer and firewall policy to that IP.
 
 Use the `wait_for()` method to chain together multiple actions that take a while to deploy.  See the <a href='docs/reference.md'>reference.md</a> file for a more detailed description of the `wait_for()` method and other class helper methods.
 
-The original source code for the Example App with some additional markup and cleanup can be found <a href='examples/example_app.py'>HERE</a>
+The original source code for the Example App with some additional markup and cleanup can be found <a href='examples/example_app.py'>here</a>
 ```
 from oneandone.client import OneAndOneService
 from oneandone.client import Server, Hdd, LoadBalancer, LoadBalancerRule
@@ -459,3 +459,4 @@ fw_response = client.add_firewall_policy(server_id=new_server['id'],
 print 'Adding firewall policy to Server...'
 server1.wait_for()
 ```
+
