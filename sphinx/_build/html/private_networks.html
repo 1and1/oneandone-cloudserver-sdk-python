@@ -1,0 +1,360 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Private Networks &mdash; 1&amp;1 Python SDK 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="1&amp;1 Python SDK 1.0 documentation" href="index.html" />
+    <link rel="next" title="Monitoring Centers" href="monitoring_centers.html" />
+    <link rel="prev" title="Public IPs" href="public_ips.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="private-networks">
+<h1>Private Networks<a class="headerlink" href="#private-networks" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="oneandoneservice-methods">
+<h2>OneAndOneService Methods<a class="headerlink" href="#oneandoneservice-methods" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All of the methods below can be called on a <a class="reference internal" href="index.html#OneAndOneService" title="OneAndOneService"><code class="xref py py-class docutils literal"><span class="pre">OneAndOneService</span></code></a> instance.</p>
+</div>
+<dl class="function">
+<dt id="list_private_networks">
+<code class="descname">list_private_networks</code><span class="sig-paren">(</span><em>page=None</em>, <em>per_page=None</em>, <em>sort=None</em>, <em>q=None</em>, <em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#list_private_networks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of all private networks.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>page</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; Allows the use of pagination. Indicate which page to start on.</li>
+<li><strong>per_page</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; Number of items per page.</li>
+<li><strong>sort</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; <code class="docutils literal"><span class="pre">sort='name'</span></code> retrieves a list of elements sorted
+alphabetically. <code class="docutils literal"><span class="pre">sort='creation_date'</span></code> retrieves a list of elements
+sorted by their creation date in descending order.</li>
+<li><strong>q</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; <code class="docutils literal"><span class="pre">q</span></code> is for query. Use this parameter to return only the items
+that match your search query.</li>
+<li><strong>fields</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; Returns only the parameters requested.
+(i.e. fields=&#8217;id, name, description, hardware.ram&#8217;)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="get_private_network">
+<code class="descname">get_private_network</code><span class="sig-paren">(</span><em>private_network_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#get_private_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve information about a private network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>private_network_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the private network.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">JSON</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="list_private_network_servers">
+<code class="descname">list_private_network_servers</code><span class="sig-paren">(</span><em>private_network_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#list_private_network_servers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of the servers attached to a private network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>private_network_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the private network.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">JSON</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="get_private_network_server">
+<code class="descname">get_private_network_server</code><span class="sig-paren">(</span><em>private_network_id=None</em>, <em>server_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#get_private_network_server" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a information about a server attached to a private network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>private_network_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the private network.</li>
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="create_private_network">
+<code class="descname">create_private_network</code><span class="sig-paren">(</span><em>private_network=None</em><span class="sig-paren">)</span><a class="headerlink" href="#create_private_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a private network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>private_network</strong> (<code class="docutils literal"><span class="pre">obj</span></code>) &#8211; an instantiation of the <a class="reference internal" href="#PrivateNetwork" title="PrivateNetwork"><code class="xref py py-class docutils literal"><span class="pre">PrivateNetwork</span></code></a> class.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">JSON</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="attach_private_network_servers">
+<code class="descname">attach_private_network_servers</code><span class="sig-paren">(</span><em>private_network_id=None</em>, <em>server_ids=None</em><span class="sig-paren">)</span><a class="headerlink" href="#attach_private_network_servers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attach servers to a private network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>private_network_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the private network.</li>
+<li><strong>server_ids</strong> (<code class="docutils literal"><span class="pre">list</span></code>) &#8211; a list of <a class="reference internal" href="shared_storages.html#AttachServer" title="AttachServer"><code class="xref py py-class docutils literal"><span class="pre">AttachServer</span></code></a> instances.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="modify_private_network">
+<code class="descname">modify_private_network</code><span class="sig-paren">(</span><em>private_network_id=None</em>, <em>name=None</em>, <em>description=None</em>, <em>network_address=None</em>, <em>subnet_mask=None</em><span class="sig-paren">)</span><a class="headerlink" href="#modify_private_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify a private network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>private_network_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the private network.</li>
+<li><strong>name</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; private network name.</li>
+<li><strong>description</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; private network description.</li>
+<li><strong>network_address</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; private network address. (valid IP)</li>
+<li><strong>subnet_mask</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; Subnet mask (valid subnet for the given IP).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="delete_private_network">
+<code class="descname">delete_private_network</code><span class="sig-paren">(</span><em>private_network_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#delete_private_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a private network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>private_network_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the private network.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">JSON</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="remove_private_network_server">
+<code class="descname">remove_private_network_server</code><span class="sig-paren">(</span><em>private_network_id=None</em>, <em>server_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#remove_private_network_server" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detach a server from a private network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>private_network_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the private network.</li>
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="the-privatenetwork-class">
+<h2>The &#8220;PrivateNetwork&#8221; Class<a class="headerlink" href="#the-privatenetwork-class" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="PrivateNetwork">
+<em class="property">class </em><code class="descname">PrivateNetwork</code><span class="sig-paren">(</span><em>name=None</em>, <em>description=None</em>, <em>network_address=None</em>, <em>subnet_mask=None</em><span class="sig-paren">)</span><a class="headerlink" href="#PrivateNetwork" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass a <a class="reference internal" href="#PrivateNetwork" title="PrivateNetwork"><code class="xref py py-class docutils literal"><span class="pre">PrivateNetwork</span></code></a> instance into the <a class="reference internal" href="#create_private_network" title="create_private_network"><code class="xref py py-func docutils literal"><span class="pre">create_private_network()</span></code></a>
+method to create a private network.  There are also a few helper methods available to perform simple requests after creating your private network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; private network name.</li>
+<li><strong>description</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; private network description.</li>
+<li><strong>network_address</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; Private network address. (valid IP)</li>
+<li><strong>subnet_mask</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; Subnet mask (valid subnet for the given IP).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Methods:</strong></p>
+<dl class="method">
+<dt id="PrivateNetwork.get">
+<code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PrivateNetwork.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the private network&#8217;s current specs.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PrivateNetwork.servers">
+<code class="descname">servers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PrivateNetwork.servers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of the servers attached to the private network.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PrivateNetwork.wait_for">
+<code class="descname">wait_for</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PrivateNetwork.wait_for" title="Permalink to this definition">¶</a></dt>
+<dd><p>Polls the <a class="reference internal" href="#PrivateNetwork" title="PrivateNetwork"><code class="xref py py-class docutils literal"><span class="pre">PrivateNetwork</span></code></a> resource until an <code class="docutils literal"><span class="pre">ACTIVE</span></code>, <code class="docutils literal"><span class="pre">POWERED_ON</span></code>, or <code class="docutils literal"><span class="pre">POWERED_OFF</span></code> state is returned.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="the-attachserver-class">
+<h2>The &#8220;AttachServer&#8221; Class<a class="headerlink" href="#the-attachserver-class" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="AttachServer">
+<em class="property">class </em><code class="descname">AttachServer</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>rights=None</em>, <em>server_ip_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#AttachServer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use the <a class="reference internal" href="shared_storages.html#AttachServer" title="AttachServer"><code class="xref py py-class docutils literal"><span class="pre">AttachServer</span></code></a> class to attach servers or server IPs to various containers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>rights</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; server rights for accessing a shared storage.  Possible values are <code class="docutils literal"><span class="pre">'R'</span></code> or <code class="docutils literal"><span class="pre">'RW'</span></code>.</li>
+<li><strong>server_ip_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server&#8217;s IP.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Private Networks</a><ul>
+<li><a class="reference internal" href="#oneandoneservice-methods">OneAndOneService Methods</a></li>
+<li><a class="reference internal" href="#the-privatenetwork-class">The &#8220;PrivateNetwork&#8221; Class</a></li>
+<li><a class="reference internal" href="#the-attachserver-class">The &#8220;AttachServer&#8221; Class</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="public_ips.html" title="previous chapter">Public IPs</a></li>
+      <li>Next: <a href="monitoring_centers.html" title="next chapter">Monitoring Centers</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/private_networks.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, 1&1 Internet SE.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/private_networks.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

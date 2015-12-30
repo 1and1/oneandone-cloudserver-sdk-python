@@ -1,0 +1,348 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Users &mdash; 1&amp;1 Python SDK 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="1&amp;1 Python SDK 1.0 documentation" href="index.html" />
+    <link rel="next" title="Usages" href="usages.html" />
+    <link rel="prev" title="Logs" href="logs.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="users">
+<h1>Users<a class="headerlink" href="#users" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="oneandoneservice-methods">
+<h2>OneAndOneService Methods<a class="headerlink" href="#oneandoneservice-methods" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All of the methods below can be called on a <a class="reference internal" href="index.html#OneAndOneService" title="OneAndOneService"><code class="xref py py-class docutils literal"><span class="pre">OneAndOneService</span></code></a> instance.</p>
+</div>
+<dl class="function">
+<dt id="list_users">
+<code class="descname">list_users</code><span class="sig-paren">(</span><em>page=None</em>, <em>per_page=None</em>, <em>sort=None</em>, <em>q=None</em>, <em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#list_users" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of all users.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>page</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; Allows the use of pagination. Indicate which page to start on.</li>
+<li><strong>per_page</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; Number of items per page.</li>
+<li><strong>sort</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; <code class="docutils literal"><span class="pre">sort='name'</span></code> retrieves a list of elements sorted
+alphabetically. <code class="docutils literal"><span class="pre">sort='creation_date'</span></code> retrieves a list of elements
+sorted by their creation date in descending order.</li>
+<li><strong>q</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; <code class="docutils literal"><span class="pre">q</span></code> is for query. Use this parameter to return only the items
+that match your search query.</li>
+<li><strong>fields</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; Returns only the parameters requested.
+(i.e. fields=&#8217;id, name, description, hardware.ram&#8217;)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="get_user">
+<code class="descname">get_user</code><span class="sig-paren">(</span><em>user_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#get_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve information about a specific user.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>user_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the user.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">JSON</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="api_info">
+<code class="descname">api_info</code><span class="sig-paren">(</span><em>user_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#api_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve information about a user&#8217;s API privileges.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>user_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the user.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">JSON</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="show_api_key">
+<code class="descname">show_api_key</code><span class="sig-paren">(</span><em>user_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#show_api_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a user&#8217;s API key.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>user_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the user.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">JSON</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ips_api_access_allowed">
+<code class="descname">ips_api_access_allowed</code><span class="sig-paren">(</span><em>user_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ips_api_access_allowed" title="Permalink to this definition">¶</a></dt>
+<dd><p>List IP&#8217;s from which API access is allowed for a user.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>user_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the user.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">JSON</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="create_user">
+<code class="descname">create_user</code><span class="sig-paren">(</span><em>name=None</em>, <em>password=None</em>, <em>email=None</em>, <em>description=None</em><span class="sig-paren">)</span><a class="headerlink" href="#create_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a user.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; user name.</li>
+<li><strong>password</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; user password.</li>
+<li><strong>email</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; user email.</li>
+<li><strong>description</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; user description.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="add_user_ip">
+<code class="descname">add_user_ip</code><span class="sig-paren">(</span><em>user_id=None</em>, <em>user_ips=None</em><span class="sig-paren">)</span><a class="headerlink" href="#add_user_ip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add user IPs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>user_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the user.</li>
+<li><strong>user_ips</strong> (<code class="docutils literal"><span class="pre">list</span></code>) &#8211; a list containing at least one IP string.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="modify_user">
+<code class="descname">modify_user</code><span class="sig-paren">(</span><em>user_id=None</em>, <em>description=None</em>, <em>email=None</em>, <em>password=None</em>, <em>state=None</em><span class="sig-paren">)</span><a class="headerlink" href="#modify_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify a user.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>user_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the user.</li>
+<li><strong>password</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; user password.</li>
+<li><strong>email</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; user email.</li>
+<li><strong>description</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; user description.</li>
+<li><strong>state</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; allows you to enable and disable users.  Possible values are <code class="docutils literal"><span class="pre">&quot;ACTIVE&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;DISABLE&quot;</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="modify_user_api">
+<code class="descname">modify_user_api</code><span class="sig-paren">(</span><em>user_id=None</em>, <em>active=None</em><span class="sig-paren">)</span><a class="headerlink" href="#modify_user_api" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify a user&#8217;s API privileges.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>user_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the user.</li>
+<li><strong>active</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) &#8211; API access.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="change_api_key">
+<code class="descname">change_api_key</code><span class="sig-paren">(</span><em>user_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#change_api_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change a user&#8217;s API key:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>user_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the user.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">JSON</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="delete_user">
+<code class="descname">delete_user</code><span class="sig-paren">(</span><em>user_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#delete_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a user.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>user_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the user.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">JSON</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="remove_user_ip">
+<code class="descname">remove_user_ip</code><span class="sig-paren">(</span><em>user_id=None</em>, <em>ip=None</em><span class="sig-paren">)</span><a class="headerlink" href="#remove_user_ip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a user IP.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>user_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the user.</li>
+<li><strong>ip</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; IP to be removed.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Users</a><ul>
+<li><a class="reference internal" href="#oneandoneservice-methods">OneAndOneService Methods</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="logs.html" title="previous chapter">Logs</a></li>
+      <li>Next: <a href="usages.html" title="next chapter">Usages</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/users.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, 1&1 Internet SE.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/users.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
