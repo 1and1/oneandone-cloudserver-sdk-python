@@ -1,0 +1,621 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1&amp;1’s Python SDK &mdash; 1&amp;1 Python SDK 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="1&amp;1 Python SDK 1.0 documentation" href="#" />
+    <link rel="next" title="Servers" href="servers.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="s-python-sdk">
+<h1>1&amp;1&#8217;s Python SDK<a class="headerlink" href="#s-python-sdk" title="Permalink to this headline">¶</a></h1>
+<p>The 1&amp;1 Python SDK is a Python library used for interacting with the 1&amp;1
+platform over the REST API.</p>
+<p>This guide will show you how to programmatically use the 1&amp;1 library to perform
+common management tasks also available through the 1&amp;1 Control Panel.</p>
+<div class="section" id="concepts">
+<h2>Concepts<a class="headerlink" href="#concepts" title="Permalink to this headline">¶</a></h2>
+<p>The Python Client Library wraps the latest version of the 1&amp;1 REST API. All
+API operations are performed over SSL and authenticated using your 1&amp;1 API Token.
+The API can be accessed within an instance running in 1&amp;1 or directly over
+the Internet from any application that can send an HTTPS request and receive
+an HTTPS response.</p>
+</div>
+<div class="section" id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<p>Before you begin you will need to have signed-up for a 1&amp;1 account. The
+credentials you setup during sign-up will be used to authenticate against the API.</p>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>The Python Client Library is available on PyPi. You can install the latest
+stable version using pip:</p>
+<div class="highlight-python"><div class="highlight"><pre>pip install 1and1
+</pre></div>
+</div>
+<p>Done!</p>
+</div>
+<div class="section" id="authentication">
+<h2>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="OneAndOneService">
+<em class="property">class </em><code class="descname">OneAndOneService</code><span class="sig-paren">(</span><em>api_token</em><span class="sig-paren">)</span><a class="headerlink" href="#OneAndOneService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for the 1and1 Library.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>api_token</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the user&#8217;s API Key.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Start your application by instantiating a <a class="reference internal" href="#OneAndOneService" title="OneAndOneService"><code class="xref py py-class docutils literal"><span class="pre">OneAndOneService</span></code></a> object
+with your API Token:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">oneandone.client</span> <span class="kn">import</span> <span class="n">OneAndOneService</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">OneAndOneService</span><span class="p">(</span><span class="s">&#39;API-TOKEN&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you have yet to create your API Token, follow the
+instructions below:</p>
+<ol class="arabic simple">
+<li>From the 1&amp;1 Control Panel, click Management &gt; Users.</li>
+<li>In the Users section, click Create.</li>
+<li>Enter the desired user name.</li>
+<li>In the Password field, enter the password and repeat it.</li>
+<li>Enter the desired e-mail address.</li>
+<li>Click Create.</li>
+<li>Select the created user</li>
+<li>In the details of the User, in the API section, click on &#8220;Disabled&#8221;.</li>
+<li>Click Yes.</li>
+<li>Click Apply Changes.</li>
+<li>In the API Key section, click Display User Information. The API Key will be displayed.</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You can now use your <a class="reference internal" href="#OneAndOneService" title="OneAndOneService"><code class="xref py py-class docutils literal"><span class="pre">OneAndOneService</span></code></a> object for any future requests.</p>
+</div>
+</div>
+<div class="section" id="table-of-contents">
+<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="servers.html">Servers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="servers.html#oneandoneservice-methods">OneAndOneService Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="servers.html#the-server-class">The &#8220;Server&#8221; Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="servers.html#the-hdd-class">The &#8220;Hdd&#8221; Class</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="images.html">Images</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="images.html#oneandoneservice-methods">OneAndOneService Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="images.html#the-image-class">The &#8220;Image&#8221; Class</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="shared_storages.html">Shared Storages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="shared_storages.html#oneandoneservice-methods">OneAndOneService Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shared_storages.html#the-sharedstorage-class">The &#8220;SharedStorage&#8221; Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shared_storages.html#the-attachserver-class">The &#8220;AttachServer&#8221; Class</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="firewall_policies.html">Firewall Policies</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="firewall_policies.html#oneandoneservice-methods">OneAndOneService Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="firewall_policies.html#the-firewallpolicy-class">The &#8220;FirewallPolicy&#8221; Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="firewall_policies.html#the-firewallpolicyrule-class">The &#8220;FirewallPolicyRule&#8221; Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="firewall_policies.html#the-attachserver-class">The &#8220;AttachServer&#8221; Class</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="load_balancers.html">Load Balancers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="load_balancers.html#oneandoneservice-methods">OneAndOneService Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_balancers.html#the-loadbalancer-class">The &#8220;LoadBalancer&#8221; Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_balancers.html#the-loadbalancerrule-class">The &#8220;LoadBalancerRule&#8221; Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="load_balancers.html#the-attachserver-class">The &#8220;AttachServer&#8221; Class</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="public_ips.html">Public IPs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="public_ips.html#oneandoneservice-methods">OneAndOneService Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="private_networks.html">Private Networks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="private_networks.html#oneandoneservice-methods">OneAndOneService Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="private_networks.html#the-privatenetwork-class">The &#8220;PrivateNetwork&#8221; Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="private_networks.html#the-attachserver-class">The &#8220;AttachServer&#8221; Class</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="monitoring_centers.html">Monitoring Centers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="monitoring_centers.html#oneandoneservice-methods">OneAndOneService Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="monitoring_policies.html">Monitoring Policies</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="monitoring_policies.html#oneandoneservice-methods">OneAndOneService Methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitoring_policies.html#the-monitoringpolicy-class">The &#8220;MonitoringPolicy&#8221; Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitoring_policies.html#the-threshold-class">The &#8220;Threshold&#8221; Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitoring_policies.html#the-port-class">The &#8220;Port&#8221; Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitoring_policies.html#the-process-class">The &#8220;Process&#8221; Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="monitoring_policies.html#the-attachserver-class">The &#8220;AttachServer&#8221; Class</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="logs.html">Logs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="logs.html#oneandoneservice-methods">OneAndOneService Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="users.html">Users</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="users.html#oneandoneservice-methods">OneAndOneService Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usages.html">Usages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usages.html#oneandoneservice-methods">OneAndOneService Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="server_appliances.html">Server Appliances</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server_appliances.html#oneandoneservice-methods">OneAndOneService Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dvds.html">DVDs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dvds.html#oneandoneservice-methods">OneAndOneService Methods</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="how-to-create-a-server">
+<h2>How To: Create a Server<a class="headerlink" href="#how-to-create-a-server" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">oneandone.client</span> <span class="kn">import</span> <span class="n">OneAndOneService</span>
+<span class="kn">from</span> <span class="nn">oneandone.client</span> <span class="kn">import</span> <span class="n">Server</span><span class="p">,</span> <span class="n">Hdd</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">OneAndOneService</span><span class="p">(</span><span class="s">&#39;&lt;API-TOKEN&gt;&#39;</span><span class="p">)</span>
+
+
+<span class="n">server1</span> <span class="o">=</span> <span class="n">Server</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Test Server&#39;</span><span class="p">,</span>
+                 <span class="n">description</span><span class="o">=</span><span class="s">&#39;Server Description&#39;</span><span class="p">,</span>
+                 <span class="n">vcore</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">cores_per_processor</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">ram</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                 <span class="n">appliance_id</span><span class="o">=</span><span class="s">&#39;&lt;IMAGE ID&gt;&#39;</span>
+                 <span class="p">)</span>
+
+<span class="n">hdd1</span> <span class="o">=</span> <span class="n">Hdd</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">is_main</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">hdd2</span> <span class="o">=</span> <span class="n">Hdd</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">is_main</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="n">hdds</span> <span class="o">=</span> <span class="p">[</span><span class="n">hdd1</span><span class="p">,</span> <span class="n">hdd2</span><span class="p">]</span>
+
+<span class="n">new_server</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">create_server</span><span class="p">(</span><span class="n">server</span><span class="o">=</span><span class="n">server1</span><span class="p">,</span> <span class="n">hdds</span><span class="o">=</span><span class="n">hdds</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="how-to-create-a-firewall-policy">
+<h2>How To: Create a Firewall Policy<a class="headerlink" href="#how-to-create-a-firewall-policy" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">oneandone.client</span> <span class="kn">import</span> <span class="n">OneAndOneService</span>
+<span class="kn">from</span> <span class="nn">oneandone.client</span> <span class="kn">import</span> <span class="n">FirewallPolicy</span><span class="p">,</span> <span class="n">FirewallPolicyRule</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">OneAndOneService</span><span class="p">(</span><span class="s">&#39;&lt;API-TOKEN&gt;&#39;</span><span class="p">)</span>
+
+
+<span class="n">fp1</span> <span class="o">=</span> <span class="n">FirewallPolicy</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Test Firewall Policy&#39;</span><span class="p">,</span>
+                     <span class="n">description</span><span class="o">=</span><span class="s">&#39;Test Description&#39;</span>
+                     <span class="p">)</span>
+
+
+<span class="n">rule1</span> <span class="o">=</span> <span class="n">FirewallPolicyRule</span><span class="p">(</span><span class="n">protocol</span><span class="o">=</span><span class="s">&#39;TCP&#39;</span><span class="p">,</span>
+                           <span class="n">port_from</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
+                           <span class="n">port_to</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
+                           <span class="n">source</span><span class="o">=</span><span class="s">&#39;0.0.0.0&#39;</span>
+                           <span class="p">)</span>
+
+<span class="n">rule2</span> <span class="o">=</span> <span class="n">FirewallPolicyRule</span><span class="p">(</span><span class="n">protocol</span><span class="o">=</span><span class="s">&#39;UDP&#39;</span><span class="p">,</span>
+                           <span class="n">port_from</span><span class="o">=</span><span class="mi">443</span><span class="p">,</span>
+                           <span class="n">port_to</span><span class="o">=</span><span class="mi">443</span><span class="p">,</span>
+                           <span class="n">source</span><span class="o">=</span><span class="s">&#39;0.0.0.0&#39;</span>
+                           <span class="p">)</span>
+
+<span class="n">rules</span> <span class="o">=</span> <span class="p">[</span><span class="n">rule1</span><span class="p">,</span> <span class="n">rule2</span><span class="p">]</span>
+
+
+<span class="n">new_firewall</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">create_firewall_policy</span><span class="p">(</span><span class="n">firewall_policy</span><span class="o">=</span><span class="n">fp1</span><span class="p">,</span> <span class="n">firewall_policy_rules</span><span class="o">=</span><span class="n">rules</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="how-to-create-a-load-balancer">
+<h2>How To: Create a Load Balancer<a class="headerlink" href="#how-to-create-a-load-balancer" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">oneandone.client</span> <span class="kn">import</span> <span class="n">OneAndOneService</span>
+<span class="kn">from</span> <span class="nn">oneandone.client</span> <span class="kn">import</span> <span class="n">LoadBalancer</span><span class="p">,</span> <span class="n">LoadBalancerRule</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">OneAndOneService</span><span class="p">(</span><span class="s">&#39;&lt;API-TOKEN&gt;&#39;</span><span class="p">)</span>
+
+
+<span class="n">lb1</span> <span class="o">=</span> <span class="n">LoadBalancer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Test Load Balancer&#39;</span><span class="p">,</span>
+                   <span class="n">description</span><span class="o">=</span><span class="s">&#39;Test Description&#39;</span><span class="p">,</span>
+                   <span class="n">health_check_test</span><span class="o">=</span><span class="s">&#39;TCP&#39;</span><span class="p">,</span>
+                   <span class="n">health_check_interval</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+                   <span class="n">persistence</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                   <span class="n">persistence_time</span><span class="o">=</span><span class="mi">1200</span><span class="p">,</span>
+                   <span class="n">method</span><span class="o">=</span><span class="s">&#39;ROUND_ROBIN&#39;</span>
+                   <span class="p">)</span>
+
+<span class="n">rule1</span> <span class="o">=</span> <span class="n">LoadBalancerRule</span><span class="p">(</span><span class="n">protocol</span><span class="o">=</span><span class="s">&#39;TCP&#39;</span><span class="p">,</span>
+                         <span class="n">port_balancer</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
+                         <span class="n">port_server</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
+                         <span class="n">source</span><span class="o">=</span><span class="s">&#39;0.0.0.0&#39;</span>
+                         <span class="p">)</span>
+<span class="n">rule2</span> <span class="o">=</span> <span class="n">LoadBalancerRule</span><span class="p">(</span><span class="n">protocol</span><span class="o">=</span><span class="s">&#39;TCP&#39;</span><span class="p">,</span>
+                         <span class="n">port_balancer</span><span class="o">=</span><span class="mi">9999</span><span class="p">,</span>
+                         <span class="n">port_server</span><span class="o">=</span><span class="mi">8888</span><span class="p">,</span>
+                         <span class="n">source</span><span class="o">=</span><span class="s">&#39;0.0.0.0&#39;</span>
+                         <span class="p">)</span>
+
+<span class="n">rules</span> <span class="o">=</span> <span class="p">[</span><span class="n">rule1</span><span class="p">,</span> <span class="n">rule2</span><span class="p">]</span>
+
+<span class="n">new_load_balancer</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">create_load_balancer</span><span class="p">(</span><span class="n">load_balancer</span><span class="o">=</span><span class="n">lb1</span><span class="p">,</span> <span class="n">load_balancer_rules</span><span class="o">=</span><span class="n">rules</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="how-to-create-a-monitoring-policy">
+<h2>How To: Create a Monitoring Policy<a class="headerlink" href="#how-to-create-a-monitoring-policy" title="Permalink to this headline">¶</a></h2>
+<p>First, create the monitoring policy:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">oneandone.client</span> <span class="kn">import</span> <span class="n">OneAndOneService</span>
+<span class="kn">from</span> <span class="nn">oneandone.client</span> <span class="kn">import</span> <span class="n">MonitoringPolicy</span><span class="p">,</span> <span class="n">Threshold</span><span class="p">,</span> <span class="n">Port</span><span class="p">,</span> <span class="n">Process</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">OneAndOneService</span><span class="p">(</span><span class="s">&#39;&lt;API-TOKEN&gt;&#39;</span><span class="p">)</span>
+
+
+<span class="n">mp1</span> <span class="o">=</span> <span class="n">MonitoringPolicy</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Test MP&#39;</span><span class="p">,</span>
+                       <span class="n">description</span><span class="o">=</span><span class="s">&#39;Test Description&#39;</span><span class="p">,</span>
+                       <span class="n">email</span><span class="o">=</span><span class="s">&#39;test@example.com&#39;</span><span class="p">,</span>
+                       <span class="n">agent</span><span class="o">=</span><span class="bp">True</span>
+                       <span class="p">)</span>
+
+
+<span class="n">cpu</span> <span class="o">=</span> <span class="n">Threshold</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="s">&#39;cpu&#39;</span><span class="p">,</span>
+                <span class="n">warning_value</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
+                <span class="n">warning_alert</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                <span class="n">critical_value</span><span class="o">=</span><span class="mi">95</span><span class="p">,</span>
+                <span class="n">critical_alert</span><span class="o">=</span><span class="bp">False</span>
+                <span class="p">)</span>
+
+<span class="n">ram</span> <span class="o">=</span> <span class="n">Threshold</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="s">&#39;ram&#39;</span><span class="p">,</span>
+                <span class="n">warning_value</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
+                <span class="n">warning_alert</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                <span class="n">critical_value</span><span class="o">=</span><span class="mi">95</span><span class="p">,</span>
+                <span class="n">critical_alert</span><span class="o">=</span><span class="bp">False</span>
+                <span class="p">)</span>
+
+<span class="n">disk</span> <span class="o">=</span> <span class="n">Threshold</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="s">&#39;disk&#39;</span><span class="p">,</span>
+                 <span class="n">warning_value</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
+                 <span class="n">warning_alert</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                 <span class="n">critical_value</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
+                 <span class="n">critical_alert</span><span class="o">=</span><span class="bp">False</span>
+                 <span class="p">)</span>
+
+<span class="n">transfer</span> <span class="o">=</span> <span class="n">Threshold</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="s">&#39;transfer&#39;</span><span class="p">,</span>
+                     <span class="n">warning_value</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+                     <span class="n">warning_alert</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                     <span class="n">critical_value</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span>
+                     <span class="n">critical_alert</span><span class="o">=</span><span class="bp">False</span>
+                     <span class="p">)</span>
+
+<span class="n">internal_ping</span> <span class="o">=</span> <span class="n">Threshold</span><span class="p">(</span><span class="n">entity</span><span class="o">=</span><span class="s">&#39;internal_ping&#39;</span><span class="p">,</span>
+                          <span class="n">warning_value</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                          <span class="n">warning_alert</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                          <span class="n">critical_value</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                          <span class="n">critical_alert</span><span class="o">=</span><span class="bp">False</span>
+                          <span class="p">)</span>
+
+<span class="n">thresholds</span> <span class="o">=</span> <span class="p">[</span><span class="n">cpu</span><span class="p">,</span> <span class="n">ram</span><span class="p">,</span> <span class="n">disk</span><span class="p">,</span> <span class="n">transfer</span><span class="p">,</span> <span class="n">internal_ping</span><span class="p">]</span>
+
+
+<span class="n">port1</span> <span class="o">=</span> <span class="n">Port</span><span class="p">(</span><span class="n">protocol</span><span class="o">=</span><span class="s">&#39;TCP&#39;</span><span class="p">,</span>
+             <span class="n">port</span><span class="o">=</span><span class="mi">22</span><span class="p">,</span>
+             <span class="n">alert_if</span><span class="o">=</span><span class="s">&#39;RESPONDING&#39;</span><span class="p">,</span>
+             <span class="n">email_notification</span><span class="o">=</span><span class="bp">False</span>
+             <span class="p">)</span>
+
+<span class="n">port2</span> <span class="o">=</span> <span class="n">Port</span><span class="p">(</span><span class="n">protocol</span><span class="o">=</span><span class="s">&#39;TCP&#39;</span><span class="p">,</span>
+             <span class="n">port</span><span class="o">=</span><span class="mi">44</span><span class="p">,</span>
+             <span class="n">alert_if</span><span class="o">=</span><span class="s">&#39;NOT_RESPONDING&#39;</span><span class="p">,</span>
+             <span class="n">email_notification</span><span class="o">=</span><span class="bp">True</span>
+             <span class="p">)</span>
+
+<span class="n">ports</span> <span class="o">=</span> <span class="p">[</span><span class="n">port1</span><span class="p">,</span> <span class="n">port2</span><span class="p">]</span>
+
+
+<span class="n">process1</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span><span class="n">process</span><span class="o">=</span><span class="s">&#39;TaskMgr&#39;</span><span class="p">,</span>
+                   <span class="n">alert_if</span><span class="o">=</span><span class="s">&#39;NOT_RUNNING&#39;</span><span class="p">,</span>
+                   <span class="n">email_notification</span><span class="o">=</span><span class="bp">True</span>
+                   <span class="p">)</span>
+
+<span class="n">process2</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span><span class="n">process</span><span class="o">=</span><span class="s">&#39;Logger&#39;</span><span class="p">,</span>
+                   <span class="n">alert_if</span><span class="o">=</span><span class="s">&#39;NOT_RUNNING&#39;</span><span class="p">,</span>
+                   <span class="n">email_notification</span><span class="o">=</span><span class="bp">True</span>
+                   <span class="p">)</span>
+
+<span class="n">processes</span> <span class="o">=</span> <span class="p">[</span><span class="n">process1</span><span class="p">,</span> <span class="n">process2</span><span class="p">]</span>
+
+
+<span class="n">new_monitoring_policy</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">create_monitoring_policy</span><span class="p">(</span><span class="n">monitoring_policy</span><span class="o">=</span><span class="n">mp1</span><span class="p">,</span>
+                                                        <span class="n">thresholds</span><span class="o">=</span><span class="n">thresholds</span><span class="p">,</span>
+                                                        <span class="n">ports</span><span class="o">=</span><span class="n">ports</span><span class="p">,</span>
+                                                        <span class="n">processes</span><span class="o">=</span><span class="n">processes</span>
+                                                        <span class="p">)</span>
+</pre></div>
+</div>
+<p>Then, add a server or two:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">oneandone.client</span> <span class="kn">import</span> <span class="n">OneAndOneService</span>
+<span class="kn">from</span> <span class="nn">oneandone.client</span> <span class="kn">import</span> <span class="n">AttachServer</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">OneAndOneService</span><span class="p">(</span><span class="s">&#39;&lt;API-TOKEN&gt;&#39;</span><span class="p">)</span>
+
+
+<span class="n">server1</span> <span class="o">=</span> <span class="n">AttachServer</span><span class="p">(</span><span class="n">server_id</span><span class="o">=</span><span class="s">&#39;&lt;SERVER1 ID&gt;&#39;</span><span class="p">)</span>
+<span class="n">server2</span> <span class="o">=</span> <span class="n">AttachServer</span><span class="p">(</span><span class="n">server_id</span><span class="o">=</span><span class="s">&#39;&lt;SERVER2 ID&gt;&#39;</span><span class="p">)</span>
+
+<span class="n">servers</span> <span class="o">=</span> <span class="p">[</span><span class="n">server1</span><span class="p">,</span> <span class="n">server2</span><span class="p">]</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">attach_monitoring_policy_server</span><span class="p">(</span><span class="n">monitoring_policy_id</span><span class="o">=</span><span class="s">&#39;&lt;MONITORING POLICY ID&gt;&#39;</span><span class="p">,</span>
+                                                  <span class="n">servers</span><span class="o">=</span><span class="n">servers</span>
+                                                  <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="how-to-update-server-cores-memory-and-disk">
+<h2>How To: Update Server Cores, Memory, and Disk<a class="headerlink" href="#how-to-update-server-cores-memory-and-disk" title="Permalink to this headline">¶</a></h2>
+<p>1&amp;1 allows users to dynamically update cores, memory, and disk independently of each other. This removes the restriction of needing to upgrade to the next size up to receive an increase in memory. You can now simply increase the instances memory keeping your costs in-line with your resource needs.</p>
+<p>The following code illustrates how you can update cores and memory:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">oneandone.client</span> <span class="kn">import</span> <span class="n">OneAndOneService</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">OneAndOneService</span><span class="p">(</span><span class="s">&#39;&lt;API-TOKEN&gt;&#39;</span><span class="p">)</span>
+
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">modify_server_hardware</span><span class="p">(</span><span class="n">server_id</span><span class="o">=</span><span class="s">&#39;&lt;SERVER ID&gt;&#39;</span><span class="p">,</span>
+                                  <span class="n">vcore</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                  <span class="n">ram</span><span class="o">=</span><span class="mi">6</span>
+                                  <span class="p">)</span>
+</pre></div>
+</div>
+<p>This is how you would update a server disk&#8217;s size:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">modify_hdd</span><span class="p">(</span><span class="n">server_id</span><span class="o">=</span><span class="s">&#39;&lt;SERVER_ID&gt;&#39;</span><span class="p">,</span>
+                             <span class="n">hdd_id</span><span class="o">=</span><span class="s">&#39;&lt;HDD ID&gt;&#39;</span><span class="p">,</span>
+                             <span class="n">size</span><span class="o">=</span><span class="mi">80</span>
+                             <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-app">
+<h2>Example App<a class="headerlink" href="#example-app" title="Permalink to this headline">¶</a></h2>
+<p>This simple app creates a load balancer, firewall policy, and server. It then creates a new IP for the server and attaches the load balancer and firewall policy to that IP.</p>
+<p>Use the <code class="docutils literal"><span class="pre">wait_for()</span></code> method to chain together multiple actions that take a while to deploy.  The <code class="docutils literal"><span class="pre">wait_for()</span></code> method is available
+on all major class objects.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">oneandone.client</span> <span class="kn">import</span> <span class="n">OneAndOneService</span>
+<span class="kn">from</span> <span class="nn">oneandone.client</span> <span class="kn">import</span> <span class="n">Server</span><span class="p">,</span> <span class="n">Hdd</span><span class="p">,</span> <span class="n">LoadBalancer</span><span class="p">,</span> <span class="n">LoadBalancerRule</span>
+<span class="kn">from</span> <span class="nn">oneandone.client</span> <span class="kn">import</span> <span class="n">FirewallPolicy</span><span class="p">,</span> <span class="n">FirewallPolicyRule</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">OneAndOneService</span><span class="p">(</span><span class="s">&#39;&lt;API-TOKEN&gt;&#39;</span><span class="p">)</span>
+
+
+<span class="c"># Create Load Balancer</span>
+<span class="n">lb1</span> <span class="o">=</span> <span class="n">LoadBalancer</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Example App LB&#39;</span><span class="p">,</span>
+                   <span class="n">description</span><span class="o">=</span><span class="s">&#39;Test Description&#39;</span><span class="p">,</span>
+                   <span class="n">health_check_test</span><span class="o">=</span><span class="s">&#39;TCP&#39;</span><span class="p">,</span>
+                   <span class="n">health_check_interval</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+                   <span class="n">persistence</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                   <span class="n">persistence_time</span><span class="o">=</span><span class="mi">1200</span><span class="p">,</span>
+                   <span class="n">method</span><span class="o">=</span><span class="s">&#39;ROUND_ROBIN&#39;</span>
+                  <span class="p">)</span>
+
+<span class="n">rule1</span> <span class="o">=</span> <span class="n">LoadBalancerRule</span><span class="p">(</span><span class="n">protocol</span><span class="o">=</span><span class="s">&#39;TCP&#39;</span><span class="p">,</span>
+                         <span class="n">port_balancer</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
+                         <span class="n">port_server</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
+                         <span class="n">source</span><span class="o">=</span><span class="s">&#39;0.0.0.0&#39;</span>
+                         <span class="p">)</span>
+<span class="n">rule2</span> <span class="o">=</span> <span class="n">LoadBalancerRule</span><span class="p">(</span><span class="n">protocol</span><span class="o">=</span><span class="s">&#39;TCP&#39;</span><span class="p">,</span>
+                         <span class="n">port_balancer</span><span class="o">=</span><span class="mi">9999</span><span class="p">,</span>
+                         <span class="n">port_server</span><span class="o">=</span><span class="mi">8888</span><span class="p">,</span>
+                         <span class="n">source</span><span class="o">=</span><span class="s">&#39;0.0.0.0&#39;</span>
+                         <span class="p">)</span>
+
+<span class="n">rules</span> <span class="o">=</span> <span class="p">[</span><span class="n">rule1</span><span class="p">,</span> <span class="n">rule2</span><span class="p">]</span>
+
+<span class="n">new_load_balancer</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">create_load_balancer</span><span class="p">(</span><span class="n">load_balancer</span><span class="o">=</span><span class="n">lb1</span><span class="p">,</span>
+                                                <span class="n">load_balancer_rules</span><span class="o">=</span><span class="n">rules</span>
+                                                <span class="p">)</span>
+
+<span class="c">## Wait for Load Balancer to go live</span>
+<span class="k">print</span> <span class="s">&#39;Creating load balancer...&#39;</span>
+<span class="n">lb1</span><span class="o">.</span><span class="n">wait_for</span><span class="p">()</span>
+
+
+<span class="c"># Create Firewall Policy</span>
+<span class="n">fp1</span> <span class="o">=</span> <span class="n">FirewallPolicy</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Example App FP&#39;</span><span class="p">,</span>
+                     <span class="n">description</span><span class="o">=</span><span class="s">&#39;Test Description&#39;</span>
+                     <span class="p">)</span>
+
+
+<span class="n">rule1</span> <span class="o">=</span> <span class="n">FirewallPolicyRule</span><span class="p">(</span><span class="n">protocol</span><span class="o">=</span><span class="s">&#39;TCP&#39;</span><span class="p">,</span>
+                           <span class="n">port_from</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
+                           <span class="n">port_to</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
+                           <span class="n">source</span><span class="o">=</span><span class="s">&#39;0.0.0.0&#39;</span>
+                           <span class="p">)</span>
+
+<span class="n">rule2</span> <span class="o">=</span> <span class="n">FirewallPolicyRule</span><span class="p">(</span><span class="n">protocol</span><span class="o">=</span><span class="s">&#39;UDP&#39;</span><span class="p">,</span>
+                           <span class="n">port_from</span><span class="o">=</span><span class="mi">443</span><span class="p">,</span>
+                           <span class="n">port_to</span><span class="o">=</span><span class="mi">443</span><span class="p">,</span>
+                           <span class="n">source</span><span class="o">=</span><span class="s">&#39;0.0.0.0&#39;</span>
+                           <span class="p">)</span>
+
+<span class="n">rules</span> <span class="o">=</span> <span class="p">[</span><span class="n">rule1</span><span class="p">,</span> <span class="n">rule2</span><span class="p">]</span>
+
+
+<span class="n">new_firewall</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">create_firewall_policy</span><span class="p">(</span><span class="n">firewall_policy</span><span class="o">=</span><span class="n">fp1</span><span class="p">,</span>
+                                             <span class="n">firewall_policy_rules</span><span class="o">=</span><span class="n">rules</span>
+                                             <span class="p">)</span>
+
+<span class="c">## Wait for Firewall Policy to go live</span>
+<span class="k">print</span> <span class="s">&#39;Creating firewall policy...&#39;</span>
+<span class="n">fp1</span><span class="o">.</span><span class="n">wait_for</span><span class="p">()</span>
+
+
+<span class="c"># Create Server</span>
+<span class="n">server1</span> <span class="o">=</span> <span class="n">Server</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Example App Server&#39;</span><span class="p">,</span>
+                 <span class="n">description</span><span class="o">=</span><span class="s">&#39;Server Description&#39;</span><span class="p">,</span>
+                 <span class="n">vcore</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">cores_per_processor</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">ram</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                 <span class="n">appliance_id</span><span class="o">=</span><span class="s">&#39;D9DBA7D7F7E9C8200A493CE9013C4605&#39;</span>
+                 <span class="p">)</span>
+
+<span class="n">hdd1</span> <span class="o">=</span> <span class="n">Hdd</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">is_main</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">hdd2</span> <span class="o">=</span> <span class="n">Hdd</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">is_main</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="n">hdds</span> <span class="o">=</span> <span class="p">[</span><span class="n">hdd1</span><span class="p">,</span> <span class="n">hdd2</span><span class="p">]</span>
+
+<span class="n">new_server</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">create_server</span><span class="p">(</span><span class="n">server</span><span class="o">=</span><span class="n">server1</span><span class="p">,</span> <span class="n">hdds</span><span class="o">=</span><span class="n">hdds</span><span class="p">)</span>
+
+<span class="c">## Wait for the Server to go live</span>
+<span class="k">print</span> <span class="s">&#39;Creating new server...&#39;</span>
+<span class="n">server1</span><span class="o">.</span><span class="n">wait_for</span><span class="p">()</span>
+
+
+<span class="c"># Add a new IP to the server</span>
+<span class="n">new_ip</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">add_new_ip</span><span class="p">(</span><span class="n">server_id</span><span class="o">=</span><span class="n">new_server</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">])</span>
+
+
+<span class="c"># Add Load Balancer to New Server IP</span>
+<span class="n">lb_response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">add_load_balancer</span><span class="p">(</span><span class="n">server_id</span><span class="o">=</span><span class="n">new_server</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">],</span>
+                                       <span class="n">ip_id</span><span class="o">=</span><span class="n">new_ip</span><span class="p">[</span><span class="s">&#39;ips&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;id&#39;</span><span class="p">],</span>
+                                       <span class="n">load_balancer_id</span><span class="o">=</span><span class="n">new_load_balancer</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span>
+                                       <span class="p">)</span>
+
+<span class="c">## Wait for Load Balancer to be added</span>
+<span class="k">print</span> <span class="s">&#39;Adding load balancer to Server...&#39;</span>
+<span class="n">server1</span><span class="o">.</span><span class="n">wait_for</span><span class="p">()</span>
+
+
+<span class="c"># Add Firewall Policy to New Server IP</span>
+<span class="n">fw_response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">add_firewall_policy</span><span class="p">(</span><span class="n">server_id</span><span class="o">=</span><span class="n">new_server</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">],</span>
+                                         <span class="n">ip_id</span><span class="o">=</span><span class="n">new_ip</span><span class="p">[</span><span class="s">&#39;ips&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;id&#39;</span><span class="p">],</span>
+                                         <span class="n">firewall_id</span><span class="o">=</span><span class="n">new_firewall</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span>
+                                         <span class="p">)</span>
+
+<span class="c">## Wait for Firewall Policy to be added</span>
+<span class="k">print</span> <span class="s">&#39;Adding firewall policy to Server...&#39;</span>
+<span class="n">server1</span><span class="o">.</span><span class="n">wait_for</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this headline">¶</a></h2>
+<p>Official 1&amp;1 REST API Documentation: <a class="reference external" href="https://cloudpanel-api.1and1.com/documentation/v1/#">Link</a></p>
+</div>
+<div class="section" id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span>Search Page</span></a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1&amp;1&#8217;s Python SDK</a><ul>
+<li><a class="reference internal" href="#concepts">Concepts</a></li>
+<li><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#authentication">Authentication</a></li>
+<li><a class="reference internal" href="#table-of-contents">Table of Contents</a></li>
+<li><a class="reference internal" href="#how-to-create-a-server">How To: Create a Server</a></li>
+<li><a class="reference internal" href="#how-to-create-a-firewall-policy">How To: Create a Firewall Policy</a></li>
+<li><a class="reference internal" href="#how-to-create-a-load-balancer">How To: Create a Load Balancer</a></li>
+<li><a class="reference internal" href="#how-to-create-a-monitoring-policy">How To: Create a Monitoring Policy</a></li>
+<li><a class="reference internal" href="#how-to-update-server-cores-memory-and-disk">How To: Update Server Cores, Memory, and Disk</a></li>
+<li><a class="reference internal" href="#example-app">Example App</a></li>
+<li><a class="reference internal" href="#resources">Resources</a></li>
+<li><a class="reference internal" href="#index">Index</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="servers.html" title="next chapter">Servers</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, 1&1 Internet SE.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/index.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

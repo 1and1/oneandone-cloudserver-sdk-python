@@ -1,0 +1,1043 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Servers &mdash; 1&amp;1 Python SDK 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="1&amp;1 Python SDK 1.0 documentation" href="index.html" />
+    <link rel="next" title="Images" href="images.html" />
+    <link rel="prev" title="1&amp;1’s Python SDK" href="index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="servers">
+<h1>Servers<a class="headerlink" href="#servers" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="oneandoneservice-methods">
+<h2>OneAndOneService Methods<a class="headerlink" href="#oneandoneservice-methods" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All of the methods below can be called on a <a class="reference internal" href="index.html#OneAndOneService" title="OneAndOneService"><code class="xref py py-class docutils literal"><span class="pre">OneAndOneService</span></code></a> instance.</p>
+</div>
+<dl class="function">
+<dt id="list_servers">
+<code class="descname">list_servers</code><span class="sig-paren">(</span><em>page=None</em>, <em>per_page=None</em>, <em>sort=None</em>, <em>q=None</em>, <em>fields=None</em><span class="sig-paren">)</span><a class="headerlink" href="#list_servers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of all servers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>page</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; Allows the use of pagination. Indicate which page to start on.</li>
+<li><strong>per_page</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; Number of items per page.</li>
+<li><strong>sort</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; <code class="docutils literal"><span class="pre">sort='name'</span></code> retrieves a list of elements sorted
+alphabetically. <code class="docutils literal"><span class="pre">sort='creation_date'</span></code> retrieves a list of elements
+sorted by their creation date in descending order.</li>
+<li><strong>q</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; <code class="docutils literal"><span class="pre">q</span></code> is for query. Use this parameter to return only the items
+that match your search query.</li>
+<li><strong>fields</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; Returns only the parameters requested.
+(i.e. fields=&#8217;id, name, description, hardware.ram&#8217;)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="get_server">
+<code class="descname">get_server</code><span class="sig-paren">(</span><em>server_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#get_server" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve information about a server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">JSON</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fixed_server_flavors">
+<code class="descname">fixed_server_flavors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fixed_server_flavors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of all fixed server flavors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">JSON</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="get_fixed_server">
+<code class="descname">get_fixed_server</code><span class="sig-paren">(</span><em>fixed_server_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#get_fixed_server" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve information about a fixed server flavor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fixed_server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the fixed server flavor.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">JSON</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="get_server_hardware">
+<code class="descname">get_server_hardware</code><span class="sig-paren">(</span><em>server_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#get_server_hardware" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve information about a server&#8217;s hardware configurations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">JSON</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="list_server_hdds">
+<code class="descname">list_server_hdds</code><span class="sig-paren">(</span><em>server_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#list_server_hdds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of a server&#8217;s HDDs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">JSON</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="get_server_hdd">
+<code class="descname">get_server_hdd</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>hdd_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#get_server_hdd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a single server HDD.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>hdd_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the HDD.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="get_server_image">
+<code class="descname">get_server_image</code><span class="sig-paren">(</span><em>server_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#get_server_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve information about a server&#8217;s image.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">JSON</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="list_server_ips">
+<code class="descname">list_server_ips</code><span class="sig-paren">(</span><em>server_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#list_server_ips" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of a server&#8217;s IPs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">JSON</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="get_server_ip">
+<code class="descname">get_server_ip</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>ip_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#get_server_ip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve information about a single server IP.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>ip_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the IP.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="list_ip_firewall_policy">
+<code class="descname">list_ip_firewall_policy</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>ip_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#list_ip_firewall_policy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of all firewall policies assigned to a server IP.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>ip_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the IP.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="list_ip_load_balancers">
+<code class="descname">list_ip_load_balancers</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>ip_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#list_ip_load_balancers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of all load balancers assigned to a server IP.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>ip_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the IP.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="get_server_status">
+<code class="descname">get_server_status</code><span class="sig-paren">(</span><em>server_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#get_server_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve information about a server&#8217;s status.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">JSON</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="get_server_dvd">
+<code class="descname">get_server_dvd</code><span class="sig-paren">(</span><em>server_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#get_server_dvd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve information about the DVD loaded into the virtual DVD unit of a server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">JSON</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="list_server_private_networks">
+<code class="descname">list_server_private_networks</code><span class="sig-paren">(</span><em>server_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#list_server_private_networks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of a server&#8217;s private networks.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">JSON</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="private_network_info">
+<code class="descname">private_network_info</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>private_network_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#private_network_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve information about a server&#8217;s private network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>private_network_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the private network.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="list_server_snapshots">
+<code class="descname">list_server_snapshots</code><span class="sig-paren">(</span><em>server_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#list_server_snapshots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of all server snapshots.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">JSON</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="create_server">
+<code class="descname">create_server</code><span class="sig-paren">(</span><em>server=None</em>, <em>hdds=None</em><span class="sig-paren">)</span><a class="headerlink" href="#create_server" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server</strong> (<code class="docutils literal"><span class="pre">obj</span></code>) &#8211; An instantiation of the <a class="reference internal" href="#Server" title="Server"><code class="xref py py-class docutils literal"><span class="pre">Server</span></code></a> class.</li>
+<li><strong>hdds</strong> (<code class="docutils literal"><span class="pre">list</span></code>) &#8211; a list of <a class="reference internal" href="#Hdd" title="Hdd"><code class="xref py py-class docutils literal"><span class="pre">Hdd</span></code></a> instances.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="add_hdd">
+<code class="descname">add_hdd</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>hdds=None</em><span class="sig-paren">)</span><a class="headerlink" href="#add_hdd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new HDD to a server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>hdds</strong> (<code class="docutils literal"><span class="pre">list</span></code>) &#8211; a list of <a class="reference internal" href="#Hdd" title="Hdd"><code class="xref py py-class docutils literal"><span class="pre">Hdd</span></code></a> instances.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="add_new_ip">
+<code class="descname">add_new_ip</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>ip_type=None</em><span class="sig-paren">)</span><a class="headerlink" href="#add_new_ip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new IP to the server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>ip_type</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; at the moment, only <code class="docutils literal"><span class="pre">`IPV4`</span></code> is currently supported.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="add_load_balancer">
+<code class="descname">add_load_balancer</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>ip_id=None</em>, <em>load_balancer_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#add_load_balancer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new load balancer to the server IP.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>ip_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server&#8217;s IP.</li>
+<li><strong>load_balancer_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the load balancer.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="assign_private_network">
+<code class="descname">assign_private_network</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>private_network_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#assign_private_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign a private network to a server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>private_network_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the private network.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="create_snapshot">
+<code class="descname">create_snapshot</code><span class="sig-paren">(</span><em>server_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#create_snapshot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a server snapshot.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">JSON</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="clone_server">
+<code class="descname">clone_server</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#clone_server" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clone a server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server to be cloned.</li>
+<li><strong>name</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the new server&#8217;s name.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="modify_server">
+<code class="descname">modify_server</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>name=None</em>, <em>description=None</em><span class="sig-paren">)</span><a class="headerlink" href="#modify_server" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify a server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>name</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; server name.</li>
+<li><strong>description</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; server description.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="modify_server_hardware">
+<code class="descname">modify_server_hardware</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>fixed_instance_size_id=None</em>, <em>vcore=None</em>, <em>cores_per_processor=None</em>, <em>ram=None</em><span class="sig-paren">)</span><a class="headerlink" href="#modify_server_hardware" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify a server&#8217;s hardware configurations.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Cannot perform &#8220;hot&#8221; decreasing of server hardware values. &#8220;Cold&#8221; decreasing is allowed.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>fixed_instance_size_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; ID of the instance size for the server. It
+is not possible to resize to a fixed instance with a HDD smaller than the current one.</li>
+<li><strong>vcore</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; Total amount of virtual cores.</li>
+<li><strong>cores_per_processor</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; Number of cores per processor.</li>
+<li><strong>ram</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; Memory size.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="modify_hdd">
+<code class="descname">modify_hdd</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>hdd_id=None</em>, <em>size=None</em><span class="sig-paren">)</span><a class="headerlink" href="#modify_hdd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify a server&#8217;s HDD.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>hdd_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server&#8217;s HDD.</li>
+<li><strong>size</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; the new size of the HDD.  Must be a multiple of <code class="docutils literal"><span class="pre">20</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="add_firewall_policy">
+<code class="descname">add_firewall_policy</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>ip_id=None</em>, <em>firewall_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#add_firewall_policy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a firewall policy to the server&#8217;s IP.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>ip_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server&#8217;s IP.</li>
+<li><strong>firewall_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the firewall policy.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="modify_server_status">
+<code class="descname">modify_server_status</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>action=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#modify_server_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify a server&#8217;s status.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>action</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the action to perform on the server.  Possible values are <code class="docutils literal"><span class="pre">'POWER_OFF'</span></code>, <code class="docutils literal"><span class="pre">'POWER_ON'</span></code>,  and <code class="docutils literal"><span class="pre">'REBOOT'</span></code>.</li>
+<li><strong>method</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the action&#8217;s method.  Possible values are <code class="docutils literal"><span class="pre">'SOFTWARE'</span></code> or <code class="docutils literal"><span class="pre">'HARDWARE'</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="load_dvd">
+<code class="descname">load_dvd</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>dvd_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#load_dvd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a DVD into the virtual DVD unit of a server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>dvd_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the DVD.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="restore_snapshot">
+<code class="descname">restore_snapshot</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>snapshot_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#restore_snapshot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restore a snapshot into the server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>snapshot_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server snapshot.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="reinstall_image">
+<code class="descname">reinstall_image</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>image_id=None</em>, <em>password=None</em>, <em>firewall_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#reinstall_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reinstall an image into a server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>image_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server image.</li>
+<li><strong>password</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; server password.</li>
+<li><strong>firewall_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the firewall policy to be assigned.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="delete_server">
+<code class="descname">delete_server</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>keep_ips=None</em><span class="sig-paren">)</span><a class="headerlink" href="#delete_server" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>keep_ips</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) &#8211; Set <code class="docutils literal"><span class="pre">keep_ips</span></code> to <code class="docutils literal"><span class="pre">True</span></code> to keep server IPs after deleting a server. (<code class="docutils literal"><span class="pre">False</span></code> by default).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="remove_hdd">
+<code class="descname">remove_hdd</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>hdd_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#remove_hdd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a server&#8217;s HDD.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>hdd_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server&#8217;s HDD.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="remove_ip">
+<code class="descname">remove_ip</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>ip_id=None</em>, <em>keep_ip=None</em><span class="sig-paren">)</span><a class="headerlink" href="#remove_ip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Release an server&#8217;s IP and optionally remove it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>ip_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server&#8217;s IP.</li>
+<li><strong>keep_ip</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) &#8211; Set <code class="docutils literal"><span class="pre">keep_ip</span></code> to <code class="docutils literal"><span class="pre">True</span></code> for releasing the IP without deleting it permanently. (<code class="docutils literal"><span class="pre">False</span></code> by default)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="remove_firewall_policy">
+<code class="descname">remove_firewall_policy</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>ip_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#remove_firewall_policy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a firewall policy from the server&#8217;s IP.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>ip_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server&#8217;s IP.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="remove_load_balancer">
+<code class="descname">remove_load_balancer</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>ip_id=None</em>, <em>load_balancer_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#remove_load_balancer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a load balancer from the server&#8217;s IP.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>ip_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server&#8217;s IP.</li>
+<li><strong>load_balancer_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the load balancer.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="remove_private_network">
+<code class="descname">remove_private_network</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>private_network_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#remove_private_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a private network from a server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>private_network_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the private network.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="eject_dvd">
+<code class="descname">eject_dvd</code><span class="sig-paren">(</span><em>server_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#eject_dvd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unload a DVD from the virtual DVD unit of a server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">JSON</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="delete_snapshot">
+<code class="descname">delete_snapshot</code><span class="sig-paren">(</span><em>server_id=None</em>, <em>snapshot_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#delete_snapshot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a snapshot.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>server_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server.</li>
+<li><strong>snapshot_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the server snapshot.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">JSON</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="the-server-class">
+<h2>The &#8220;Server&#8221; Class<a class="headerlink" href="#the-server-class" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Server">
+<em class="property">class </em><code class="descname">Server</code><span class="sig-paren">(</span><em>name=None</em>, <em>description=None</em>, <em>fixed_instance_size_id=None</em>, <em>vcore=None</em>, <em>cores_per_processor=None</em>, <em>ram=None</em>, <em>appliance_id=None</em>, <em>password=None</em>, <em>power_on=None</em>, <em>firewall_policy_id=None</em>, <em>ip_id=None</em>, <em>load_balancer_id=None</em>, <em>monitoring_policy_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Server" title="Permalink to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Pass a <a class="reference internal" href="#Server" title="Server"><code class="xref py py-class docutils literal"><span class="pre">Server</span></code></a> instance into the <a class="reference internal" href="#create_server" title="create_server"><code class="xref py py-func docutils literal"><span class="pre">create_server()</span></code></a>
+method to create a server.  There are also a few helper methods available to perform simple requests after creating your server.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Only the following parameters are <strong>required</strong> to create a server:</p>
+<ul class="last simple">
+<li><code class="docutils literal"><span class="pre">name</span></code></li>
+<li><code class="docutils literal"><span class="pre">description</span></code></li>
+<li><code class="docutils literal"><span class="pre">vcore</span></code></li>
+<li><code class="docutils literal"><span class="pre">cores_per_processor</span></code></li>
+<li><code class="docutils literal"><span class="pre">ram</span></code></li>
+<li><code class="docutils literal"><span class="pre">appliance_id</span></code></li>
+</ul>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; server name.</li>
+<li><strong>description</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; server description.</li>
+<li><strong>fixed_instance_size_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for your desired fixed server flavor.</li>
+<li><strong>vcore</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; Total amount of virtual cores.</li>
+<li><strong>cores_per_processor</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; Number of cores per processor.</li>
+<li><strong>ram</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; Memory size.</li>
+<li><strong>appliance_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; image to be installed on the server.</li>
+<li><strong>password</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; server password.</li>
+<li><strong>power_on</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) &#8211; choose whether or not you want the server to &#8216;POWER_ON&#8217; after creation.  (True by default)</li>
+<li><strong>firewall_policy_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the firewall policy to be assigned.</li>
+<li><strong>ip_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the IP to be assigned.</li>
+<li><strong>load_balancer_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the load balancer to be assigned.</li>
+<li><strong>monitoring_policy_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) &#8211; the unique identifier for the monitoring policy to be assigned.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Methods:</strong></p>
+<dl class="method">
+<dt id="Server.get">
+<code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Server.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the server&#8217;s current specs.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Server.hardware">
+<code class="descname">hardware</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Server.hardware" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the server&#8217;s current hardware configurations.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Server.hdds">
+<code class="descname">hdds</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Server.hdds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves a list of the server&#8217;s HDDs.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Server.image">
+<code class="descname">image</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Server.image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves information about the image currently installed on the server.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Server.ips">
+<code class="descname">ips</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Server.ips" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves a list of the server&#8217;s IPs.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Server.status">
+<code class="descname">status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Server.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the server&#8217;s current status.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Server.dvd">
+<code class="descname">dvd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Server.dvd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves information about the DVD currently loaded into the server.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Server.private_networks">
+<code class="descname">private_networks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Server.private_networks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves a list of the server&#8217;s private networks.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Server.snapshots">
+<code class="descname">snapshots</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Server.snapshots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves a list of the server&#8217;s snapshots.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Server.wait_for">
+<code class="descname">wait_for</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Server.wait_for" title="Permalink to this definition">¶</a></dt>
+<dd><p>Polls the <a class="reference internal" href="#Server" title="Server"><code class="xref py py-class docutils literal"><span class="pre">Server</span></code></a> resource until an <code class="docutils literal"><span class="pre">ACTIVE</span></code>, <code class="docutils literal"><span class="pre">POWERED_ON</span></code>, or <code class="docutils literal"><span class="pre">POWERED_OFF</span></code> state is returned.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="the-hdd-class">
+<h2>The &#8220;Hdd&#8221; Class<a class="headerlink" href="#the-hdd-class" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Hdd">
+<em class="property">class </em><code class="descname">Hdd</code><span class="sig-paren">(</span><em>size=None</em>, <em>is_main=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Hdd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use the <a class="reference internal" href="#Hdd" title="Hdd"><code class="xref py py-class docutils literal"><span class="pre">Hdd</span></code></a> class to create HDDs which can then be added to a server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>size</strong> (<code class="docutils literal"><span class="pre">int</span></code>) &#8211; HDD size.  Must be a multiple of <code class="docutils literal"><span class="pre">20</span></code>.</li>
+<li><strong>is_main</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) &#8211; set to <code class="docutils literal"><span class="pre">True</span></code> if the HDD is to be the primary HDD.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Servers</a><ul>
+<li><a class="reference internal" href="#oneandoneservice-methods">OneAndOneService Methods</a></li>
+<li><a class="reference internal" href="#the-server-class">The &#8220;Server&#8221; Class</a></li>
+<li><a class="reference internal" href="#the-hdd-class">The &#8220;Hdd&#8221; Class</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">1&amp;1&#8217;s Python SDK</a></li>
+      <li>Next: <a href="images.html" title="next chapter">Images</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/servers.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, 1&1 Internet SE.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/servers.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
