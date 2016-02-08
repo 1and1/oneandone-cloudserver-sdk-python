@@ -3,8 +3,8 @@
 
 # Table of Contents
 
-- [The "wait_for" Method](#wait-for)
-- [Class Helper Methods](#helper-methods)
+- [The 'wait_for' Method](#the-'wait_for'-method)
+- [Class Helper Methods](#class-helper-methods)
 - [Servers](#servers)
 - [Images](#images)
 - [Shared Storages](#shared-storages)
@@ -21,7 +21,7 @@
 - [DVD ISO](#dvd-iso)
 
 
-# <a name="wait-for"></a>The "wait_for" Method
+## The 'wait_for' Method
 
 
 Use the `wait_for()` method on any major class object to poll its resource until an `"ACTIVE"` or `"POWERED_ON"` state is returned.  This is necessary when chaining together multiple actions that take a while to deploy.  See the example below:
@@ -102,7 +102,7 @@ server1.wait_for()
 The `wait_for()` method is available on the `Server`, `Image`, `SharedStorage`, `FirewallPolicy`, `LoadBalancer`, `PrivateNetwork`, and `MonitoringPolicy` classes.
 
 
-# <a name="helper-methods"></a>Class Helper Methods
+## Class Helper Methods
 
 In addition to the `wait_for()` method, all of the classes mentioned above are also equipped with helper methods that retrieve resources without the need to pass in an ID. For example: 
 
@@ -209,7 +209,7 @@ The helper methods for each class are as follows:
 `servers()` - retrieves a list of the servers currently attached to the monitoring policy.
 
 
-# <a name="servers"></a>Servers
+## Servers
 
 
 **List all servers:**
@@ -453,7 +453,7 @@ response = client.add_hdd(server_id='', hdds=hdds)
 
 
 
-# <a name="images"></a>Images
+## Images
 
 
 **List all images:**
@@ -504,7 +504,7 @@ modified_image = client.modify_image(image_id='',
 
 
 
-# <a name="shared-storages"></a>Shared Storages
+## Shared Storages
 
 
 **List all shared storages:**
@@ -593,7 +593,7 @@ modified_storage = client.modify_shared_storage(shared_storage_id='',
 
 
 
-# <a name="firewall-policies"></a>Firewall Policies
+## Firewall Policies
 
 
 **List all firewall policies:**
@@ -703,7 +703,7 @@ to retreive the ID for a server IP
 
 
 
-# <a name="load-balancers"></a>Load Balancers
+## Load Balancers
 
 
 **List all load balancers:**
@@ -831,7 +831,7 @@ to retreive the ID for a server IP
 
 
 
-# <a name="public-ips"></a>Public IPs
+## Public IPs
 
 
 **List all of your public IPs:**
@@ -864,7 +864,7 @@ to retreive the ID for a server IP
 
 
 
-# <a name="private-networks"></a>Private Networks
+## Private Networks
 
 
 **List all private networks:**
@@ -939,7 +939,7 @@ to power down the server first
 `response = client.remove_private_network_server(private_network_id='', server_id='')`
 
 
-# <a name="monitoring-center"></a>Monitoring Center
+## Monitoring Center
 
 
 **List all usages and alerts of monitoring servers:**
@@ -958,7 +958,7 @@ set using the following date/time format: `2015-19-05T00:05:00Z`
 
 
 
-# <a name="monitoring-policies"></a>Monitoring Policies
+## Monitoring Policies
 
 
 **List all monitoring policies:**
@@ -1092,7 +1092,7 @@ new_monitoring_policy = client.create_monitoring_policy(monitoring_policy=mp1,
 ```
 
 
-**Add new ports to a monitoring_policy:**
+**Add new ports to a monitoring policy:**
 
 *Note:* `ports` must receive a list with at least one `Port` object
 ```
@@ -1222,7 +1222,7 @@ response = client.modify_process(monitoring_policy_id='', process_id='', process
 
 
 
-# <a name="logs"></a>Logs
+## Logs
 
 
 **List all logs:**
@@ -1241,7 +1241,7 @@ set using the following date/time format: `2015-19-05T00:05:00Z`
 
 
 
-# <a name="users"></a>Users
+## Users
 
 
 **List all users:**
@@ -1264,7 +1264,7 @@ set using the following date/time format: `2015-19-05T00:05:00Z`
 `api_key = client.show_api_key(user_id='')`
 
 
-**List IP's from which API access is allowed for a user:**
+**List IPs from which API access is allowed for a user:**
 
 `ips_allowed = client.ips_api_access_allowed(user_id='')`
 
@@ -1280,7 +1280,7 @@ new_user = client.create_user(name='Test User',
 ```
 
 
-**Add new IP's to a user:**
+**Add new IPs to a user:**
 
 *Note:* `user_ips` must receive a list with at least one IP string
 ```
@@ -1321,7 +1321,7 @@ response = client.add_user_ip(user_id='', user_ips=ips)
 
 
 
-# <a name="usages"></a>Usages
+## Usages
 
 
 **List all usages:**
@@ -1335,10 +1335,10 @@ set using the following date/time format: `2015-19-05T00:05:00Z`
 
 
 
-# <a name="server-appliances"></a>Server Appliances
+## Server Appliances
 
 
-**List all the of appliances that you can use for creating a server:**
+**List all of the appliances that you can use for creating a server:**
 
 `server_appliances = client.list_appliances()`
 
@@ -1349,10 +1349,10 @@ set using the following date/time format: `2015-19-05T00:05:00Z`
 
 
 
-# <a name="dvd-iso"></a>DVD ISO
+## DVD ISO
 
 
-**List all operative systems and tools that you can load into your virtual DVD unit:**
+**List all operating systems and tools that you can load into your virtual DVD unit:**
 
 `dvds = client.list_dvds()`
 
@@ -1360,5 +1360,4 @@ set using the following date/time format: `2015-19-05T00:05:00Z`
 **Retrieve a specific ISO image:**
 
 `dvd = client.get_dvd(iso_id='')`
-
 
