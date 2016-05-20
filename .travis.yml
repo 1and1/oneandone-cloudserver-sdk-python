@@ -1,0 +1,24 @@
+language: python
+
+python:
+  - 2.6
+  - 2.7
+  - 3.2
+
+install: "pip install -r requirements.txt"
+
+script:
+  - python tests/test_mock_servers.rb
+  - python tests/test_mock_images.rb
+  - python tests/test_mock_firewall_policies.rb
+  - python tests/test_mock_shared_storages.rb
+  - python tests/test_mock_load_balancers.rb
+  - python tests/test_mock_monitoring_policy.rb
+  - python tests/test_mock_public_ips.rb
+  - python tests/test_mock_private_network.rb
+  - python tests/test_mock_dvds.rb
+  - python tests/test_mock_logs.rb
+  - python tests/test_mock_monitoring_center.rb
+  - python tests/test_mock_server_appliances.rb
+  - python tests/test_mock_usages.rb
+  - python tests/test_mock_users.rb
