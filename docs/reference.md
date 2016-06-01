@@ -19,12 +19,18 @@
 - [Usages](#usages)
 - [Server Appliances](#server-appliances)
 - [DVD ISO](#dvd-iso)
+- [Data Centers](#datacenters)
+- [Pricing](#pricing)
+- [Ping](#ping)
+- [Ping Auth](#ping-auth)
+- [VPN's](#vpn)
+- [Roles](#roles)
 
 
 ## The 'wait_for' Method
 
 
-Use the `wait_for()` method on any major class object to poll its resource until an `"ACTIVE"` or `"POWERED_ON"` state is returned.  This is necessary when chaining together multiple actions that take a while to deploy.  See the example below:
+Use the `wait_for()` method on any major class object to poll its resource until an `"ACTIVE"`, `"ENABLED"`, `"POWERED_ON"`, or `"POWERED_OFF"` state is returned.  This is necessary when chaining together multiple actions that take some time to deploy.  The `wait_for()` method is available on the `Server`, `Image`, `SharedStorage`, `Vpn`, `FirewallPolicy`, `LoadBalancer`, `PrivateNetwork`, and `MonitoringPolicy` classes.  It returns a dictionary containing the execution duration.  See the example below:
 ```
 from oneandone.client import OneAndOneService
 from oneandone.client import Server, Hdd, LoadBalancer, LoadBalancerRule
@@ -85,13 +91,10 @@ print 'Creating new server...'
 server1.wait_for()
 
 
-# Add a new IP to the server
-new_ip = client.add_new_ip(server_id=new_server['id'])
-
 
 # Add Load Balancer to New Server IP
 lb_response = client.add_load_balancer(server_id=new_server['id'],
-                                       ip_id=new_ip['ips'][1]['id'],
+                                       ip_id=server1.first_ip['id'],
                                        load_balancer_id=new_load_balancer['id']
                                        )
 
@@ -99,7 +102,6 @@ lb_response = client.add_load_balancer(server_id=new_server['id'],
 print 'Adding load balancer to Server...'
 server1.wait_for()
 ```
-The `wait_for()` method is available on the `Server`, `Image`, `SharedStorage`, `FirewallPolicy`, `LoadBalancer`, `PrivateNetwork`, and `MonitoringPolicy` classes.
 
 
 ## Class Helper Methods
@@ -297,41 +299,89 @@ The helper methods for each class are as follows:
 `snapshots = client.list_server_snapshots(server_id='')`
 
 
-**Create a server:**
+**Create a fixed server:**
 
-*Note:* `server` must receive a `Server` object
+*Note:* `appliance_id` takes an `image_id` string
+```
+server1 = Server(name='Example Server',
+                 fixed_instance_id='<FIXED-ID>',
+                 appliance_id='<IMAGE-ID>')
 
-*Note:* `hdds` must receive a list with at least one `Hdd` object
+
+response = client.create_server(server=server1)
+```
+
+
+**Create a custom server:**
+
+*Note:* `hdds` must receive an array with at least one object
 
 *Note:* A Hdd's `size` must be a multiple of `20`
 
-*Note:* `appliance_id`, takes an `image_id` string
+*Note:* `appliance_id` takes an `image_id` string
 ```
-server1 = Server(name='Test Server',
-                 description='Server Description',
+server1 = Server(name='Example Server',
                  vcore=1,
-                 cores_per_processor=1, 
-                 ram=2, 
-                 appliance_id=''
-                 )
+                 cores_per_processor=1,
+                 ram=1,
+                 appliance_id='<IMAGE-ID>')
 
 hdd1 = Hdd(size=120, is_main=True)
 hdds = [hdd1]
 
-new_server = client.create_server(server=server1, hdds=hdds)
+response = client.create_server(server=server1, hdds=hdds)
 ```
 
 
-**Add a new HDD to a server:**
+**Create a server with SSH Key access:**
 
-*Note:* `hdds` must receive a list with at least one `Hdd` object
+*Note:* `hdds` must receive an array with at least one object
 
 *Note:* A Hdd's `size` must be a multiple of `20`
-```
-hdd2 = Hdd(size=40, is_main=False)
-hdds = [hdd2]
 
-response = client.add_hdd(server_id='', hdds=hdds)
+*Note:* `appliance_id` takes an `image_id` string
+```
+pub_key = '<PUB-KEY>'
+
+server1 = Server(name='Example Server',
+                 vcore=1,
+                 cores_per_processor=1,
+                 ram=1,
+                 appliance_id='<IMAGE-ID>',
+                 rsa_key=pub_key)
+
+hdd1 = Hdd(size=120, is_main=True)
+hdds = [hdd1]
+
+response = client.create_server(server=server1, hdds=hdds)
+```
+
+
+**Create a server with SSH Key access and explicitly declare your datacenter:**
+
+*Note:* `hdds` must receive an array with at least one object
+
+*Note:* A Hdd's `size` must be a multiple of `20`
+
+*Note:* `appliance_id` takes an `image_id` string
+
+*Note:* `appliance_id` location must match datacenter location (ex. DE and DE)
+```
+pub_key = '<PUB-KEY>'
+datacenter = '<DATACENTER-ID>'
+
+server1 = Server(name='Example Server',
+                 vcore=1,
+                 cores_per_processor=1,
+                 ram=1,
+                 appliance_id='<IMAGE-ID>',
+                 rsa_key=pub_key,
+                 datacenter_id=datacenter)
+
+hdd1 = Hdd(size=120, is_main=True)
+hdds = [hdd1]
+
+response = client.create_server(server=server1, hdds=hdds)
 ```
 
 
@@ -1361,3 +1411,205 @@ set using the following date/time format: `2015-19-05T00:05:00Z`
 
 `dvd = client.get_dvd(iso_id='')`
 
+
+
+# <a name="datacenters"></a>Data Centers
+
+
+**List all available data centers:**
+
+```
+response = client.list_datacenters()
+```
+
+
+**Returns information about a data center:**
+
+```
+response = client.get_datacenter(datacenter_id='<DATACENTER-ID>')
+```
+
+
+
+# <a name="pricing"></a>Pricing
+
+
+**List pricing for all available resources in Cloud Panel:**
+
+```
+response = client.pricing()
+```
+
+
+
+# <a name="ping"></a>Ping
+
+
+**Returns `"PONG"` if the API is running:**
+
+```
+response = client.ping()
+```
+
+
+
+# <a name="ping-auth"></a>Ping Auth
+
+
+**Returns `"PONG"` if the API is running and your token is valid:**
+
+```
+response = client.ping_auth()
+```
+
+
+
+# <a name="vpn"></a>VPN's
+
+
+**List all VPN's:**
+
+```
+response = client.list_vpns()
+```
+
+
+**Retrieve a single VPN:**
+
+```
+response = client.get_vpn(vpn_id='<VPN-ID>')
+```
+
+
+**Create a VPN:**
+
+```
+my_vpn = Vpn(name='Example VPN', datacenter_id='<DC-ID>')
+
+response = client.create_vpn(vpn=my_vpn)
+```
+
+
+**Modify a VPN:**
+
+```
+response = client.modify_vpn(vpn_id='<VPN-ID>', name='New Name')
+```
+
+
+**Delete a VPN:**
+
+```
+response = client.delete_vpn(vpn_id='<VPN-ID>')
+```
+
+
+**Download a VPN's config file:**
+
+```
+response = client.download_config(vpn_id='<VPN-ID>')
+```
+
+
+
+# <a name="roles"></a>Roles
+
+
+**List all available roles on your account:**
+
+```
+response = client.list_roles()
+```
+
+
+**Retrieve a single role:**
+
+```
+response = client.get_role(role_id='<ROLE-ID>')
+```
+
+
+**Create a role:**
+
+```
+response = client.create_role(name='Example Role')
+```
+
+
+**Modify a role:**
+
+```
+response = client.modify_role(role_id='<ROLE-ID>', name='New Name',
+                              state='ACTIVE')
+```
+
+
+**Delete a role:**
+
+```
+response = client.delete_role(role_id='<ROLE-ID>')
+```
+
+
+
+**List a role's permissions:**
+
+```
+response = client.permissions(role_id='<ROLE-ID>')
+```
+
+
+
+**Modify a role's permissions:**
+
+```
+server_perms = {
+  'show': True,
+  'create': True,
+  'delete': False
+}
+
+response = client.modify_permissions(role_id='<ROLE-ID>', servers=server_perms)
+```
+
+
+
+**List the users assigned to a role:**
+
+```
+response = client.role_users(role_id='<ROLE-ID>')
+```
+
+
+
+**Assign new users to a role:**
+
+```
+users = ['<USER1-ID>', '<USER2-ID>']
+
+response = client.add_users(role_id='<ROLE-ID>', users=users)
+```
+
+
+
+**Returns information about a user assigned to a role:**
+
+```
+response = client.get_role_user(role_id='<ROLE-ID>', user_id='<USER-ID>')
+```
+
+
+
+**Unassign a user from a role:**
+
+```
+response = client.remove_user(role_id='<ROLE-ID>', user_id='<USER-ID>')
+```
+
+
+
+**Clone a role:**
+
+```
+response = client.clone_role(role_id='<ROLE-ID>', name='Role Clone')
+```

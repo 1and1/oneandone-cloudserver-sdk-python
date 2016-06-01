@@ -904,7 +904,7 @@ class OneAndOneService(object):
 		
 		return r.json()
 
-	def clone_server(self, server_id=None, name=None):
+	def clone_server(self, server_id=None, name=None, datacenter_id=None):
 		
 		# Error Handling
 		if(server_id == None):
@@ -913,7 +913,10 @@ class OneAndOneService(object):
 			raise ValueError('name is a required parameter')
 
 		# Perform Request
-		data = {'name': name}
+		data = {
+				'name': name,
+				'datacenter_id': datacenter_id
+		}
 
 		url = '%s/servers/%s/clone' % (self.base_url, server_id)
 
@@ -933,20 +936,23 @@ class OneAndOneService(object):
 		if(server == None):
 			raise ValueError(('server is a required parameter. Make '
 							  'sure you pass a Server object.'))
-		if(hdds == None):
-			raise ValueError(('hdds is a required parameter.  Make '
-							  'sure you pass a list with at least one '
-							  'Hdd object.'))
 
 		# Unpack hdds
-		hdd = []
+		if hdds:
+			hdd = []
 
-		for value in hdds:
-			hdd.append(value.specs)
+			for value in hdds:
+				hdd.append(value.specs)
 
-		# Add hdds to server object and perform request
-		server.specs['hardware']['hdds'] = hdd
+			# Add hdds to server object
+			server.specs['hardware']['hdds'] = hdd
 
+		# Clean dictionary
+		for key, value in server.specs['hardware'].items():
+			if value == None:
+				del server.specs['hardware'][key]
+
+		# Build URL and perform request
 		url = '%s/servers' % self.base_url
 
 		r = requests.post(url, headers=self.header, json=server.specs)
@@ -962,6 +968,7 @@ class OneAndOneService(object):
 
 		server.specs.update(server_id=response['id'])
 		server.specs.update(api_token=self.header)
+		server.first_password = response['first_password']
 		
 		return r.json()
 
@@ -1256,7 +1263,8 @@ class OneAndOneService(object):
 		data = {
 			'name': shared_storage.name,
 			'description': shared_storage.description,
-			'size': shared_storage.size
+			'size': shared_storage.size,
+			'datacenter_id': shared_storage.datacenter_id
 		}
 
 		url = '%s/shared_storages' % self.base_url
@@ -2161,7 +2169,8 @@ class OneAndOneService(object):
 
 	## 'POST' Methods
 
-	def create_public_ip(self, reverse_dns=None, ip_type=None):
+	def create_public_ip(self, reverse_dns=None, ip_type=None,
+			datacenter_id=None):
 		
 		# Error Handling
 		if(ip_type != 'IPV4' and ip_type != None):
@@ -2170,7 +2179,8 @@ class OneAndOneService(object):
 		# Perform Request
 		data = {
 			'reverse_dns': reverse_dns,
-			'type': ip_type
+			'type': ip_type,
+			'datacenter_id': datacenter_id
 		}
 
 		url = '%s/public_ips' % self.base_url
@@ -2335,7 +2345,8 @@ class OneAndOneService(object):
 			'name': private_network.name,
 			'description': private_network.description,
 			'network_address': private_network.network_address,
-			'subnet_mask': private_network.subnet_mask
+			'subnet_mask': private_network.subnet_mask,
+			'datacenter_id': private_network.datacenter_id
 		}
 
 		url = '%s/private_networks' % self.base_url
@@ -3648,6 +3659,549 @@ class OneAndOneService(object):
 		return r.json()
 
 
+	#Datacenter Functions
+
+	## 'GET' Methods
+
+	def list_datacenters(self, page=None, per_page=None, sort=None,
+			q=None, fields=None):
+		
+		#Perform Request
+		parameters = {
+			'page': page,
+			'per_page': per_page,
+			'sort': sort,
+			'q': q,
+			'fields': fields
+		}
+
+		url = '%s/datacenters' % self.base_url
+
+		r = requests.get(url, headers=self.header, params=parameters)
+		
+		# Handle Potential Response Errors
+		if r.status_code not in self.success_codes:
+			error_message = ('Error Code: %s. Error Message: %s.' % 
+				(r.status_code, r.text))
+			raise Exception(error_message)
+		
+		return r.json()
+
+	def get_datacenter(self, datacenter_id=None):
+		
+		# Error Handling
+		if(datacenter_id == None):
+			raise ValueError('datacenter_id parameter is required')
+
+		# Perform Request
+		url = '%s/datacenters/%s' % (self.base_url, datacenter_id)
+
+		r = requests.get(url, headers=self.header)
+		
+		# Handle Potential Response Errors
+		if r.status_code not in self.success_codes:
+			error_message = ('Error Code: %s. Error Message: %s.' % 
+				(r.status_code, r.text))
+			raise Exception(error_message)
+		
+		return r.json()
+
+
+	#Pricing Functions
+
+	## 'GET' Methods
+
+	def pricing(self):
+		
+		#Perform Request
+		url = '%s/pricing' % self.base_url
+
+		r = requests.get(url, headers=self.header)
+		
+		# Handle Potential Response Errors
+		if r.status_code not in self.success_codes:
+			error_message = ('Error Code: %s. Error Message: %s.' % 
+				(r.status_code, r.text))
+			raise Exception(error_message)
+		
+		return r.json()
+
+
+	#Ping Functions
+
+	## 'GET' Methods
+
+	def ping(self):
+		
+		#Perform Request
+		url = '%s/ping' % self.base_url
+
+		r = requests.get(url, headers=self.header)
+		
+		# Handle Potential Response Errors
+		if r.status_code not in self.success_codes:
+			error_message = ('Error Code: %s. Error Message: %s.' % 
+				(r.status_code, r.text))
+			raise Exception(error_message)
+		
+		return r.json()
+
+
+	#Ping Auth Functions
+
+	## 'GET' Methods
+
+	def ping_auth(self):
+		
+		#Perform Request
+		url = '%s/ping_auth' % self.base_url
+
+		r = requests.get(url, headers=self.header)
+		
+		# Handle Potential Response Errors
+		if r.status_code not in self.success_codes:
+			error_message = ('Error Code: %s. Error Message: %s.' % 
+				(r.status_code, r.text))
+			raise Exception(error_message)
+		
+		return r.json()
+
+
+	#VPN Functions
+
+	## 'GET' Methods
+
+	def list_vpns(self, page=None, per_page=None, sort=None, q=None,
+			fields=None):			
+
+		# Perform Request
+		parameters = {
+			'page': page,
+			'per_page': per_page,
+			'sort': sort,
+			'q': q,
+			'fields': fields
+		}
+
+		url = '%s/vpns' % self.base_url
+
+		r = requests.get(url, headers=self.header, params=parameters)
+		
+		# Handle Potential Response Errors
+		if r.status_code not in self.success_codes:
+			error_message = ('Error Code: %s. Error Message: %s.' % 
+				(r.status_code, r.text))
+			raise Exception(error_message)
+		
+		return r.json()
+
+	def get_vpn(self, vpn_id=None):
+
+		# Error Handling
+		if(vpn_id == None):
+			raise ValueError('vpn_id is a required parameter')
+
+		# Perform Request
+
+		url = '%s/vpns/%s' % (self.base_url, vpn_id)
+
+		r = requests.get(url, headers=self.header)
+		
+		# Handle Potential Response Errors
+		if r.status_code not in self.success_codes:
+			error_message = ('Error Code: %s. Error Message: %s.' % 
+				(r.status_code, r.text))
+			raise Exception(error_message)
+		
+		return r.json()
+
+	def download_config(self, vpn_id=None):
+
+		# Error Handling
+		if(vpn_id == None):
+			raise ValueError('vpn_id is a required parameter')
+
+		# Perform Request
+
+		url = '%s/vpns/%s/configuration_file' % (self.base_url, vpn_id)
+
+		r = requests.get(url, headers=self.header)
+		
+		# Handle Potential Response Errors
+		if r.status_code not in self.success_codes:
+			error_message = ('Error Code: %s. Error Message: %s.' % 
+				(r.status_code, r.text))
+			raise Exception(error_message)
+		
+		return r.json()
+
+	## 'POST' Methods
+
+	def create_vpn(self, vpn=None):
+
+		# Perform Request
+		data = {
+			'name': vpn.name,
+			'description': vpn.description,
+			'datacenter_id': vpn.datacenter_id
+		}
+
+		url = '%s/vpns' % self.base_url
+
+		r = requests.post(url, headers=self.header, json=data)
+		
+		# Handle Potential Response Errors
+		if r.status_code not in self.success_codes:
+			error_message = ('Error Code: %s. Error Message: %s.' % 
+				(r.status_code, r.text))
+			raise Exception(error_message)
+
+		# Assign new image_id back to calling Image object
+		response = r.json()
+
+		vpn.specs.update(vpn_id=response['id'])
+		vpn.specs.update(api_token=self.header)
+		
+		return r.json()
+
+	## 'DELETE' Methods
+
+	def delete_vpn(self, vpn_id=None):
+
+		# Error Handling
+		if(vpn_id == None):
+			raise ValueError('vpn_id is a required parameter')
+
+		# Perform Request
+		self.header['content-type'] = 'application/json'
+
+		url = '%s/vpns/%s' % (self.base_url, vpn_id)
+
+		r = requests.delete(url, headers=self.header)
+		
+		# Handle Potential Response Errors
+		if r.status_code not in self.success_codes:
+			error_message = ('Error Code: %s. Error Message: %s.' % 
+				(r.status_code, r.text))
+			raise Exception(error_message)
+		
+		return r.json()
+
+	## 'PUT' Methods
+
+	def modify_vpn(self, vpn_id=None, name=None, description=None):
+
+		# Error Handling
+		if(vpn_id == None):
+			raise ValueError('vpn_id is a required parameter')
+
+		# Perform Request
+		data = {
+			'name': name,
+			'description': description
+		}
+
+		url = '%s/vpns/%s' % (self.base_url, vpn_id)
+
+		r = requests.put(url, headers=self.header, json=data)
+		
+		# Handle Potential Response Errors
+		if r.status_code not in self.success_codes:
+			error_message = ('Error Code: %s. Error Message: %s.' % 
+				(r.status_code, r.text))
+			raise Exception(error_message)
+		
+		return r.json()
+
+
+	#Role Functions
+
+	## 'GET' Methods
+
+	def list_roles(self, page=None, per_page=None, sort=None, q=None,
+			fields=None):			
+
+		# Perform Request
+		parameters = {
+			'page': page,
+			'per_page': per_page,
+			'sort': sort,
+			'q': q,
+			'fields': fields
+		}
+
+		url = '%s/roles' % self.base_url
+
+		r = requests.get(url, headers=self.header, params=parameters)
+		
+		# Handle Potential Response Errors
+		if r.status_code not in self.success_codes:
+			error_message = ('Error Code: %s. Error Message: %s.' % 
+				(r.status_code, r.text))
+			raise Exception(error_message)
+		
+		return r.json()
+
+	def get_role(self, role_id=None):
+
+		# Error Handling
+		if(role_id == None):
+			raise ValueError('role_id is a required parameter')
+
+		# Perform Request
+
+		url = '%s/roles/%s' % (self.base_url, role_id)
+
+		r = requests.get(url, headers=self.header)
+		
+		# Handle Potential Response Errors
+		if r.status_code not in self.success_codes:
+			error_message = ('Error Code: %s. Error Message: %s.' % 
+				(r.status_code, r.text))
+			raise Exception(error_message)
+		
+		return r.json()
+
+	def permissions(self, role_id=None):
+
+		# Error Handling
+		if(role_id == None):
+			raise ValueError('role_id is a required parameter')
+
+		# Perform Request
+
+		url = '%s/roles/%s/permissions' % (self.base_url, role_id)
+
+		r = requests.get(url, headers=self.header)
+		
+		# Handle Potential Response Errors
+		if r.status_code not in self.success_codes:
+			error_message = ('Error Code: %s. Error Message: %s.' % 
+				(r.status_code, r.text))
+			raise Exception(error_message)
+		
+		return r.json()
+
+	def role_users(self, role_id=None):
+
+		# Error Handling
+		if(role_id == None):
+			raise ValueError('role_id is a required parameter')
+
+		# Perform Request
+
+		url = '%s/roles/%s/users' % (self.base_url, role_id)
+
+		r = requests.get(url, headers=self.header)
+		
+		# Handle Potential Response Errors
+		if r.status_code not in self.success_codes:
+			error_message = ('Error Code: %s. Error Message: %s.' % 
+				(r.status_code, r.text))
+			raise Exception(error_message)
+		
+		return r.json()
+
+	def get_role_user(self, role_id=None, user_id=None):
+
+		# Error Handling
+		if(role_id == None):
+			raise ValueError('role_id is a required parameter')
+
+		# Perform Request
+		url = '%s/roles/%s/users/%s' % (self.base_url, role_id, user_id)
+
+		r = requests.get(url, headers=self.header)
+		
+		# Handle Potential Response Errors
+		if r.status_code not in self.success_codes:
+			error_message = ('Error Code: %s. Error Message: %s.' % 
+				(r.status_code, r.text))
+			raise Exception(error_message)
+		
+		return r.json()
+
+	## 'POST' Methods
+
+	def create_role(self, name=None):
+
+		# Perform Request
+		data = {
+			'name': name
+		}
+
+		url = '%s/vpns' % self.base_url
+
+		r = requests.post(url, headers=self.header, json=data)
+		
+		# Handle Potential Response Errors
+		if r.status_code not in self.success_codes:
+			error_message = ('Error Code: %s. Error Message: %s.' % 
+				(r.status_code, r.text))
+			raise Exception(error_message)
+		
+		return r.json()
+
+	def add_users(self, role_id=None, users=None):
+
+		# Error Handling
+		if(role_id == None):
+			raise ValueError('role_id is a required parameter')
+
+		# Perform Request
+		data = {
+			'users': users
+		}
+		
+		url = '%s/roles/%s/users' % (self.base_url, role_id)
+
+		r = requests.post(url, headers=self.header, json=data)
+		
+		# Handle Potential Response Errors
+		if r.status_code not in self.success_codes:
+			error_message = ('Error Code: %s. Error Message: %s.' % 
+				(r.status_code, r.text))
+			raise Exception(error_message)
+		
+		return r.json()
+
+	def clone_role(self, role_id=None, name=None):
+
+		# Error Handling
+		if(role_id == None):
+			raise ValueError('role_id is a required parameter')
+
+		# Perform Request
+		data = {
+			'name': name
+		}
+		
+		url = '%s/roles/%s/clone' % (self.base_url, role_id)
+
+		r = requests.post(url, headers=self.header, json=data)
+		
+		# Handle Potential Response Errors
+		if r.status_code not in self.success_codes:
+			error_message = ('Error Code: %s. Error Message: %s.' % 
+				(r.status_code, r.text))
+			raise Exception(error_message)
+		
+		return r.json()
+
+	## 'DELETE' Methods
+
+	def delete_role(self, role_id=None):
+
+		# Error Handling
+		if(role_id == None):
+			raise ValueError('role_id is a required parameter')
+
+		# Perform Request
+		self.header['content-type'] = 'application/json'
+
+		url = '%s/roles/%s' % (self.base_url, role_id)
+
+		r = requests.delete(url, headers=self.header)
+		
+		# Handle Potential Response Errors
+		if r.status_code not in self.success_codes:
+			error_message = ('Error Code: %s. Error Message: %s.' % 
+				(r.status_code, r.text))
+			raise Exception(error_message)
+		
+		return r.json()
+
+	def remove_user(self, role_id=None, user_id=None):
+
+		# Error Handling
+		if(role_id == None):
+			raise ValueError('role_id is a required parameter')
+
+		# Perform Request
+		self.header['content-type'] = 'application/json'
+
+		url = '%s/roles/%s/users/%s' % (self.base_url, role_id, user_id)
+
+		r = requests.delete(url, headers=self.header)
+		
+		# Handle Potential Response Errors
+		if r.status_code not in self.success_codes:
+			error_message = ('Error Code: %s. Error Message: %s.' % 
+				(r.status_code, r.text))
+			raise Exception(error_message)
+		
+		return r.json()
+
+	## 'PUT' Methods
+
+	def modify_role(self, role_id=None, name=None, description=None,
+		state=None):
+
+		# Error Handling
+		if(role_id == None):
+			raise ValueError('role_id is a required parameter')
+
+		# Perform Request
+		data = {
+			'name': name,
+			'description': description,
+			'state': state
+		}
+
+		url = '%s/roles/%s' % (self.base_url, role_id)
+
+		r = requests.put(url, headers=self.header, json=data)
+		
+		# Handle Potential Response Errors
+		if r.status_code not in self.success_codes:
+			error_message = ('Error Code: %s. Error Message: %s.' % 
+				(r.status_code, r.text))
+			raise Exception(error_message)
+		
+		return r.json()
+
+	def modify_permissions(self, role_id=None, servers=None, images=None,
+      	shared_storages=None, firewalls=None, load_balancers=None, ips=None,
+      	private_networks=None, vpns=None, monitoring_centers=None,
+      	monitoring_policies=None, backups=None, logs=None, users=None,
+      	roles=None, usages=None, interactive_invoices=None):
+
+		# Error Handling
+		if(role_id == None):
+			raise ValueError('role_id is a required parameter')
+
+		# Perform Request
+		data = {
+			'servers': servers,
+			'images': images,
+			'sharedstorages': shared_storages,
+			'firewalls': firewalls,
+			'loadbalancers': load_balancers,
+			'ips': ips,
+			'privatenetwork': private_networks,
+			'vpn': vpns,
+			'monitoringcenter': monitoring_centers,
+			'monitoringpolicies': monitoring_policies,
+			'backups': backups,
+			'logs': logs,
+			'users': users,
+			'roles': roles,
+			'usages': usages,
+			'interactiveinvoice': interactive_invoices
+		}
+		
+		url = '%s/roles/%s/permissions' % (self.base_url, role_id)
+
+		r = requests.put(url, headers=self.header, json=data)
+		
+		# Handle Potential Response Errors
+		if r.status_code not in self.success_codes:
+			error_message = ('Error Code: %s. Error Message: %s.' % 
+				(r.status_code, r.text))
+			raise Exception(error_message)
+		
+		return r.json()
+
 
 # Utility Classes
 
@@ -3658,8 +4212,11 @@ class Server(object):
 			fixed_instance_size_id=None, vcore=None, cores_per_processor=None,
 			ram=None, appliance_id=None, password=None, power_on=None,
 			firewall_policy_id=None, ip_id=None, load_balancer_id=None,
-			monitoring_policy_id=None):
+			monitoring_policy_id=None, datacenter_id=None, rsa_key=None):
 		
+		self.first_password = None
+		self.first_ip = None
+
 		self.specs = {
 			'name': name,
 			'description': description,
@@ -3675,18 +4232,22 @@ class Server(object):
 			'firewall_policy_id': firewall_policy_id,
 			'ip_id': ip_id,
 			'load_balancer_id': load_balancer_id,
-			'monitoring_policy_id': monitoring_policy_id			
+			'monitoring_policy_id': monitoring_policy_id,
+			'datacenter_id': datacenter_id,
+			'rsa_key': rsa_key			
 		}
 
 		self.base_url = 'https://cloudpanel-api.1and1.com/v1'
 		self.success_codes = (200, 201, 202)
-		self.good_states = ('ACTIVE', 'POWERED_ON', 'POWERED_OFF')
+		self.good_states = ('ACTIVE', 'ENABLED', 'POWERED_ON', 'POWERED_OFF')
 
 	def __repr__(self):
 		return ('Server: name=%s, description=%s, fixed_instance_size_id=%s, '
 				'vcore=%s, cores_per_processor=%s, ram=%s, appliance_id=%s, '
 				'password=%s, power_on=%s, firewall_policy_id=%s, ip_id=%s, '
-				'load_balancer_id=%s, monitoring_policy_id=%s' % 
+				'load_balancer_id=%s, monitoring_policy_id=%s, '
+				'rsa_key=%s, datacenter_id=%s, first_password=%s, '
+				'first_ip=%s' % 
 					(self.specs['name'], self.specs['description'],
 					 self.specs['hardware']['fixed_instance_size_id'],
 					 self.specs['hardware']['vcore'],
@@ -3695,7 +4256,9 @@ class Server(object):
 					 self.specs['appliance_id'], self.specs['password'],
 					 self.specs['power_on'], self.specs['firewall_policy_id'],
 					 self.specs['ip_id'], self.specs['load_balancer_id'],
-					 self.specs['monitoring_policy_id']))
+					 self.specs['monitoring_policy_id'],
+					 self.specs['rsa_key'], self.specs['datacenter_id'],
+					 self.first_password, self.first_ip))
 
 	def get(self):
 
@@ -3841,33 +4404,49 @@ class Server(object):
 		
 		return r.json()
 
-	def wait_for(self):
+	def wait_for(self, timeout=25, interval=15):
+
+		# Capture start time
+		start = time.time()
+		duration = 0
 
 		# Check initial server status
-		url = '%s/servers/%s/status' % (self.base_url, self.specs['server_id'])
+		url = '%s/servers/%s' % (self.base_url, self.specs['server_id'])
 
 		r = requests.get(url, headers=self.specs['api_token'])
 		response = r.json()
 
-		# Store initial server state
-		server_state = response['state']
+		# Store initial server state and percent values
+		server_state = response['status']['state']
+		percent = response['status']['percent']
 
 		# Keep polling the server's status until good
-		while server_state not in self.good_states:
+		while (server_state not in self.good_states) or (percent != None):
 
-			# Wait 30 seconds before polling again
-			time.sleep(30)
+			# Wait 15 seconds before polling again
+			time.sleep(interval)
 
 			# Check server status again
 			r = requests.get(url, headers=self.specs['api_token'])
-			current_response = r.json()
+			response = r.json()
 
-			# Update server state
-			server_state = current_response['state']
+			# Update server state and percent values
+			server_state = response['status']['state']
+			percent = response['status']['percent']
 
-		if server_state in self.good_states:
-			print '\nSuccess!'
-			print 'Server State: %s\n' % server_state
+			# Check for timeout
+			seconds = (time.time() - start)
+			duration = seconds / 60
+			if duration > timeout:
+				print 'The operation timed out after %s minutes.' % timeout
+				return
+
+			# Parse for first IP address
+			if len(response['ips']) == 1:
+				self.first_ip = response['ips'][0]
+
+		return {'duration': duration}
+
 
 
 class Hdd(object):
@@ -3897,26 +4476,6 @@ class AttachServer(object):
 
 class Image(object):
 
-	"""
-	:param server_id: the ID of the server to be copied.
-	:type server_id: ``str``
-
-	:param name: image name.
-	:type name: ``str``
-
-	:param description: image description.
-	:type description: ``str``
-
-	:param frequency: the image's creation policy.  Possible values are 
-		``'ONCE'``, ``'DAILY'``, and ``'WEEKLY'``.
-	:type frequency: ``str``
-
-	:param num_images: maximum number of images.
-	:type num_images: ``int``
-
-	:rtype: obj
-	"""
-
 	#Init Function
 	def __init__(self, server_id=None, name=None, description=None,
 			frequency=None, num_images=None):
@@ -3931,7 +4490,7 @@ class Image(object):
 
 		self.base_url = 'https://cloudpanel-api.1and1.com/v1'
 		self.success_codes = (200, 201, 202)
-		self.good_states = ('ACTIVE', 'POWERED_ON', 'POWERED_OFF')
+		self.good_states = ('ACTIVE', 'ENABLED', 'POWERED_ON', 'POWERED_OFF')
 
 	def __repr__(self):
 		return ('Image: server_id=%s, name=%s, description=%s, '
@@ -3955,52 +4514,63 @@ class Image(object):
 		
 		return r.json()	
 
-	def wait_for(self):
+	def wait_for(self, timeout=25, interval=15):
 
-		# Check initial image state
+		# Capture start time
+		start = time.time()
+		duration = 0
+
+		# Check initial image status
 		url = '%s/images/%s' % (self.base_url, self.specs['image_id'])
 
 		r = requests.get(url, headers=self.specs['api_token'])
 		response = r.json()
 
-		# Store initial image state
+		# Store initial server state and percent values
 		image_state = response['state']
 
-		# Keep polling the image's status until good
+		# Keep polling the server's status until good
 		while image_state not in self.good_states:
 
-			# Wait 30 seconds before polling again
-			time.sleep(30)
+			# Wait 15 seconds before polling again
+			time.sleep(interval)
 
-			# Check image status again
+			# Check server status again
 			r = requests.get(url, headers=self.specs['api_token'])
-			current_response = r.json()
+			response = r.json()
 
-			# Update image state
-			image_state = current_response['state']
+			# Update server state and percent values
+			image_state = response['state']
 
-		if image_state in self.good_states:
-			print '\nSuccess!'
-			print 'Image State: %s\n' % image_state
+			# Check for timeout
+			seconds = (time.time() - start)
+			duration = seconds / 60
+			if duration > timeout:
+				print 'The operation timed out after %s minutes.' % timeout
+				return
+
+		return {'duration': duration}
 
 class SharedStorage(object):
 
 	# Init Function
-	def __init__(self, name=None, description=None, size=None):
+	def __init__(self, name=None, description=None, size=None,
+			datacenter_id=None):
 
 		self.name = name
 		self.description = description
 		self.size = size
+		self.datacenter_id = datacenter_id
 
 		self.specs = {}
 
 		self.base_url = 'https://cloudpanel-api.1and1.com/v1'
 		self.success_codes = (200, 201, 202)
-		self.good_states = ('ACTIVE', 'POWERED_ON', 'POWERED_OFF')
+		self.good_states = ('ACTIVE', 'ENABLED', 'POWERED_ON', 'POWERED_OFF')
 
 	def __repr__(self):
 		return ('Shared Storage: name=%s, description=%s, size=%s' % 
-				(self.name, self.description, self.size))
+				(self.name, self.description, self.size, self.datacenter_id))
 
 	def get(self):
 
@@ -4034,34 +4604,43 @@ class SharedStorage(object):
 		
 		return r.json()
 
-	def wait_for(self):
+	def wait_for(self, timeout=25, interval=5):
 
-		# Check initial image state
+		# Capture start time
+		start = time.time()
+		duration = 0
+
+		# Check initial image status
 		url = '%s/shared_storages/%s' % (self.base_url,
 			self.specs['shared_storage_id'])
 
 		r = requests.get(url, headers=self.specs['api_token'])
 		response = r.json()
 
-		# Store initial image state
-		storage_state = response['state']
+		# Store initial server state and percent values
+		shared_storage_state = response['state']
 
-		# Keep polling the image's status until good
-		while storage_state not in self.good_states:
+		# Keep polling the server's status until good
+		while shared_storage_state not in self.good_states:
 
-			# Wait 10 seconds before polling again
-			time.sleep(10)
+			# Wait 15 seconds before polling again
+			time.sleep(interval)
 
-			# Check image status again
+			# Check server status again
 			r = requests.get(url, headers=self.specs['api_token'])
-			current_response = r.json()
+			response = r.json()
 
-			# Update image state
-			storage_state = current_response['state']
+			# Update server state and percent values
+			shared_storage_state = response['state']
 
-		if storage_state in self.good_states:
-			print '\nSuccess!'
-			print 'Shared Storage State: %s\n' % storage_state
+			# Check for timeout
+			seconds = (time.time() - start)
+			duration = seconds / 60
+			if duration > timeout:
+				print 'The operation timed out after %s minutes.' % timeout
+				return
+
+		return {'duration': duration}
 
 class FirewallPolicyRule(object):
 
@@ -4093,7 +4672,7 @@ class FirewallPolicy(object):
 
 		self.base_url = 'https://cloudpanel-api.1and1.com/v1'
 		self.success_codes = (200, 201, 202)
-		self.good_states = ('ACTIVE', 'POWERED_ON', 'POWERED_OFF')
+		self.good_states = ('ACTIVE', 'ENABLED', 'POWERED_ON', 'POWERED_OFF')
 
 	def __repr__(self):
 		return ('FirewallPolicy: name=%s, description=%s' % 
@@ -4147,34 +4726,42 @@ class FirewallPolicy(object):
 		
 		return r.json()
 
-	def wait_for(self):
+	def wait_for(self, timeout=25, interval=5):
 
-		# Check initial image state
-		url = '%s/firewall_policies/%s' % (self.base_url,
-			self.specs['firewall_id'])
+		# Capture start time
+		start = time.time()
+		duration = 0
+
+		# Check initial image status
+		url = '%s/firewall_policies/%s' % (self.base_url, self.specs['firewall_id'])
 
 		r = requests.get(url, headers=self.specs['api_token'])
 		response = r.json()
 
-		# Store initial image state
+		# Store initial server state and percent values
 		firewall_state = response['state']
 
-		# Keep polling the image's status until good
+		# Keep polling the server's status until good
 		while firewall_state not in self.good_states:
 
-			# Wait 5 seconds before polling again
-			time.sleep(5)
+			# Wait 15 seconds before polling again
+			time.sleep(interval)
 
-			# Check image status again
+			# Check server status again
 			r = requests.get(url, headers=self.specs['api_token'])
-			current_response = r.json()
+			response = r.json()
 
-			# Update image state
-			firewall_state = current_response['state']
+			# Update server state and percent values
+			firewall_state = response['state']
 
-		if firewall_state in self.good_states:
-			print '\nSuccess!'
-			print 'Firewall Policy State: %s\n' % firewall_state
+			# Check for timeout
+			seconds = (time.time() - start)
+			duration = seconds / 60
+			if duration > timeout:
+				print 'The operation timed out after %s minutes.' % timeout
+				return
+
+		return {'duration': duration}
 
 class LoadBalancerRule(object):
 
@@ -4201,7 +4788,7 @@ class LoadBalancer(object):
 	def __init__(self, health_check_path=None, health_check_parse=None,
 			name=None, description=None, health_check_test=None,
 			health_check_interval=None, persistence=None,
-			persistence_time=None, method=None):
+			persistence_time=None, method=None, datacenter_id=None):
 
 		self.specs = {
 			'health_check_path': health_check_path,
@@ -4212,24 +4799,25 @@ class LoadBalancer(object):
 			'health_check_interval': health_check_interval,
 			'persistence': persistence,
 			'persistence_time': persistence_time,
-			'method': method
+			'method': method,
+			'datacenter_id': datacenter_id
 		}
 
 		self.base_url = 'https://cloudpanel-api.1and1.com/v1'
 		self.success_codes = (200, 201, 202)
-		self.good_states = ('ACTIVE', 'POWERED_ON', 'POWERED_OFF')
+		self.good_states = ('ACTIVE', 'ENABLED', 'POWERED_ON', 'POWERED_OFF')
 
 	def __repr__(self):
 		return ('LoadBalancer: health_check_path=%s, health_check_parse=%s, '
 				'name=%s, description=%s, health_check_test=%s, '
 				'health_check_interval=%s, persistence=%s, '
-				'persistence_time=%s, method=%s' % 
+				'persistence_time=%s, method=%s, datacenter_id=%s' % 
 				(self.specs['health_check_path'],
 					self.specs['health_check_parse'], self.specs['name'],
 					self.specs['description'], self.specs['health_check_test'],
 					self.specs['health_check_interval'],
 					self.specs['persistence'], self.specs['persistence_time'],
-					self.specs['method']))
+					self.specs['method'], self.datacenter_id))
 
 	def get(self):
 
@@ -4279,51 +4867,61 @@ class LoadBalancer(object):
 		
 		return r.json()
 
-	def wait_for(self):
+	def wait_for(self, timeout=25, interval=5):
 
-		# Check initial lb state
+		# Capture start time
+		start = time.time()
+		duration = 0
+
+		# Check initial image status
 		url = '%s/load_balancers/%s' % (self.base_url,
 			self.specs['load_balancer_id'])
 
 		r = requests.get(url, headers=self.specs['api_token'])
 		response = r.json()
 
-		# Store initial lb state
-		lb_state = response['state']
+		# Store initial server state and percent values
+		load_balancer_state = response['state']
 
-		# Keep polling the load balancer's status until good
-		while lb_state not in self.good_states:
+		# Keep polling the server's status until good
+		while load_balancer_state not in self.good_states:
 
-			# Wait 5 seconds before polling again
-			time.sleep(5)
+			# Wait 15 seconds before polling again
+			time.sleep(interval)
 
-			# Check lb status again
+			# Check server status again
 			r = requests.get(url, headers=self.specs['api_token'])
-			current_response = r.json()
+			response = r.json()
 
-			# Update lb state
-			lb_state = current_response['state']
+			# Update server state and percent values
+			load_balancer_state = response['state']
 
-		if lb_state in self.good_states:
-			print '\nSuccess!'
-			print 'Load Balancer State: %s\n' % lb_state
+			# Check for timeout
+			seconds = (time.time() - start)
+			duration = seconds / 60
+			if duration > timeout:
+				print 'The operation timed out after %s minutes.' % timeout
+				return
+
+		return {'duration': duration}
 
 class PrivateNetwork(object):
 
 	#Init Function
 	def __init__(self, name=None, description=None, network_address=None,
-			subnet_mask=None):
+			subnet_mask=None, datacenter_id=None):
 
 		self.name = name
 		self.description = description
 		self.network_address = network_address
 		self.subnet_mask = subnet_mask
+		self.datacenter_id = datacenter_id
 
 		self.specs = {}
 
 		self.base_url = 'https://cloudpanel-api.1and1.com/v1'
 		self.success_codes = (200, 201, 202)
-		self.good_states = ('ACTIVE', 'POWERED_ON', 'POWERED_OFF')
+		self.good_states = ('ACTIVE', 'ENABLED', 'POWERED_ON', 'POWERED_OFF')
 
 	def __repr__(self):
 		return ('Private Network: name=%s, description=%s, network_address=%s, '
@@ -4362,34 +4960,43 @@ class PrivateNetwork(object):
 		
 		return r.json()
 
-	def wait_for(self):
+	def wait_for(self, timeout=25, interval=5):
 
-		# Check initial pn state
+		# Capture start time
+		start = time.time()
+		duration = 0
+
+		# Check initial image status
 		url = '%s/private_networks/%s' % (self.base_url,
 			self.specs['private_network_id'])
 
 		r = requests.get(url, headers=self.specs['api_token'])
 		response = r.json()
 
-		# Store initial pn state
-		pn_state = response['state']
+		# Store initial server state and percent values
+		private_network_state = response['state']
 
-		# Keep polling the load balancer's status until good
-		while pn_state not in self.good_states:
+		# Keep polling the server's status until good
+		while private_network_state not in self.good_states:
 
-			# Wait 5 seconds before polling again
-			time.sleep(5)
+			# Wait 15 seconds before polling again
+			time.sleep(interval)
 
-			# Check lb status again
+			# Check server status again
 			r = requests.get(url, headers=self.specs['api_token'])
-			current_response = r.json()
+			response = r.json()
 
-			# Update lb state
-			pn_state = current_response['state']
+			# Update server state and percent values
+			private_network_state = response['state']
 
-		if pn_state in self.good_states:
-			print '\nSuccess!'
-			print 'Private Network State: %s\n' % pn_state
+			# Check for timeout
+			seconds = (time.time() - start)
+			duration = seconds / 60
+			if duration > timeout:
+				print 'The operation timed out after %s minutes.' % timeout
+				return
+
+		return {'duration': duration}
 
 class MonitoringPolicy(object):
 
@@ -4404,7 +5011,7 @@ class MonitoringPolicy(object):
 
 		self.base_url = 'https://cloudpanel-api.1and1.com/v1'
 		self.success_codes = (200, 201, 202)
-		self.good_states = ('ACTIVE', 'POWERED_ON', 'POWERED_OFF')
+		self.good_states = ('ACTIVE', 'ENABLED', 'POWERED_ON', 'POWERED_OFF')
 
 	def __repr__(self):
 		return ('MonitoringPolicy: name=%s, description=%s, email=%s, '
@@ -4476,34 +5083,43 @@ class MonitoringPolicy(object):
 		
 		return r.json()
 
-	def wait_for(self):
+	def wait_for(self, timeout=25, interval=5):
 
-		# Check initial mp state
+		# Capture start time
+		start = time.time()
+		duration = 0
+
+		# Check initial image status
 		url = '%s/monitoring_policies/%s' % (self.base_url,
 			self.specs['monitoring_policy_id'])
 
 		r = requests.get(url, headers=self.specs['api_token'])
 		response = r.json()
 
-		# Store initial mp state
+		# Store initial server state and percent values
 		mp_state = response['state']
 
-		# Keep polling the monitoring policy's status until good
+		# Keep polling the server's status until good
 		while mp_state not in self.good_states:
 
-			# Wait 5 seconds before polling again
-			time.sleep(5)
+			# Wait 15 seconds before polling again
+			time.sleep(interval)
 
-			# Check mp status again
+			# Check server status again
 			r = requests.get(url, headers=self.specs['api_token'])
-			current_response = r.json()
+			response = r.json()
 
-			# Update mp state
-			mp_state = current_response['state']
+			# Update server state and percent values
+			mp_state = response['state']
 
-		if mp_state in self.good_states:
-			print '\nSuccess!'
-			print 'Monitoring Policy State: %s\n' % mp_state
+			# Check for timeout
+			seconds = (time.time() - start)
+			duration = seconds / 60
+			if duration > timeout:
+				print 'The operation timed out after %s minutes.' % timeout
+				return
+
+		return {'duration': duration}
 
 class Threshold(object):
 
@@ -4556,3 +5172,77 @@ class Process(object):
 		return ('Process: process=%s, alert_if=%s, email_notification=%s' % 
 				(self.process_set['process'], self.process_set['alert_if'],
 					self.process_set['email_notification']))
+
+class Vpn(object):
+
+	#Init Function
+	def __init__(self, name=None, description=None, datacenter_id=None):
+
+		self.name = name
+		self.description = description
+		self.datacenter_id = datacenter_id
+
+		self.specs = {}
+
+		self.base_url = 'https://cloudpanel-api.1and1.com/v1'
+		self.success_codes = (200, 201, 202)
+		self.good_states = ('ACTIVE', 'ENABLED', 'POWERED_ON', 'POWERED_OFF')
+
+	def __repr__(self):
+		return ('Vpn: name=%s, description=%s, datacenter_id=%s' % (self.name,
+			self.description, self.datacenter_id))
+
+	def get(self):
+
+		# Perform Request
+		url = ('%s/vpns/%s' % 
+			(self.base_url, self.specs['vpn_id']))
+
+		r = requests.get(url, headers=self.specs['api_token'])
+		
+		# Handle Potential Response Errors
+		if r.status_code not in self.success_codes:
+			error_message = ('Error Code: %s. Error Message: %s.' % 
+				(r.status_code, r.text))
+			raise Exception(error_message)
+		
+		return r.json()
+
+	def wait_for(self, timeout=25, interval=15):
+
+		# Capture start time
+		start = time.time()
+		duration = 0
+
+		# Check initial image status
+		url = '%s/vpns/%s' % (self.base_url, self.specs['vpn_id'])
+
+		r = requests.get(url, headers=self.specs['api_token'])
+		response = r.json()
+
+		# Store initial server state and percent values
+		vpn_state = response['state']
+
+		# Keep polling the server's status until good
+		while vpn_state not in self.good_states:
+
+			# Wait 15 seconds before polling again
+			time.sleep(interval)
+
+			# Check server status again
+			r = requests.get(url, headers=self.specs['api_token'])
+			response = r.json()
+
+			# Update server state and percent values
+			vpn_state = response['state']
+
+			# Check for timeout
+			seconds = (time.time() - start)
+			duration = seconds / 60
+			if duration > timeout:
+				print 'The operation timed out after %s minutes.' % timeout
+				return
+
+		return {'duration': duration}
+
+		
