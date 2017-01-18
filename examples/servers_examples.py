@@ -127,8 +127,8 @@ client = OneAndOneService('API-TOKEN')
 server1 = Server(name='Test Server',
                  description='Server Description',
                  vcore=1,
-                 cores_per_processor=1, 
-                 ram=2, 
+                 cores_per_processor=1,
+                 ram=2,
                  appliance_id=''
                  )
 
@@ -219,6 +219,20 @@ client = OneAndOneService('API-TOKEN')
 
 response = client.modify_server_status(server_id='', action='REBOOT',
 		method='SOFTWARE')
+
+# Stop a server
+from oneandone.client import OneAndOneService
+
+client = OneAndOneService('API-TOKEN')
+
+response = client.stop_server(server_id='')
+
+# Start a server
+from oneandone.client import OneAndOneService
+
+client = OneAndOneService('API-TOKEN')
+
+response = client.start_server(server_id='')
 
 # Load a DVD into a server
 from oneandone.client import OneAndOneService
