@@ -4269,7 +4269,8 @@ class Server(object):
             fixed_instance_size_id=None, vcore=None, cores_per_processor=None,
             ram=None, appliance_id=None, password=None, power_on=None,
             firewall_policy_id=None, ip_id=None, load_balancer_id=None,
-            monitoring_policy_id=None, datacenter_id=None, rsa_key=None):
+            monitoring_policy_id=None, datacenter_id=None, rsa_key=None,
+            private_network_id=None):
 
         self.first_password = None
         self.first_ip = None
@@ -4291,7 +4292,8 @@ class Server(object):
             'load_balancer_id': load_balancer_id,
             'monitoring_policy_id': monitoring_policy_id,
             'datacenter_id': datacenter_id,
-            'rsa_key': rsa_key
+            'rsa_key': rsa_key,
+            'private_network_id': private_network_id
         }
 
         self.base_url = 'https://cloudpanel-api.1and1.com/v1'
