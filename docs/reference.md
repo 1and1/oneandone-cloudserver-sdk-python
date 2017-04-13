@@ -74,8 +74,8 @@ lb1.wait_for()
 server1 = Server(name='Example App Server',
                  description='Server Description',
                  vcore=1,
-                 cores_per_processor=1, 
-                 ram=2, 
+                 cores_per_processor=1,
+                 ram=2,
                  appliance_id='D9DBA7D7F7E9C8200A493CE9013C4605'
                  )
 
@@ -106,7 +106,7 @@ server1.wait_for()
 
 ## Class Helper Methods
 
-In addition to the `wait_for()` method, all of the classes mentioned above are also equipped with helper methods that retrieve resources without the need to pass in an ID. For example: 
+In addition to the `wait_for()` method, all of the classes mentioned above are also equipped with helper methods that retrieve resources without the need to pass in an ID. For example:
 
 ```
 from oneandone.client import OneAndOneService
@@ -120,8 +120,8 @@ client = OneAndOneService('<API-TOKEN>')
 server1 = Server(name='Example App Server',
                  description='Server Description',
                  vcore=1,
-                 cores_per_processor=1, 
-                 ram=2, 
+                 cores_per_processor=1,
+                 ram=2,
                  appliance_id='D9DBA7D7F7E9C8200A493CE9013C4605'
                  )
 
@@ -139,7 +139,7 @@ server1.wait_for()
 
 # After creating a server, you can then call a helper method from the Server object you instantiated
 
-server1_info = server1.get() 
+server1_info = server1.get()
 
 # This will return the same JSON as:
 
@@ -441,6 +441,16 @@ response = client.create_server(server=server1, hdds=hdds)
 *Note:* `method` can be set to `SOFTWARE` or `HARDWARE`
 
 `response = client.modify_server_status(server_id='', action='REBOOT', method='SOFTWARE')`
+
+
+**Stop a server:**
+
+`response = client.stop_server(server_id='')`
+
+
+**Start a server:**
+
+`response = client.start_server(server_id='')`
 
 
 **Load a DVD into the virtual DVD unit of a server:**
@@ -811,7 +821,7 @@ lb1 = LoadBalancer(name='Test Load Balancer',
                    persistence_time=1200,
                    method='ROUND_ROBIN'
                   )
-                  
+
 rule1 = LoadBalancerRule(protocol='TCP', port_balancer=80, port_server=80, source='0.0.0.0')
 rule2 = LoadBalancerRule(protocol='TCP', port_balancer=9999, port_server=8888, source='0.0.0.0')
 
@@ -1074,35 +1084,35 @@ cpu = Threshold(entity='cpu',
                 critical_value=95,
                 critical_alert=False
                 )
-                
+
 ram = Threshold(entity='ram',
                 warning_value=90,
                 warning_alert=False,
                 critical_value=95,
                 critical_alert=False
                 )
-                
+
 disk = Threshold(entity='disk',
                  warning_value=80,
                  warning_alert=False,
                  critical_value=90,
                  critical_alert=False
                  )
-                 
+
 transfer = Threshold(entity='transfer',
                      warning_value=1000,
                      warning_alert=False,
                      critical_value=2000,
                      critical_alert=False
                      )
-                     
+
 internal_ping = Threshold(entity='internal_ping',
                           warning_value=50,
                           warning_alert=False,
                           critical_value=100,
                           critical_alert=False
                           )
-                          
+
 thresholds = [cpu, ram, disk, transfer, internal_ping]
 
 
@@ -1111,13 +1121,13 @@ port1 = Port(protocol='TCP',
              alert_if='RESPONDING',
              email_notification=False
              )
-             
+
 port2 = Port(protocol='TCP',
              port=44,
              alert_if='NOT_RESPONDING',
              email_notification=True
              )
-             
+
 ports = [port1, port2]
 
 
@@ -1125,12 +1135,12 @@ process1 = Process(process='TaskMgr',
                    alert_if='NOT_RUNNING',
                    email_notification=True
                    )
-                   
+
 process2 = Process(process='Logger',
                    alert_if='NOT_RUNNING',
                    email_notification=True
                    )
-                   
+
 processes = [process1, process2]
 
 
@@ -1151,9 +1161,9 @@ port3 = Port(protocol='TCP',
              alert_if='RESPONDING',
              email_notification=False
              )
-             
+
 ports = [port3]
-             
+
 response = client.add_port(monitoring_policy_id='', ports=ports)
 ```
 
@@ -1166,7 +1176,7 @@ process3 = Process(process='Third Test',
                    alert_if='RUNNING',
                    email_notification=True
                    )
-                   
+
 processes = [process3]
 
 
@@ -1203,21 +1213,21 @@ modified_cpu = Threshold(entity='cpu',
                          critical_value=90,
                          critical_alert=True
                          )
-                         
+
 modified_ram = Threshold(entity='ram',
                          warning_value=80,
                          warning_alert=True,
                          critical_value=90,
                          critical_alert=True
                          )
-                         
+
 modified_disk = Threshold(entity='disk',
                           warning_value=70,
                           warning_alert=True,
                           critical_value=80,
                           critical_alert=True
                           )
-                          
+
 
 thresholds = [modified_cpu, modified_ram, modified_disk]
 
