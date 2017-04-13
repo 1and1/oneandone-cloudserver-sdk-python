@@ -13,6 +13,7 @@ This guide will show you how to programmatically use the 1&1 library to perform 
 - [Operations](#operations)
   - [Resources and Using the Module](#resources-and-using-the-module)
   - [Creating a Server](#creating-a-server)
+  - [Creating a Server with SSH Key Access](#creating-a-server-with-ssh-key-access)
   - [Creating a Firewall Policy](#creating-a-firewall-policy)
   - [Creating a Load Balancer](#creating-a-load-balancer)
   - [Creating a Monitoring Policy](#creating-a-monitoring-policy)
@@ -37,7 +38,9 @@ Before you begin you will need to have signed up for a 1&1 account. The credenti
 
 The Python Client Library is available on <a href='https://pypi.python.org/pypi/1and1'>PyPi</a>. You can install the latest stable version using pip:
 
-`pip install 1and1`
+```bash
+$ pip install 1and1
+```
 
 Done!
 
@@ -46,7 +49,7 @@ Done!
 
 Connecting to 1&1 is handled by first setting up your authentication.
 
-```
+```python
 from oneandone.client import OneAndOneService
 
 client = OneAndOneService('API-TOKEN')
@@ -60,7 +63,7 @@ You can now use `client` for any future requests.
 
 **Resources**
 
-Official 1&amp;1 REST API Documentation: <a href='https://cloudpanel-api.1and1.com/documentation/v1/#' target='_blank'>https://cloudpanel-api.1and1.com/documentation/v1/#</a>
+Official 1&amp;1 REST API Documentation: <a href='https://cloudpanel-api.1and1.com/documentation/1and1/v1/en/documentation.html' target='_blank'>https://cloudpanel-api.1and1.com/documentation/1and1/v1/en/documentation.html</a>
 
 1&amp;1 Python SDK Method Reference Sheet: <a href='docs/reference.md'>reference.md</a>
 
@@ -71,7 +74,7 @@ The following "**How To's**" are meant to give you a general overview of some of
 
 ### Creating a Server
 
-```
+```python
 from oneandone.client import OneAndOneService
 from oneandone.client import Server, Hdd
 
@@ -94,10 +97,42 @@ hdds = [hdd1, hdd2]
 new_server = client.create_server(server=server1, hdds=hdds)
 ```
 
+### Creating a Server with SSH Key Access
+
+```python
+from oneandone.client import OneAndOneService
+from oneandone.client import Server, Hdd
+
+client = OneAndOneService('<API-TOKEN>')
+
+
+# Assign your public key to a variable
+pub_key = '<PUB-KEY>'
+
+server1 = Server(name='Test Server',
+                 description='Server Description',
+                 vcore=1,
+                 cores_per_processor=1, 
+                 ram=2, 
+                 appliance_id='<IMAGE ID>',
+                 rsa_key=pub_key
+                 )
+
+hdd1 = Hdd(size=120, is_main=True)
+hdd2 = Hdd(size=60, is_main=False)
+
+hdds = [hdd1, hdd2]
+
+new_server = client.create_server(server=server1, hdds=hdds)
+```
+**Note:** You may then SSH into your server by executing the following command in terminal 
+
+`ssh –i <path_to_private_key_file> root@SERVER_IP`
+
 
 ### Creating a Firewall Policy
 
-```
+```python
 from oneandone.client import OneAndOneService
 from oneandone.client import FirewallPolicy, FirewallPolicyRule
 
@@ -130,7 +165,7 @@ new_firewall = client.create_firewall_policy(firewall_policy=fp1, firewall_polic
 
 ### Creating a Load Balancer
 
-```
+```python
 from oneandone.client import OneAndOneService
 from oneandone.client import LoadBalancer, LoadBalancerRule
 
@@ -167,7 +202,7 @@ new_load_balancer = client.create_load_balancer(load_balancer=lb1, load_balancer
 
 
 First, create the monitoring policy:
-```
+```python
 from oneandone.client import OneAndOneService
 from oneandone.client import MonitoringPolicy, Threshold, Port, Process
 
@@ -255,7 +290,7 @@ new_monitoring_policy = client.create_monitoring_policy(monitoring_policy=mp1,
 ```
 
 Then, add a server or two:
-```
+```python
 from oneandone.client import OneAndOneService
 from oneandone.client import AttachServer
 
@@ -278,7 +313,7 @@ response = client.attach_monitoring_policy_server(monitoring_policy_id='<MONITOR
 1&amp;1 allows users to dynamically update cores, memory, and disk independently of each other. This means you will no longer have to upgrade your server to receive an increase in memory. You can now simply increase the instance's memory, which keeps your costs in-line with your resource needs.
 
 The following code illustrates how you can update cores and memory:
-```
+```python
 from oneandone.client import OneAndOneService
 
 client = OneAndOneService('<API-TOKEN>')
@@ -291,7 +326,7 @@ response = modify_server_hardware(server_id='<SERVER ID>',
 ```
 
 This is how you would update a server disk's size:
-```
+```python
 response = client.modify_hdd(server_id='<SERVER_ID>',
                              hdd_id='<HDD ID>',
                              size=80
@@ -317,7 +352,7 @@ Generating a list of resources is fairly straight forward.  Each "list" method f
 
 
 #### Examples of Listing Resources
-```
+```python
 from oneandone.client import OneAndOneService
 
 client = OneAndOneService('<API-TOKEN>')
@@ -341,125 +376,95 @@ monitoring_policies = client.list_monitoring_policies()
 
 ## Example App
 
-This simple app creates a load balancer, firewall policy, and server.  It then creates a new IP for the server and attaches the load balancer and firewall policy to that IP.
+This simple app creates a load balancer, firewall policy, and server.  It then adds the load balancer and firewall policy to the server's initial IP address.  You can access a server's initial IP by using the `first_ip` attribute on the Server class object, as seen in the example below.
 
-Use the `wait_for()` method to chain together multiple actions that take a while to deploy.  See the <a href='docs/reference.md'>reference.md</a> file for a more detailed description of the `wait_for()` method and other class helper methods.
-
-The original source code for the Example App with some additional markup and cleanup can be found <a href='examples/example_app.py'>here</a>
-```
+The source code for the Example App can be found <a href='examples/example_app.py'>here</a>.
+```python
 from oneandone.client import OneAndOneService
 from oneandone.client import Server, Hdd, LoadBalancer, LoadBalancerRule
 from oneandone.client import FirewallPolicy, FirewallPolicyRule
 
-client = OneAndOneService('<API-TOKEN>')
+client = OneAndOneService('<API-Token>')
 
 
 # Create Load Balancer
-lb1 = LoadBalancer(name='Example App LB',
-                   description='Test Description',
-                   health_check_test='TCP',
-                   health_check_interval=40,
-                   persistence=True,
-                   persistence_time=1200,
-                   method='ROUND_ROBIN'
-                  )
+lb1 = LoadBalancer(name='Example App LB', description='Example Description',
+  health_check_test='TCP', health_check_interval=40, persistence=True,
+  persistence_time=1200, method='ROUND_ROBIN')
 
-rule1 = LoadBalancerRule(protocol='TCP',
-                         port_balancer=80,
-                         port_server=80,
-                         source='0.0.0.0'
-                         )
-rule2 = LoadBalancerRule(protocol='TCP',
-                         port_balancer=9999,
-                         port_server=8888,
-                         source='0.0.0.0'
-                         )
+rule1 = LoadBalancerRule(protocol='TCP', port_balancer=80, port_server=80,
+  source='0.0.0.0')
 
-rules = [rule1, rule2]
+rules = [rule1]
 
 new_load_balancer = client.create_load_balancer(load_balancer=lb1,
-                                                load_balancer_rules=rules
-                                                )
+  load_balancer_rules=rules)
 
 ## Wait for Load Balancer to go live
 print 'Creating load balancer...'
-lb1.wait_for()
+print lb1.wait_for()
 
 
 # Create Firewall Policy
-fp1 = FirewallPolicy(name='Example App FP',
-		     		 description='Test Description'
-		     		 )
+fp1 = FirewallPolicy(name='Example App FP', description='Test Description')
 
+rule1 = FirewallPolicyRule(protocol='TCP', port_from=80, port_to=80,
+  source='0.0.0.0')
 
-rule1 = FirewallPolicyRule(protocol='TCP',
-			   	 		   port_from=80,
-			   	 		   port_to=80,
-			   	 		   source='0.0.0.0'
-			   	 		   )
-
-rule2 = FirewallPolicyRule(protocol='UDP',
-			   	 		   port_from=443,
-			   	 		   port_to=443,
-			   	 		   source='0.0.0.0'
-			   	 		   )
-
-rules = [rule1, rule2]
-
+rules = [rule1]
 
 new_firewall = client.create_firewall_policy(firewall_policy=fp1,
-					     	 				 firewall_policy_rules=rules
-					     	 				 )
+  firewall_policy_rules=rules)
 
 ## Wait for Firewall Policy to go live
 print 'Creating firewall policy...'
-fp1.wait_for()
+print fp1.wait_for()
 
 
 # Create Server
 server1 = Server(name='Example App Server',
-                 description='Server Description',
-                 vcore=1,
-                 cores_per_processor=1, 
-                 ram=2, 
-                 appliance_id='D9DBA7D7F7E9C8200A493CE9013C4605'
-                 )
+  fixed_instance_size_id='65929629F35BBFBA63022008F773F3EB',
+  appliance_id='6C902E5899CC6F7ED18595EBEB542EE1',
+  datacenter_id='5091F6D8CBFEF9C26ACE957C652D5D49')
 
-hdd1 = Hdd(size=120, is_main=True)
-hdd2 = Hdd(size=60, is_main=False)
-
-hdds = [hdd1, hdd2]
-
-new_server = client.create_server(server=server1, hdds=hdds)
+new_server = client.create_server(server=server1)
 
 ## Wait for the Server to go live
 print 'Creating new server...'
-server1.wait_for()
+print server1.wait_for()
 
 
-# Add a new IP to the server
-new_ip = client.add_new_ip(server_id=new_server['id'])
-
-
-# Add Load Balancer to New Server IP
+# Add Load Balancer to New Server
 lb_response = client.add_load_balancer(server_id=new_server['id'],
-                                       ip_id=new_ip['ips'][1]['id'],
-                                       load_balancer_id=new_load_balancer['id']
-                                       )
+  ip_id=server1.first_ip['id'], load_balancer_id=new_load_balancer['id'])
 
 ## Wait for Load Balancer to be added
 print 'Adding load balancer to Server...'
-server1.wait_for()
+print server1.wait_for()
 
 
-# Add Firewall Policy to New Server IP
+# Add Firewall Policy to New Server
 fw_response = client.add_firewall_policy(server_id=new_server['id'],
-					 					 ip_id=new_ip['ips'][1]['id'],
-					 					 firewall_id=new_firewall['id']
-					 					 )
+  ip_id=server1.first_ip['id'], firewall_id=new_firewall['id'])
 
 ## Wait for Firewall Policy to be added
 print 'Adding firewall policy to Server...'
-server1.wait_for()
+print server1.wait_for()
+print 'Everything looks good!'
+
+
+# Cleanup the rubbish
+print 'Cleaning up the mess we just made...\n'
+
+print 'Deleting server...'
+client.delete_server(server_id=new_server['id'])
+
+print 'Deleting load balancer...'
+client.delete_load_balancer(load_balancer_id=new_load_balancer['id'])
+
+print 'Deleting firewall...'
+client.delete_firewall(firewall_id=new_firewall['id'])
+
+print '\nAll done!'
 ```
 
