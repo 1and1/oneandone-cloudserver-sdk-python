@@ -4087,7 +4087,7 @@ class OneAndOneService(object):
             'name': name
         }
 
-        url = '%s/vpns' % self.base_url
+        url = '%s/roles' % self.base_url
 
         r = requests.post(url, headers=self.header, json=data)
 
