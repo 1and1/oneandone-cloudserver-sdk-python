@@ -9,9 +9,9 @@ import time
 class OneAndOneService(object):
 
     # Init Function
-    def __init__(self, api_token):
+    def __init__(self, api_token, api_url='https://cloudpanel-api.1and1.com/v1'):
         self.api_token = api_token
-        self.base_url = 'https://cloudpanel-api.1and1.com/v1'
+        self.base_url = api_url
         self.header = {'X-TOKEN': self.api_token}
         self.success_codes = (200, 201, 202)
 
