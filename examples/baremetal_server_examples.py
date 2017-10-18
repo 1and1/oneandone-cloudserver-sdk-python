@@ -25,14 +25,6 @@ hdds = [hdd1]
 new_server = client.create_server(server=server1)
 print server1.wait_for()
 
-# Add a new HDD to a server
-print "add a new HDD to the server"
-hdd2 = Hdd(size=40, is_main=False)
-hdds = [hdd2]
-
-response = client.add_hdd(server_id=new_server['id'], hdds=hdds)
-print server1.wait_for()
-
 # Add a new IP to a server.
 print "add a new IP to the server"
 response = client.add_new_ip(server_id=new_server['id'], ip_type='IPV4')
