@@ -7,7 +7,7 @@ token = os.getenv('ONEANDONE_TOKEN')
 
 client = OneAndOneService(token)
 print "creating bare metal server"
-server_appliances = client.list_appliances(q='centos7-64min')
+server_appliances = client.list_appliances(q='baremetal')
 
 baremetal_model = client.list_baremetal_models(q='BMC_L')
 
@@ -61,7 +61,7 @@ print hardware
 # List a server's HDDs
 print "List a server's HDDs"
 hdds = client.list_server_hdds(server_id=new_server['id'])
-print len(hdds) + " found"
+print len(hdds)
 
 # Retrieve a server's status
 print "Retrieve a server's status"
