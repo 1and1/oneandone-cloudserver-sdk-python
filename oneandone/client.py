@@ -1185,7 +1185,11 @@ class OneAndOneService(object):
             'name': image.name,
             'frequency': image.frequency,
             'num_images': image.num_images,
-            'description': image.description
+            'description': image.description,
+            'source': image.source,
+            'url': image.url,
+            'os_id': image.osId,
+            'type': image.type
         }
 
         url = '%s/images' % self.base_url
@@ -4651,13 +4655,17 @@ class Image(object):
 
     # Init Function
     def __init__(self, server_id=None, name=None, description=None,
-            frequency=None, num_images=None):
+            frequency=None, num_images=None, source='server', url=None, os_id=None, isotype=None):
 
         self.server_id = server_id
         self.name = name
         self.description = description
         self.frequency = frequency
         self.num_images = num_images
+        self.source = source
+        self.url = url
+        self.os_id = os_id
+        self.type = isotype
 
         self.specs = {}
 
@@ -4667,9 +4675,9 @@ class Image(object):
 
     def __repr__(self):
         return ('Image: server_id=%s, name=%s, description=%s, '
-                'frequency=%s, num_images=%s' % (self.server_id,
+                'frequency=%s, num_images=%s ,source=%s, url=%s, os_id=%s, type=%s' % (self.server_id,
                     self.name, self.description, self.frequency,
-                    self.num_images))
+                    self.num_images, self.source, self.url, self.osId, self.type))
 
     def get(self):
 
