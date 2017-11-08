@@ -4294,7 +4294,7 @@ class Server(object):
             'datacenter_id': datacenter_id,
             'rsa_key': rsa_key,
             'private_network_id': private_network_id,
-            'type': server_type
+            'server_type': server_type
         }
 
         self.base_url = 'https://cloudpanel-api.1and1.com/v1'
