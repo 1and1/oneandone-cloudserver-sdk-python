@@ -1,7 +1,11 @@
 import requests
-import urllib
-import json
 import time
+import base64
+try:
+  from cStringIO import StringIO
+except:
+  from StringIO import StringIO
+import zipfile
 
 # 1and1 Object Classes
 
@@ -3434,6 +3438,21 @@ class OneAndOneService(object):
 
         return r.json()
 
+    def show_user_permissions(self):
+
+        # Perform Request
+        url = '%s/users/current_user_permissions' % (self.base_url)
+
+        r = requests.get(url, headers=self.header)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
     def ips_api_access_allowed(self, user_id=None):
 
         # Error Handling
@@ -3670,6 +3689,21 @@ class OneAndOneService(object):
         url = '%s/usages' % self.base_url
 
         r = requests.get(url, headers=self.header, params=parameters)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+    def get_pricing(self):
+
+        # Perform Request
+        url = '%s/pricing' % (self.base_url)
+
+        r = requests.get(url, headers=self.header)
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -3980,7 +4014,7 @@ class OneAndOneService(object):
 
         return r.json()
 
-    def download_config(self, vpn_id=None):
+    def download_config(self, vpn_id=None, file_path=None):
 
         # Error Handling
         if(vpn_id == None):
@@ -3997,6 +4031,11 @@ class OneAndOneService(object):
             error_message = ('Error Code: %s. Error Message: %s.' %
                 (r.status_code, r.text))
             raise Exception(error_message)
+        body = r.json()
+        filestring = base64.b64decode(body["config_zip_file"])
+        zipPath = file_path + '.zip'
+        with open(zipPath, 'wb') as zipFile:
+            zipFile.write(filestring)
 
         return r.json()
 
