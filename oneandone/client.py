@@ -4060,6 +4060,22 @@ class OneAndOneService(object):
 
         return r.json()
 
+    def current_user_permissions(self):
+
+        # Perform Request
+
+        url = '%s/users/current_user_permissions' % (self.base_url)
+
+        r = requests_retry_session().get(url, headers=self.header)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
     def role_users(self, role_id=None):
 
         # Error Handling
