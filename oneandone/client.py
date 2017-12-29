@@ -1,13 +1,40 @@
-import requests
-import urllib
-import json
 import time
 import logging
 import httplib as http_client
+import requests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.poolmanager import PoolManager
+from requests.packages.urllib3.util.retry import Retry
+import ssl
+
+class MyAdapter(HTTPAdapter):
+    def init_poolmanager(self, connections, maxsize, block=False):
+        self.poolmanager = PoolManager(num_pools=connections,
+                                       maxsize=maxsize,
+                                       block=block,
+                                       ssl_version=ssl.PROTOCOL_TLSv1)
+
+#Retry logic if the API fails to responde
+def requests_retry_session(
+        retries=5,
+        backoff_factor=0.5,
+        status_forcelist=(500, 502, 504, 495, 496, 525, 526),
+        session=None,
+):
+    session = session or requests.Session()
+    retry = Retry(
+        total=retries,
+        read=retries,
+        connect=retries,
+        backoff_factor=backoff_factor,
+        status_forcelist=status_forcelist,
+    )
+    adapter = MyAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
+    return session
 
 # 1and1 Object Classes
-
-
 
 class OneAndOneService(object):
 
@@ -50,7 +77,7 @@ class OneAndOneService(object):
         url = '%s/servers' % self.base_url
 
         try:
-            r = requests.get(url, headers=self.header, params=parameters)
+            r = requests_retry_session().get(url, headers=self.header, params=parameters)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -73,7 +100,7 @@ class OneAndOneService(object):
         url = '%s/servers/fixed_instance_sizes' % self.base_url
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -101,7 +128,7 @@ class OneAndOneService(object):
             (self.base_url, fixed_server_id))
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -127,7 +154,7 @@ class OneAndOneService(object):
         # Perform Request
         url = '%s/servers/%s' % (self.base_url, server_id)
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -154,7 +181,7 @@ class OneAndOneService(object):
         url = '%s/servers/%s/hardware' % (self.base_url, server_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -181,7 +208,7 @@ class OneAndOneService(object):
         url = '%s/servers/%s/hardware/hdds' % (self.base_url, server_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -211,7 +238,7 @@ class OneAndOneService(object):
             (self.base_url, server_id, hdd_id))
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -238,7 +265,7 @@ class OneAndOneService(object):
         url = '%s/servers/%s/image' % (self.base_url, server_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -265,7 +292,7 @@ class OneAndOneService(object):
         url = '%s/servers/%s/ips' % (self.base_url, server_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -294,7 +321,7 @@ class OneAndOneService(object):
         url = '%s/servers/%s/ips/%s' % (self.base_url, server_id, ip_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -324,7 +351,7 @@ class OneAndOneService(object):
             (self.base_url, server_id, ip_id))
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -354,7 +381,7 @@ class OneAndOneService(object):
             (self.base_url, server_id, ip_id))
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -380,7 +407,7 @@ class OneAndOneService(object):
         # Perform Request
         url = '%s/servers/%s/status' % (self.base_url, server_id)
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -408,7 +435,7 @@ class OneAndOneService(object):
         url = '%s/servers/%s/dvd' % (self.base_url, server_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -435,7 +462,7 @@ class OneAndOneService(object):
         url = '%s/servers/%s/private_networks' % (self.base_url, server_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -466,7 +493,7 @@ class OneAndOneService(object):
             (self.base_url, server_id, private_network_id))
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -493,7 +520,7 @@ class OneAndOneService(object):
         url = '%s/servers/%s/snapshots' % (self.base_url, server_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -529,7 +556,7 @@ class OneAndOneService(object):
         url = '%s/servers/%s' % (self.base_url, server_id)
 
         try:
-            r = requests.put(url, headers=self.header, json=data)
+            r = requests_retry_session().put(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -585,7 +612,7 @@ class OneAndOneService(object):
         url = '%s/servers/%s/hardware' % (self.base_url, server_id)
 
         try:
-            r = requests.put(url, headers=self.header, json=data)
+            r = requests_retry_session().put(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -629,7 +656,7 @@ class OneAndOneService(object):
             (self.base_url, server_id, hdd_id))
 
         try:
-            r = requests.put(url, headers=self.header, json=data)
+            r = requests_retry_session().put(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -663,7 +690,7 @@ class OneAndOneService(object):
             (self.base_url, server_id, ip_id))
 
         try:
-            r = requests.put(url, headers=self.header, json=data)
+            r = requests_retry_session().put(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -707,7 +734,7 @@ class OneAndOneService(object):
         url = '%s/servers/%s/status/action' % (self.base_url, server_id)
 
         try:
-            r = requests.put(url, headers=self.header, json=data)
+            r = requests_retry_session().put(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -744,7 +771,7 @@ class OneAndOneService(object):
         url = '%s/servers/%s/status/action' % (self.base_url, server_id)
 
         try:
-            r = requests.put(url, headers=self.header, json=data)
+            r = requests_retry_session().put(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -781,7 +808,7 @@ class OneAndOneService(object):
         url = '%s/servers/%s/status/action' % (self.base_url, server_id)
 
         try:
-            r = requests.put(url, headers=self.header, json=data)
+            r = requests_retry_session().put(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -812,7 +839,7 @@ class OneAndOneService(object):
         url = '%s/servers/%s/dvd' % (self.base_url, server_id)
 
         try:
-            r = requests.put(url, headers=self.header, json=data)
+            r = requests_retry_session().put(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -845,7 +872,7 @@ class OneAndOneService(object):
             (self.base_url, server_id, snapshot_id))
 
         try:
-            r = requests.put(url, headers=self.header)
+            r = requests_retry_session().put(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -884,7 +911,7 @@ class OneAndOneService(object):
         url = '%s/servers/%s/image' % (self.base_url, server_id)
 
         try:
-            r = requests.put(url, headers=self.header, json=data)
+            r = requests_retry_session().put(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -916,7 +943,7 @@ class OneAndOneService(object):
         url = '%s/servers/%s' % (self.base_url, server_id)
 
         try:
-            r = requests.delete(url, headers=self.header, params=parameters)
+            r = requests_retry_session().delete(url, headers=self.header, params=parameters)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -949,7 +976,7 @@ class OneAndOneService(object):
             (self.base_url, server_id, hdd_id))
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -981,7 +1008,7 @@ class OneAndOneService(object):
         url = '%s/servers/%s/ips/%s' % (self.base_url, server_id, ip_id)
 
         try:
-            r = requests.delete(url, headers=self.header, params=parameters)
+            r = requests_retry_session().delete(url, headers=self.header, params=parameters)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1013,7 +1040,7 @@ class OneAndOneService(object):
             (self.base_url, server_id, ip_id))
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1048,7 +1075,7 @@ class OneAndOneService(object):
             (self.base_url, server_id, ip_id, load_balancer_id))
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1080,7 +1107,7 @@ class OneAndOneService(object):
             (self.base_url, server_id, private_network_id))
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1110,7 +1137,7 @@ class OneAndOneService(object):
         url = '%s/servers/%s/dvd' % (self.base_url, server_id)
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1142,7 +1169,7 @@ class OneAndOneService(object):
             (self.base_url, server_id, snapshot_id))
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1176,7 +1203,7 @@ class OneAndOneService(object):
         url = '%s/servers/%s/ips' % (self.base_url, server_id)
 
         try:
-            r = requests.post(url, headers=self.header, json=data)
+            r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1210,7 +1237,7 @@ class OneAndOneService(object):
         url = ('%s/servers/%s/ips/%s/load_balancers' %
             (self.base_url, server_id, ip_id))
         try:
-            r = requests.post(url, headers=self.header, json=data)
+            r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1241,7 +1268,7 @@ class OneAndOneService(object):
         url = '%s/servers/%s/private_networks' % (self.base_url, server_id)
 
         try:
-            r = requests.post(url, headers=self.header, json=data)
+            r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1270,7 +1297,7 @@ class OneAndOneService(object):
         url = '%s/servers/%s/snapshots' % (self.base_url, server_id)
 
         try:
-            r = requests.post(url, headers=self.header)
+            r = requests_retry_session().post(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1304,7 +1331,7 @@ class OneAndOneService(object):
         url = '%s/servers/%s/clone' % (self.base_url, server_id)
 
         try:
-            r = requests.post(url, headers=self.header, json=data)
+            r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1347,7 +1374,7 @@ class OneAndOneService(object):
         url = '%s/servers' % self.base_url
 
         try:
-            r = requests.post(url, headers=self.header, json=server.specs)
+            r = requests_retry_session().post(url, headers=self.header, json=server.specs)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1393,7 +1420,7 @@ class OneAndOneService(object):
         url = '%s/servers/%s/hardware/hdds' % (self.base_url, server_id)
 
         try:
-            r = requests.post(url, headers=self.header, json=data)
+            r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1430,7 +1457,7 @@ class OneAndOneService(object):
         url = '%s/images' % self.base_url
 
         try:
-            r = requests.get(url, headers=self.header, params=parameters)
+            r = requests_retry_session().get(url, headers=self.header, params=parameters)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1458,7 +1485,7 @@ class OneAndOneService(object):
         url = '%s/images/%s' % (self.base_url, image_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1495,13 +1522,17 @@ class OneAndOneService(object):
             'name': image.name,
             'frequency': image.frequency,
             'num_images': image.num_images,
-            'description': image.description
+            'description': image.description,
+            'source': image.source,
+            'url': image.url,
+            'os_id': image.os_id,
+            'type': image.type
         }
 
         url = '%s/images' % self.base_url
 
         try:
-            r = requests.post(url, headers=self.header, json=data)
+            r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1538,7 +1569,7 @@ class OneAndOneService(object):
         url = '%s/images/%s' % (self.base_url, image_id)
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1574,7 +1605,7 @@ class OneAndOneService(object):
         url = '%s/images/%s' % (self.base_url, image_id)
 
         try:
-            r = requests.put(url, headers=self.header, json=data)
+            r = requests_retry_session().put(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1611,7 +1642,7 @@ class OneAndOneService(object):
         url = '%s/shared_storages' % self.base_url
 
         try:
-            r = requests.get(url, headers=self.header, params=parameters)
+            r = requests_retry_session().get(url, headers=self.header, params=parameters)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1638,7 +1669,7 @@ class OneAndOneService(object):
         url = '%s/shared_storages/%s' % (self.base_url, shared_storage_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1666,7 +1697,7 @@ class OneAndOneService(object):
             (self.base_url, shared_storage_id))
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1696,7 +1727,7 @@ class OneAndOneService(object):
             (self.base_url, shared_storage_id, server_id))
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1720,7 +1751,7 @@ class OneAndOneService(object):
         url = '%s/shared_storages/access' % self.base_url
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1758,7 +1789,7 @@ class OneAndOneService(object):
         url = '%s/shared_storages' % self.base_url
 
         try:
-            r = requests.post(url, headers=self.header, json=data)
+            r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1804,7 +1835,7 @@ class OneAndOneService(object):
             (self.base_url, shared_storage_id))
 
         try:
-            r = requests.post(url, headers=self.header, json=data)
+            r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1840,7 +1871,7 @@ class OneAndOneService(object):
         url = '%s/shared_storages/%s' % (self.base_url, shared_storage_id)
 
         try:
-            r = requests.put(url, headers=self.header, json=data)
+            r = requests_retry_session().put(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1870,7 +1901,7 @@ class OneAndOneService(object):
         url = '%s/shared_storages/access' % self.base_url
 
         try:
-            r = requests.put(url, headers=self.header, json=data)
+            r = requests_retry_session().put(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1901,7 +1932,7 @@ class OneAndOneService(object):
         url = '%s/shared_storages/%s' % (self.base_url, shared_storage_id)
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1934,7 +1965,7 @@ class OneAndOneService(object):
             (self.base_url, shared_storage_id, server_id))
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1970,7 +2001,7 @@ class OneAndOneService(object):
 
         url = '%s/firewall_policies' % self.base_url
         try:
-            r = requests.get(url, headers=self.header, params=parameters)
+            r = requests_retry_session().get(url, headers=self.header, params=parameters)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -1998,7 +2029,7 @@ class OneAndOneService(object):
         url = '%s/firewall_policies/%s' % (self.base_url, firewall_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2026,7 +2057,7 @@ class OneAndOneService(object):
             (self.base_url, firewall_id))
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2056,7 +2087,7 @@ class OneAndOneService(object):
             (self.base_url, firewall_id, server_ip_id))
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2083,7 +2114,7 @@ class OneAndOneService(object):
         url = '%s/firewall_policies/%s/rules' % (self.base_url, firewall_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2113,7 +2144,7 @@ class OneAndOneService(object):
             (self.base_url, firewall_id, rule_id))
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2147,7 +2178,7 @@ class OneAndOneService(object):
         url = '%s/firewall_policies/%s' % (self.base_url, firewall_id)
 
         try:
-            r = requests.put(url, headers=self.header, json=data)
+            r = requests_retry_session().put(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2192,7 +2223,7 @@ class OneAndOneService(object):
         url = '%s/firewall_policies' % self.base_url
 
         try:
-            r = requests.post(url, headers=self.header, json=firewall_policy.specs)
+            r = requests_retry_session().post(url, headers=self.header, json=firewall_policy.specs)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2238,7 +2269,7 @@ class OneAndOneService(object):
         url = '%s/firewall_policies/%s/rules' % (self.base_url, firewall_id)
 
         try:
-            r = requests.post(url, headers=self.header, json=data)
+            r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2277,7 +2308,7 @@ class OneAndOneService(object):
             (self.base_url, firewall_id))
 
         try:
-            r = requests.post(url, headers=self.header, json=data)
+            r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2308,7 +2339,7 @@ class OneAndOneService(object):
         url = '%s/firewall_policies/%s' % (self.base_url, firewall_id)
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2340,7 +2371,7 @@ class OneAndOneService(object):
             (self.base_url, firewall_id, rule_id))
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2372,7 +2403,7 @@ class OneAndOneService(object):
             (self.base_url, firewall_id, server_ip_id))
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2409,7 +2440,7 @@ class OneAndOneService(object):
         url = '%s/load_balancers' % self.base_url
 
         try:
-            r = requests.get(url, headers=self.header, params=parameters)
+            r = requests_retry_session().get(url, headers=self.header, params=parameters)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2436,7 +2467,7 @@ class OneAndOneService(object):
         url = '%s/load_balancers/%s' % (self.base_url, load_balancer_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2464,7 +2495,7 @@ class OneAndOneService(object):
             (self.base_url, load_balancer_id))
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2495,7 +2526,7 @@ class OneAndOneService(object):
             (self.base_url, load_balancer_id, server_ip_id))
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2522,7 +2553,7 @@ class OneAndOneService(object):
         url = '%s/load_balancers/%s/rules' % (self.base_url, load_balancer_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2552,7 +2583,7 @@ class OneAndOneService(object):
             (self.base_url, load_balancer_id, rule_id))
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2614,7 +2645,7 @@ class OneAndOneService(object):
         url = '%s/load_balancers/%s' % (self.base_url, load_balancer_id)
 
         try:
-            r = requests.put(url, headers=self.header, json=data)
+            r = requests_retry_session().put(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2662,7 +2693,7 @@ class OneAndOneService(object):
         url = '%s/load_balancers' % self.base_url
 
         try:
-            r = requests.post(url, headers=self.header, json=load_balancer.specs)
+            r = requests_retry_session().post(url, headers=self.header, json=load_balancer.specs)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2709,7 +2740,7 @@ class OneAndOneService(object):
             (self.base_url, load_balancer_id))
 
         try:
-            r = requests.post(url, headers=self.header, json=data)
+            r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2750,7 +2781,7 @@ class OneAndOneService(object):
             (self.base_url, load_balancer_id))
 
         try:
-            r = requests.post(url, headers=self.header, json=data)
+            r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2781,7 +2812,7 @@ class OneAndOneService(object):
         url = '%s/load_balancers/%s' % (self.base_url, load_balancer_id)
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2814,7 +2845,7 @@ class OneAndOneService(object):
             (self.base_url, load_balancer_id, server_ip_id))
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2846,7 +2877,7 @@ class OneAndOneService(object):
             (self.base_url, load_balancer_id, rule_id))
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2883,7 +2914,7 @@ class OneAndOneService(object):
         url = '%s/public_ips' % self.base_url
 
         try:
-            r = requests.get(url, headers=self.header, params=parameters)
+            r = requests_retry_session().get(url, headers=self.header, params=parameters)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2910,7 +2941,7 @@ class OneAndOneService(object):
         url = '%s/public_ips/%s' % (self.base_url, ip_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2946,7 +2977,7 @@ class OneAndOneService(object):
         url = '%s/public_ips' % self.base_url
 
         try:
-            r = requests.post(url, headers=self.header, json=data)
+            r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -2977,7 +3008,7 @@ class OneAndOneService(object):
         url = '%s/public_ips/%s' % (self.base_url, ip_id)
 
         try:
-            r = requests.put(url, headers=self.header, json=data)
+            r = requests_retry_session().put(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3008,7 +3039,7 @@ class OneAndOneService(object):
         url = '%s/public_ips/%s' % (self.base_url, ip_id)
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3045,7 +3076,7 @@ class OneAndOneService(object):
         url = '%s/private_networks' % self.base_url
 
         try:
-            r = requests.get(url, headers=self.header, params=parameters)
+            r = requests_retry_session().get(url, headers=self.header, params=parameters)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3072,7 +3103,7 @@ class OneAndOneService(object):
         url = '%s/private_networks/%s' % (self.base_url, private_network_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3100,7 +3131,7 @@ class OneAndOneService(object):
             (self.base_url, private_network_id))
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3131,7 +3162,7 @@ class OneAndOneService(object):
             (self.base_url, private_network_id, server_id))
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3168,7 +3199,7 @@ class OneAndOneService(object):
         url = '%s/private_networks' % self.base_url
 
         try:
-            r = requests.post(url, headers=self.header, json=data)
+            r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3215,7 +3246,7 @@ class OneAndOneService(object):
             (self.base_url, private_network_id))
 
         try:
-            r = requests.post(url, headers=self.header, json=data)
+            r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3248,7 +3279,7 @@ class OneAndOneService(object):
         url = '%s/private_networks/%s' % (self.base_url, private_network_id)
 
         try:
-            r = requests.put(url, headers=self.header, json=data)
+            r = requests_retry_session().put(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3279,7 +3310,7 @@ class OneAndOneService(object):
         url = '%s/private_networks/%s' % (self.base_url, private_network_id)
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3312,7 +3343,7 @@ class OneAndOneService(object):
             (self.base_url, private_network_id, server_id))
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3349,7 +3380,7 @@ class OneAndOneService(object):
         url = '%s/monitoring_center' % self.base_url
 
         try:
-            r = requests.get(url, headers=self.header, params=parameters)
+            r = requests_retry_session().get(url, headers=self.header, params=parameters)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3390,7 +3421,7 @@ class OneAndOneService(object):
         url = '%s/monitoring_center/%s' % (self.base_url, server_id)
 
         try:
-            r = requests.get(url, headers=self.header, params=parameters)
+            r = requests_retry_session().get(url, headers=self.header, params=parameters)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3427,7 +3458,7 @@ class OneAndOneService(object):
         url = '%s/monitoring_policies' % self.base_url
 
         try:
-            r = requests.get(url, headers=self.header, params=parameters)
+            r = requests_retry_session().get(url, headers=self.header, params=parameters)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3455,7 +3486,7 @@ class OneAndOneService(object):
             (self.base_url, monitoring_policy_id))
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3483,7 +3514,7 @@ class OneAndOneService(object):
             (self.base_url, monitoring_policy_id))
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3514,7 +3545,7 @@ class OneAndOneService(object):
             (self.base_url, monitoring_policy_id, port_id))
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3542,7 +3573,7 @@ class OneAndOneService(object):
             (self.base_url, monitoring_policy_id))
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3573,7 +3604,7 @@ class OneAndOneService(object):
             (self.base_url, monitoring_policy_id, process_id))
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3601,7 +3632,7 @@ class OneAndOneService(object):
             (self.base_url, monitoring_policy_id))
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3632,7 +3663,7 @@ class OneAndOneService(object):
             (self.base_url, monitoring_policy_id, server_id))
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3664,7 +3695,7 @@ class OneAndOneService(object):
             (self.base_url, monitoring_policy_id))
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3697,7 +3728,7 @@ class OneAndOneService(object):
             (self.base_url, monitoring_policy_id, port_id))
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3730,7 +3761,7 @@ class OneAndOneService(object):
             (self.base_url, monitoring_policy_id, process_id))
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3763,7 +3794,7 @@ class OneAndOneService(object):
             (self.base_url, monitoring_policy_id, server_id))
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3838,7 +3869,7 @@ class OneAndOneService(object):
         url = '%s/monitoring_policies' % self.base_url
 
         try:
-            r = requests.post(url, headers=self.header,
+            r = requests_retry_session().post(url, headers=self.header,
                     json=monitoring_policy.specs)
 
             # Handle Potential Response Errors
@@ -3884,7 +3915,7 @@ class OneAndOneService(object):
             (self.base_url, monitoring_policy_id))
 
         try:
-            r = requests.post(url, headers=self.header, json=data)
+            r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3924,7 +3955,7 @@ class OneAndOneService(object):
             (self.base_url, monitoring_policy_id))
 
         try:
-            r = requests.post(url, headers=self.header, json=data)
+            r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -3965,7 +3996,7 @@ class OneAndOneService(object):
             (self.base_url, monitoring_policy_id))
 
         try:
-            r = requests.post(url, headers=self.header, json=data)
+            r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -4063,11 +4094,11 @@ class OneAndOneService(object):
                 url = ('%s/monitoring_policies/%s' %
                     (self.base_url, monitoring_policy_id))
 
-                r = requests.put(url, headers=self.header, json=data)
+                r = requests_retry_session().put(url, headers=self.header, json=data)
 
             else:
                 # Mock Request for Unit Testing
-                r = requests.put(self.base_url + '/monitoring_policies/%s' %
+                r = requests_retry_session().put(self.base_url + '/monitoring_policies/%s' %
                     (monitoring_policy_id), headers=self.header)
 
             # Handle Potential Response Errors
@@ -4117,11 +4148,11 @@ class OneAndOneService(object):
                 url = ('%s/monitoring_policies/%s/ports/%s' %
                     (self.base_url, monitoring_policy_id, port_id))
 
-                r = requests.put(url, headers=self.header, json=data)
+                r = requests_retry_session().put(url, headers=self.header, json=data)
 
             else:
                 # Mock Request for Unit Testing
-                r = requests.put(self.base_url + '/monitoring_policies/%s/ports/%s' %
+                r = requests_retry_session().put(self.base_url + '/monitoring_policies/%s/ports/%s' %
                         (monitoring_policy_id, port_id), headers=self.header)
 
             # Handle Potential Response Errors
@@ -4173,11 +4204,11 @@ class OneAndOneService(object):
                 url = ('%s/monitoring_policies/%s/processes/%s' %
                     (self.base_url, monitoring_policy_id, process_id))
 
-                r = requests.put(url, headers=self.header, json=data)
+                r = requests_retry_session().put(url, headers=self.header, json=data)
 
             else:
                 # Mock Request for Unit Testing
-                r = requests.put(self.base_url + '/monitoring_policies/%s/processes/%s' %
+                r = requests_retry_session().put(self.base_url + '/monitoring_policies/%s/processes/%s' %
                     (monitoring_policy_id, process_id), headers=self.header)
 
             # Handle Potential Response Errors
@@ -4227,7 +4258,7 @@ class OneAndOneService(object):
         url = '%s/logs' % self.base_url
 
         try:
-            r = requests.get(url, headers=self.header, params=parameters)
+            r = requests_retry_session().get(url, headers=self.header, params=parameters)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -4254,7 +4285,7 @@ class OneAndOneService(object):
         url = '%s/logs/%s' % (self.base_url, log_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -4291,7 +4322,7 @@ class OneAndOneService(object):
         url = '%s/users' % self.base_url
 
         try:
-            r = requests.get(url, headers=self.header, params=parameters)
+            r = requests_retry_session().get(url, headers=self.header, params=parameters)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -4318,7 +4349,7 @@ class OneAndOneService(object):
         url = '%s/users/%s' % (self.base_url, user_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -4345,7 +4376,7 @@ class OneAndOneService(object):
         url = '%s/users/%s/api' % (self.base_url, user_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -4372,7 +4403,7 @@ class OneAndOneService(object):
         url = '%s/users/%s/api/key' % (self.base_url, user_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -4399,7 +4430,7 @@ class OneAndOneService(object):
         url = '%s/users/%s/api/ips' % (self.base_url, user_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -4439,7 +4470,7 @@ class OneAndOneService(object):
         url = '%s/users' % self.base_url
 
         try:
-            r = requests.post(url, headers=self.header, json=data)
+            r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -4478,7 +4509,7 @@ class OneAndOneService(object):
         url = '%s/users/%s/api/ips' % (self.base_url, user_id)
 
         try:
-            r = requests.post(url, headers=self.header, json=data)
+            r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -4519,7 +4550,7 @@ class OneAndOneService(object):
         url = '%s/users/%s' % (self.base_url, user_id)
 
         try:
-            r = requests.put(url, headers=self.header, json=data)
+            r = requests_retry_session().put(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -4550,7 +4581,7 @@ class OneAndOneService(object):
         url = '%s/users/%s/api' % (self.base_url, user_id)
 
         try:
-            r = requests.put(url, headers=self.header, json=data)
+            r = requests_retry_session().put(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -4580,7 +4611,7 @@ class OneAndOneService(object):
 
 
         try:
-            r = requests.put(url, headers=self.header)
+            r = requests_retry_session().put(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -4611,7 +4642,7 @@ class OneAndOneService(object):
         url = '%s/users/%s' % (self.base_url, user_id)
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -4642,7 +4673,7 @@ class OneAndOneService(object):
         url = '%s/users/%s/api/ips/%s' % (self.base_url, user_id, ip)
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -4691,7 +4722,7 @@ class OneAndOneService(object):
         url = '%s/usages' % self.base_url
 
         try:
-            r = requests.get(url, headers=self.header, params=parameters)
+            r = requests_retry_session().get(url, headers=self.header, params=parameters)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -4713,6 +4744,7 @@ class OneAndOneService(object):
 
     # 'GET' Methods
 
+
     def list_appliances(self, page=None, per_page=None, sort=None,
             q=None, fields=None):
 
@@ -4728,7 +4760,7 @@ class OneAndOneService(object):
         url = '%s/server_appliances' % self.base_url
 
         try:
-            r = requests.get(url, headers=self.header, params=parameters)
+            r = requests_retry_session().get(url, headers=self.header, params=parameters)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -4755,7 +4787,7 @@ class OneAndOneService(object):
         url = '%s/server_appliances/%s' % (self.base_url, appliance_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -4792,7 +4824,7 @@ class OneAndOneService(object):
         url = '%s/dvd_isos' % self.base_url
 
         try:
-            r = requests.get(url, headers=self.header, params=parameters)
+            r = requests_retry_session().get(url, headers=self.header, params=parameters)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -4819,7 +4851,7 @@ class OneAndOneService(object):
         url = '%s/dvd_isos/%s' % (self.base_url, iso_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -4856,7 +4888,7 @@ class OneAndOneService(object):
         url = '%s/datacenters' % self.base_url
 
         try:
-            r = requests.get(url, headers=self.header, params=parameters)
+            r = requests_retry_session().get(url, headers=self.header, params=parameters)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -4883,7 +4915,7 @@ class OneAndOneService(object):
         url = '%s/datacenters/%s' % (self.base_url, datacenter_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -4911,7 +4943,7 @@ class OneAndOneService(object):
         url = '%s/pricing' % self.base_url
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -4939,7 +4971,7 @@ class OneAndOneService(object):
         url = '%s/ping' % self.base_url
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -4967,7 +4999,7 @@ class OneAndOneService(object):
         url = '%s/ping_auth' % self.base_url
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -5005,7 +5037,7 @@ class OneAndOneService(object):
         url = '%s/vpns' % self.base_url
 
         try:
-            r = requests.get(url, headers=self.header, params=parameters)
+            r = requests_retry_session().get(url, headers=self.header, params=parameters)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -5033,7 +5065,7 @@ class OneAndOneService(object):
         url = '%s/vpns/%s' % (self.base_url, vpn_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -5062,7 +5094,7 @@ class OneAndOneService(object):
         url = '%s/vpns/%s/configuration_file' % (self.base_url, vpn_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -5093,7 +5125,7 @@ class OneAndOneService(object):
         url = '%s/vpns' % self.base_url
 
         try:
-            r = requests.post(url, headers=self.header, json=data)
+            r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -5130,7 +5162,7 @@ class OneAndOneService(object):
         url = '%s/vpns/%s' % (self.base_url, vpn_id)
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -5164,7 +5196,7 @@ class OneAndOneService(object):
         url = '%s/vpns/%s' % (self.base_url, vpn_id)
 
         try:
-            r = requests.put(url, headers=self.header, json=data)
+            r = requests_retry_session().put(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -5201,7 +5233,7 @@ class OneAndOneService(object):
         url = '%s/roles' % self.base_url
 
         try:
-            r = requests.get(url, headers=self.header, params=parameters)
+            r = requests_retry_session().get(url, headers=self.header, params=parameters)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -5229,7 +5261,7 @@ class OneAndOneService(object):
         url = '%s/roles/%s' % (self.base_url, role_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -5257,7 +5289,7 @@ class OneAndOneService(object):
         url = '%s/roles/%s/permissions' % (self.base_url, role_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -5274,6 +5306,22 @@ class OneAndOneService(object):
             else:
                 raise
 
+    def current_user_permissions(self):
+
+        # Perform Request
+
+        url = '%s/users/current_user_permissions' % (self.base_url)
+
+        r = requests_retry_session().get(url, headers=self.header)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
     def role_users(self, role_id=None):
 
         # Error Handling
@@ -5285,7 +5333,7 @@ class OneAndOneService(object):
         url = '%s/roles/%s/users' % (self.base_url, role_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -5312,7 +5360,7 @@ class OneAndOneService(object):
         url = '%s/roles/%s/users/%s' % (self.base_url, role_id, user_id)
 
         try:
-            r = requests.get(url, headers=self.header)
+            r = requests_retry_session().get(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -5341,7 +5389,7 @@ class OneAndOneService(object):
         url = '%s/roles' % self.base_url
 
         try:
-            r = requests.post(url, headers=self.header, json=data)
+            r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -5373,7 +5421,7 @@ class OneAndOneService(object):
         url = '%s/roles/%s/users' % (self.base_url, role_id)
 
         try:
-            r = requests.post(url, headers=self.header, json=data)
+            r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -5404,7 +5452,7 @@ class OneAndOneService(object):
         url = '%s/roles/%s/clone' % (self.base_url, role_id)
 
         try:
-            r = requests.post(url, headers=self.header, json=data)
+            r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -5435,7 +5483,7 @@ class OneAndOneService(object):
         url = '%s/roles/%s' % (self.base_url, role_id)
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -5464,7 +5512,7 @@ class OneAndOneService(object):
         url = '%s/roles/%s/users/%s' % (self.base_url, role_id, user_id)
 
         try:
-            r = requests.delete(url, headers=self.header)
+            r = requests_retry_session().delete(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -5500,7 +5548,7 @@ class OneAndOneService(object):
         url = '%s/roles/%s' % (self.base_url, role_id)
 
         try:
-            r = requests.put(url, headers=self.header, json=data)
+            r = requests_retry_session().put(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -5550,7 +5598,7 @@ class OneAndOneService(object):
         url = '%s/roles/%s/permissions' % (self.base_url, role_id)
 
         try:
-            r = requests.put(url, headers=self.header, json=data)
+            r = requests_retry_session().put(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
@@ -5578,7 +5626,7 @@ class Server(object):
             ram=None, appliance_id=None, password=None, power_on=None,
             firewall_policy_id=None, ip_id=None, load_balancer_id=None,
             monitoring_policy_id=None, datacenter_id=None, rsa_key=None,
-            private_network_id=None):
+            private_network_id=None, server_type=None):
 
         self.first_password = None
         self.first_ip = None
@@ -5601,7 +5649,8 @@ class Server(object):
             'monitoring_policy_id': monitoring_policy_id,
             'datacenter_id': datacenter_id,
             'rsa_key': rsa_key,
-            'private_network_id': private_network_id
+            'private_network_id': private_network_id,
+            'server_type': server_type
         }
 
         self.base_url = 'https://cloudpanel-api.1and1.com/v1'
@@ -5633,7 +5682,7 @@ class Server(object):
         url = ('%s/servers/%s' %
             (self.base_url, self.specs['server_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -5649,7 +5698,7 @@ class Server(object):
         url = ('%s/servers/%s/hardware' %
             (self.base_url, self.specs['server_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -5665,7 +5714,7 @@ class Server(object):
         url = ('%s/servers/%s/hardware/hdds' %
             (self.base_url, self.specs['server_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -5681,7 +5730,7 @@ class Server(object):
         url = ('%s/servers/%s/image' %
             (self.base_url, self.specs['server_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -5697,7 +5746,7 @@ class Server(object):
         url = ('%s/servers/%s/ips' %
             (self.base_url, self.specs['server_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -5713,7 +5762,7 @@ class Server(object):
         url = ('%s/servers/%s/status' %
             (self.base_url, self.specs['server_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -5729,7 +5778,7 @@ class Server(object):
         url = ('%s/servers/%s/dvd' %
             (self.base_url, self.specs['server_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -5745,7 +5794,7 @@ class Server(object):
         url = ('%s/servers/%s/private_networks' %
             (self.base_url, self.specs['server_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -5761,7 +5810,7 @@ class Server(object):
         url = ('%s/servers/%s/snapshots' %
             (self.base_url, self.specs['server_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -5780,7 +5829,7 @@ class Server(object):
         # Check initial server status
         url = '%s/servers/%s' % (self.base_url, self.specs['server_id'])
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
         response = r.json()
 
         # Store initial server state and percent values
@@ -5794,7 +5843,7 @@ class Server(object):
             time.sleep(interval)
 
             # Check server status again
-            r = requests.get(url, headers=self.specs['api_token'])
+            r = requests_retry_session().get(url, headers=self.specs['api_token'])
             response = r.json()
 
             # Update server state and percent values
@@ -5846,13 +5895,18 @@ class Image(object):
 
     # Init Function
     def __init__(self, server_id=None, name=None, description=None,
-            frequency=None, num_images=None):
+            frequency=None, num_images=None, source=None, url=None,
+            os_id=None, type=None):
 
         self.server_id = server_id
         self.name = name
         self.description = description
         self.frequency = frequency
         self.num_images = num_images
+        self.source = source
+        self.url = url
+        self.os_id = os_id
+        self.type = type
 
         self.specs = {}
 
@@ -5862,9 +5916,10 @@ class Image(object):
 
     def __repr__(self):
         return ('Image: server_id=%s, name=%s, description=%s, '
-                'frequency=%s, num_images=%s' % (self.server_id,
-                    self.name, self.description, self.frequency,
-                    self.num_images))
+                'frequency=%s, num_images=%s, source=%s, url=%s'
+                'os_id=%s, type=%s' % (self.server_id, self.name,
+                self.description, self.frequency, self.num_images,
+                self.source, self.url, self.os_id, self.type))
 
     def get(self):
 
@@ -5872,7 +5927,7 @@ class Image(object):
         url = ('%s/images/%s' %
             (self.base_url, self.specs['image_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -5891,7 +5946,7 @@ class Image(object):
         # Check initial image status
         url = '%s/images/%s' % (self.base_url, self.specs['image_id'])
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
         response = r.json()
 
         # Store initial server state and percent values
@@ -5904,7 +5959,7 @@ class Image(object):
             time.sleep(interval)
 
             # Check server status again
-            r = requests.get(url, headers=self.specs['api_token'])
+            r = requests_retry_session().get(url, headers=self.specs['api_token'])
             response = r.json()
 
             # Update server state and percent values
@@ -5947,7 +6002,7 @@ class SharedStorage(object):
         url = ('%s/shared_storages/%s' %
             (self.base_url, self.specs['shared_storage_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -5963,7 +6018,7 @@ class SharedStorage(object):
         url = ('%s/shared_storages/%s/servers' %
             (self.base_url, self.specs['shared_storage_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -5983,7 +6038,7 @@ class SharedStorage(object):
         url = '%s/shared_storages/%s' % (self.base_url,
             self.specs['shared_storage_id'])
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
         response = r.json()
 
         # Store initial server state and percent values
@@ -5996,7 +6051,7 @@ class SharedStorage(object):
             time.sleep(interval)
 
             # Check server status again
-            r = requests.get(url, headers=self.specs['api_token'])
+            r = requests_retry_session().get(url, headers=self.specs['api_token'])
             response = r.json()
 
             # Update server state and percent values
@@ -6055,7 +6110,7 @@ class FirewallPolicy(object):
         url = ('%s/firewall_policies/%s' %
             (self.base_url, self.specs['firewall_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -6071,7 +6126,7 @@ class FirewallPolicy(object):
         url = ('%s/firewall_policies/%s/server_ips' %
             (self.base_url, self.specs['firewall_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -6087,7 +6142,7 @@ class FirewallPolicy(object):
         url = ('%s/firewall_policies/%s/rules' %
             (self.base_url, self.specs['firewall_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -6106,7 +6161,7 @@ class FirewallPolicy(object):
         # Check initial image status
         url = '%s/firewall_policies/%s' % (self.base_url, self.specs['firewall_id'])
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
         response = r.json()
 
         # Store initial server state and percent values
@@ -6119,7 +6174,7 @@ class FirewallPolicy(object):
             time.sleep(interval)
 
             # Check server status again
-            r = requests.get(url, headers=self.specs['api_token'])
+            r = requests_retry_session().get(url, headers=self.specs['api_token'])
             response = r.json()
 
             # Update server state and percent values
@@ -6198,7 +6253,7 @@ class LoadBalancer(object):
         url = ('%s/load_balancers/%s' %
             (self.base_url, self.specs['load_balancer_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -6214,7 +6269,7 @@ class LoadBalancer(object):
         url = ('%s/load_balancers/%s/server_ips' %
             (self.base_url, self.specs['load_balancer_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -6230,7 +6285,7 @@ class LoadBalancer(object):
         url = ('%s/load_balancers/%s/rules' %
             (self.base_url, self.specs['load_balancer_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -6250,7 +6305,7 @@ class LoadBalancer(object):
         url = '%s/load_balancers/%s' % (self.base_url,
             self.specs['load_balancer_id'])
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
         response = r.json()
 
         # Store initial server state and percent values
@@ -6263,7 +6318,7 @@ class LoadBalancer(object):
             time.sleep(interval)
 
             # Check server status again
-            r = requests.get(url, headers=self.specs['api_token'])
+            r = requests_retry_session().get(url, headers=self.specs['api_token'])
             response = r.json()
 
             # Update server state and percent values
@@ -6308,7 +6363,7 @@ class PrivateNetwork(object):
         url = ('%s/private_networks/%s' %
             (self.base_url, self.specs['private_network_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -6324,7 +6379,7 @@ class PrivateNetwork(object):
         url = ('%s/private_networks/%s/servers' %
             (self.base_url, self.specs['private_network_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -6344,7 +6399,7 @@ class PrivateNetwork(object):
         url = '%s/private_networks/%s' % (self.base_url,
             self.specs['private_network_id'])
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
         response = r.json()
 
         # Store initial server state and percent values
@@ -6357,7 +6412,7 @@ class PrivateNetwork(object):
             time.sleep(interval)
 
             # Check server status again
-            r = requests.get(url, headers=self.specs['api_token'])
+            r = requests_retry_session().get(url, headers=self.specs['api_token'])
             response = r.json()
 
             # Update server state and percent values
@@ -6400,7 +6455,7 @@ class MonitoringPolicy(object):
         url = ('%s/monitoring_policies/%s' %
             (self.base_url, self.specs['monitoring_policy_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -6416,7 +6471,7 @@ class MonitoringPolicy(object):
         url = ('%s/monitoring_policies/%s/ports' %
             (self.base_url, self.specs['monitoring_policy_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -6432,7 +6487,7 @@ class MonitoringPolicy(object):
         url = ('%s/monitoring_policies/%s/processes' %
             (self.base_url, self.specs['monitoring_policy_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -6448,7 +6503,7 @@ class MonitoringPolicy(object):
         url = ('%s/monitoring_policies/%s/servers' %
             (self.base_url, self.specs['monitoring_policy_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -6468,7 +6523,7 @@ class MonitoringPolicy(object):
         url = '%s/monitoring_policies/%s' % (self.base_url,
             self.specs['monitoring_policy_id'])
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
         response = r.json()
 
         # Store initial server state and percent values
@@ -6481,7 +6536,7 @@ class MonitoringPolicy(object):
             time.sleep(interval)
 
             # Check server status again
-            r = requests.get(url, headers=self.specs['api_token'])
+            r = requests_retry_session().get(url, headers=self.specs['api_token'])
             response = r.json()
 
             # Update server state and percent values
@@ -6577,7 +6632,7 @@ class Vpn(object):
         url = ('%s/vpns/%s' %
             (self.base_url, self.specs['vpn_id']))
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
@@ -6596,7 +6651,7 @@ class Vpn(object):
         # Check initial image status
         url = '%s/vpns/%s' % (self.base_url, self.specs['vpn_id'])
 
-        r = requests.get(url, headers=self.specs['api_token'])
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
         response = r.json()
 
         # Store initial server state and percent values
@@ -6609,7 +6664,7 @@ class Vpn(object):
             time.sleep(interval)
 
             # Check server status again
-            r = requests.get(url, headers=self.specs['api_token'])
+            r = requests_retry_session().get(url, headers=self.specs['api_token'])
             response = r.json()
 
             # Update server state and percent values
