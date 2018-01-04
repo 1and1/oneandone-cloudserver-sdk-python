@@ -57,6 +57,20 @@ from oneandone.client import OneAndOneService
 client = OneAndOneService('API-TOKEN')
 ```
 
+You can also provide two other optional parameters:
+
+`api_url` allows you to provide a custom URL for the API
+
+```
+client = OneAndOneService(api_token='<API-Token>', api_url="CUSTOM URL")
+```
+
+`enable_logs` when set to True it will print out http requests/response logs to the console for further debugging
+
+```
+client = OneAndOneService(api_token='<API-Token>', enable_logs=True)
+```
+
 You can now use `client` for any future requests.
 
 ## Operations
