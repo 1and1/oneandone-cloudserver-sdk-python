@@ -4426,7 +4426,7 @@ class Server(object):
             ram=None, appliance_id=None, password=None, power_on=None,
             firewall_policy_id=None, ip_id=None, load_balancer_id=None,
             monitoring_policy_id=None, datacenter_id=None, rsa_key=None,
-            private_network_id=None, server_type=None):
+            private_network_id=None, server_type=None, public_key=None):
 
         self.first_password = None
         self.first_ip = None
@@ -4450,7 +4450,8 @@ class Server(object):
             'datacenter_id': datacenter_id,
             'rsa_key': rsa_key,
             'private_network_id': private_network_id,
-            'server_type': server_type
+            'server_type': server_type,
+            'public_key': public_key
         }
 
         self.base_url = 'https://cloudpanel-api.1and1.com/v1'
@@ -4463,7 +4464,7 @@ class Server(object):
                 'password=%s, power_on=%s, firewall_policy_id=%s, ip_id=%s, '
                 'load_balancer_id=%s, monitoring_policy_id=%s, '
                 'rsa_key=%s, datacenter_id=%s, first_password=%s, '
-                'first_ip=%s' %
+                'first_ip=%s, public_key=%s' %
                     (self.specs['name'], self.specs['description'],
                      self.specs['hardware']['fixed_instance_size_id'],
                      self.specs['hardware']['vcore'],
@@ -4474,7 +4475,7 @@ class Server(object):
                      self.specs['ip_id'], self.specs['load_balancer_id'],
                      self.specs['monitoring_policy_id'],
                      self.specs['rsa_key'], self.specs['datacenter_id'],
-                     self.first_password, self.first_ip))
+                     self.first_password, self.first_ip, self.specs['public_key']))
 
     def get(self):
 
