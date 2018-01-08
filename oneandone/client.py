@@ -4301,6 +4301,203 @@ class OneAndOneService(object):
         return r.json()
 
 
+    # Block Storage Functions
+
+    # 'GET' Methods
+
+    def list_block_storages(self, page=None, per_page=None, sort=None,
+            q=None, fields=None):
+
+        # Perform Request
+        parameters = {
+            'page': page,
+            'per_page': per_page,
+            'sort': sort,
+            'q': q,
+            'fields': fields
+        }
+
+        url = '%s/block_storages' % self.base_url
+
+        r = requests_retry_session().get(url, headers=self.header, params=parameters)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+    def get_block_storage(self, block_storage_id=None):
+
+        # Error Handling
+        if(block_storage_id == None):
+            raise ValueError('block_storage_id is a required parameter')
+
+        # Perform Request
+        url = '%s/block_storages/%s' % (self.base_url, block_storage_id)
+
+        r = requests_retry_session().get(url, headers=self.header)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+    def get_block_storage_server(self, block_storage_id=None):
+
+        # Error Handling
+        if(block_storage_id == None):
+            raise ValueError('block_storage_id parameter is required')
+
+        # Perform Request
+        url = ('%s/block_storages/%s/server' %
+            (self.base_url, block_storage_id))
+
+        r = requests_retry_session().get(url, headers=self.header)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+    # 'POST' Methods
+
+    def create_block_storage(self, block_storage=None):
+
+        # Perform Request
+        data = {
+            'name': block_storage.name,
+            'description': block_storage.description,
+            'size': block_storage.size,
+            'server': block_storage.server_id,
+            'datacenter_id': block_storage.datacenter_id
+        }
+
+        url = '%s/block_storages' % self.base_url
+
+        r = requests_retry_session().post(url, headers=self.header, json=data)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        # Assign new block_storage_id back to calling BlockStorage object
+        response = r.json()
+
+        block_storage.specs.update(block_storage_id=response['id'])
+        block_storage.specs.update(api_token=self.header)
+
+        return r.json()
+
+    def attach_server_block_storage(self, block_storage_id=None,
+            server_id=None):
+
+        # Error Handling
+        if(block_storage_id == None):
+            raise ValueError('block_storage_id is a required parameter')
+        if(server_id == None):
+            raise ValueError(('server_id is a required parameter.'))
+
+        # Perform Request
+        data = {'server': server_id}
+
+        url = ('%s/block_storages/%s/server' %
+            (self.base_url, block_storage_id))
+
+        r = requests_retry_session().post(url, headers=self.header, json=data)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+    # 'PUT' Methods
+
+    def modify_block_storage(self, block_storage_id=None, name=None,
+            description=None, size=None):
+
+        # Error Handling
+        if(block_storage_id == None):
+            raise ValueError('block_storage_id is a required parameter')
+
+        # Perform Request
+        data = {
+            'name': name,
+            'description': description,
+            'size': size
+        }
+
+        url = '%s/block_storages/%s' % (self.base_url, block_storage_id)
+
+        r = requests_retry_session().put(url, headers=self.header, json=data)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+    # 'DELETE' Methods
+
+    def delete_block_storage(self, block_storage_id=None):
+
+        # Error Handling
+        if(block_storage_id == None):
+            raise ValueError('block_storage_id is a required parameter')
+
+        # Perform Request
+        self.header['content-type'] = 'application/json'
+
+        url = '%s/block_storages/%s' % (self.base_url, block_storage_id)
+
+        r = requests_retry_session().delete(url, headers=self.header)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+    def detach_server_block_storage(self, block_storage_id=None):
+
+        # Error Handling
+        if(block_storage_id == None):
+            raise ValueError('block_storage_id is a required parameter')
+
+        # Perform Request
+        self.header['content-type'] = 'application/json'
+
+        url = ('%s/block_storages/%s/server' %
+            (self.base_url, block_storage_id))
+
+        r = requests_retry_session().delete(url, headers=self.header)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+
 # Utility Classes
 
 class Server(object):
@@ -5342,6 +5539,98 @@ class Vpn(object):
 
             # Update server state and percent values
             vpn_state = response['state']
+
+            # Check for timeout
+            seconds = (time.time() - start)
+            duration = seconds / 60
+            if duration > timeout:
+                print 'The operation timed out after %s minutes.' % timeout
+                return
+
+        return {'duration': duration}
+
+class BlockStorage(object):
+
+    # Init Function
+    def __init__(self, name=None, description=None, size=None,
+            datacenter_id=None, server_id=None):
+
+        self.name = name
+        self.description = description
+        self.size = size
+        self.datacenter_id = datacenter_id
+        self.server_id = server_id
+
+        self.specs = {}
+
+        self.base_url = 'https://cloudpanel-api.1and1.com/v1'
+        self.success_codes = (200, 201, 202)
+        self.good_states = ('ACTIVE', 'ENABLED', 'POWERED_ON', 'POWERED_OFF')
+
+    def __repr__(self):
+        return ('Block Storage: name=%s, description=%s, size=%s, server_id=%s' %
+                (self.name, self.description, self.size, self.datacenter_id, self.server_id))
+
+    def get(self):
+
+        # Perform Request
+        url = ('%s/block_storages/%s' %
+            (self.base_url, self.specs['block_storage_id']))
+
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+    def server(self):
+
+        # Perform Request
+        url = ('%s/block_storages/%s/server' %
+            (self.base_url, self.specs['block_storage_id']))
+
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+    def wait_for(self, timeout=25, interval=5):
+
+        # Capture start time
+        start = time.time()
+        duration = 0
+
+        # Check initial block storage status
+        url = '%s/block_storages/%s' % (self.base_url,
+            self.specs['block_storage_id'])
+
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
+        response = r.json()
+
+        # Store initial block storage state and percent values
+        block_storage_state = response['state']
+
+        # Keep polling the block storage's status until good
+        while block_storage_state not in self.good_states:
+
+            # Wait 15 seconds before polling again
+            time.sleep(interval)
+
+            # Check block storage status again
+            r = requests_retry_session().get(url, headers=self.specs['api_token'])
+            response = r.json()
+
+            # Update block storage state and percent values
+            block_storage_state = response['state']
 
             # Check for timeout
             seconds = (time.time() - start)
