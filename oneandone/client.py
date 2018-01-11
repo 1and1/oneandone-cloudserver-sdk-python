@@ -4333,7 +4333,7 @@ class OneAndOneService(object):
 
         # Error Handling
         if(ssh_key_id == None):
-            raise ValueError('role_id is a required parameter')
+            raise ValueError('ssh_key_id is a required parameter')
 
         # Perform Request
 
@@ -4363,6 +4363,12 @@ class OneAndOneService(object):
             error_message = ('Error Code: %s. Error Message: %s.' %
                 (r.status_code, r.text))
             raise Exception(error_message)
+
+        # Assign new ssh_key_id back to calling SshKey object
+        response = r.json()
+
+        ssh_key.specs.update(ssh_key_id=response['id'])
+        ssh_key.specs.update(api_token=self.header)
 
         return r.json()
 
