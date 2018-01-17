@@ -45,24 +45,6 @@ class TestBlockStorage(unittest.TestCase):
 
 		self.assertEqual(r['id'], block_storage_id)
 
-	@responses.activate
-	def test_get_block_storage_server(self):
-		block_storage_id = '6AD2F180B7B666539EF75A02FE227084'
-
-		with open('mock-api/get-block-storage-server.json') as f:
-			data = json.load(f)
-
-		block_storage_id = 'BLOCK_STORAGE_ID'
-		server_id = data['id']
-
-		responses.add(responses.GET, 'https://cloudpanel-api.1and1.com/v1/block_storages/%s/server' % (block_storage_id),
-					  body=json.dumps(data), status=200,
-					  content_type="application/json")
-
-		r = self.client.get_block_storage_server(block_storage_id=block_storage_id)
-
-		self.assertEqual(r['id'], server_id)
-
 	# 'PUT' Methods
 	@responses.activate
 	def test_modify_block_storage(self):
@@ -104,9 +86,9 @@ class TestBlockStorage(unittest.TestCase):
 		self.assertEqual(r['name'], data['name'])
 
 	@responses.activate
-	def test_attach_server_block_storage(self):
+	def test_attach_block_storage(self):
 
-		with open('mock-api/attach-server-block-storage.json') as f:
+		with open('mock-api/attach-block-storage.json') as f:
 			data = json.load(f)
 
 		block_storage_id= 'BLOCK_STORAGE_ID'

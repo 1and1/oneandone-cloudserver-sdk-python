@@ -4348,26 +4348,6 @@ class OneAndOneService(object):
 
         return r.json()
 
-    def get_block_storage_server(self, block_storage_id=None):
-
-        # Error Handling
-        if(block_storage_id == None):
-            raise ValueError('block_storage_id parameter is required')
-
-        # Perform Request
-        url = ('%s/block_storages/%s/server' %
-            (self.base_url, block_storage_id))
-
-        r = requests_retry_session().get(url, headers=self.header)
-
-        # Handle Potential Response Errors
-        if r.status_code not in self.success_codes:
-            error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
-            raise Exception(error_message)
-
-        return r.json()
-
     # 'POST' Methods
 
     def create_block_storage(self, block_storage=None):
@@ -4399,14 +4379,14 @@ class OneAndOneService(object):
 
         return r.json()
 
-    def attach_server_block_storage(self, block_storage_id=None,
+    def attach_block_storage(self, block_storage_id=None,
             server_id=None):
 
         # Error Handling
         if(block_storage_id == None):
             raise ValueError('block_storage_id is a required parameter')
         if(server_id == None):
-            raise ValueError(('server_id is a required parameter.'))
+            raise ValueError('server_id is a required parameter.')
 
         # Perform Request
         data = {'server': server_id}
@@ -4475,7 +4455,7 @@ class OneAndOneService(object):
 
         return r.json()
 
-    def detach_server_block_storage(self, block_storage_id=None):
+    def detach_block_storage(self, block_storage_id=None):
 
         # Error Handling
         if(block_storage_id == None):

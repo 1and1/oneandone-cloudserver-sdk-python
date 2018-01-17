@@ -33,26 +33,19 @@ response = client.modify_block_storage(block_storage_id='',
                                        name='New name',
                                        description='New Description')
 
-# Attach a server to a block storage
+# Attach block storage to a server
 from oneandone.client import OneAndOneService
 
 client = OneAndOneService('<API-TOKEN>')
 
-response = client.attach_server_block_storage(block_storage_id='', server_id='')
+response = client.attach_block_storage(block_storage_id='', server_id='')
 
-# Retrieve a server attached to a block storage
+# Detach a block storage from a server
 from oneandone.client import OneAndOneService
 
 client = OneAndOneService('<API-TOKEN>')
 
-response = client.get_block_storage_server(block_storage_id='')
-
-# Detach a server from a block storage
-from oneandone.client import OneAndOneService
-
-client = OneAndOneService('<API-TOKEN>')
-
-response = client.detach_server_block_storage(block_storage_id='')
+response = client.detach_block_storage(block_storage_id='')
 
 # Delete a block storage
 from oneandone.client import OneAndOneService

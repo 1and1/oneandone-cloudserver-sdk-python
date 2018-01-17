@@ -1670,22 +1670,15 @@ response = client.delete_block_storage(block_storage_id='<BLOCK-STORAGE-ID>')
 ```
 
 
-**Attach a server to a block storage:**
+**Attach a block storage to a server:**
 
 ```
-response = client.attach_server_block_storage(block_storage_id='<BLOCK-STORAGE-ID>', server_id='<SERVER-ID>')
-```
-
-
-**Retrieve attached server:**
-
-```
-response = client.get_block_storage_server(block_storage_id='<BLOCK-STORAGE-ID>')
+response = client.attach_block_storage(block_storage_id='<BLOCK-STORAGE-ID>', server_id='<SERVER-ID>')
 ```
 
 
-**Detach a server from a block storage:**
+**Detach a block storage from a server:**
 
 ```
-response = client.detach_server_block_storage(block_storage_id='<BLOCK-STORAGE-ID>')
+response = client.detach_block_storage(block_storage_id='<BLOCK-STORAGE-ID>')
 ```
