@@ -17,6 +17,7 @@ This guide will show you how to programmatically use the 1&1 library to perform 
   - [Creating a Firewall Policy](#creating-a-firewall-policy)
   - [Creating a Load Balancer](#creating-a-load-balancer)
   - [Creating a Monitoring Policy](#creating-a-monitoring-policy)
+  - [Creating a Block Storage](#creating-a-block-storage)
   - [Creating an SSH Key](#creating-an-ssh-key)
   - [Updating Server Cores, Memory, and Disk](#updating-server-cores,-memory,-and-disk)
   - [Listing Servers, Images, Shared Storages, etc.](#listing-servers,-images,-shared-storages,-etc.)
@@ -56,6 +57,20 @@ Connecting to 1&1 is handled by first setting up your authentication.
 from oneandone.client import OneAndOneService
 
 client = OneAndOneService('API-TOKEN')
+```
+
+You can also provide two other optional parameters:
+
+`api_url` allows you to provide a custom URL for the API
+
+```
+client = OneAndOneService(api_token='<API-Token>', api_url="CUSTOM URL")
+```
+
+`enable_logs` when set to True it will print out http requests/response logs to the console for further debugging
+
+```
+client = OneAndOneService(api_token='<API-Token>', enable_logs=True)
 ```
 
 You can now use `client` for any future requests.
@@ -311,6 +326,22 @@ response = client.attach_monitoring_policy_server(monitoring_policy_id='<MONITOR
 ```
 
 
+### Creating a Block Storage
+
+
+```python
+from oneandone.client import OneAndOneService
+from oneandone.client import BlockStorage
+client = OneAndOneService('<API-TOKEN>')
+
+block_storage = BlockStorage(name='My new block storage',
+                             description='My block storage description',
+                             size=20,
+                             server_id='<SERVER-ID>',
+                             datacenter_id='<DATACENTER-ID>')
+```
+
+
 ### Creating an SSH Key
 
 
@@ -335,8 +366,8 @@ Then, you can pass the ssh key id when creating a server:
 server1 = Server(name='Test Ssh Server',
                  description='Server Description',
                  vcore=1,
-                 cores_per_processor=1, 
-                 ram=2, 
+                 cores_per_processor=1,
+                 ram=2,
                  appliance_id='<IMAGE ID>',
                  public_key=ssh_key.specs['ssh_key_id']
                  )
@@ -412,6 +443,8 @@ load_balancers = client.list_load_balancers()
 private_networks = client.list_private_networks()
 
 monitoring_policies = client.list_monitoring_policies()
+
+block_storages = client.list_block_storages()
 
 ssh_keys = client.list_ssh_keys()
 ```

@@ -25,6 +25,7 @@
 - [Ping Auth](#ping-auth)
 - [VPN's](#vpn)
 - [Roles](#roles)
+- [Block Storages](#block-storages)
 - [SSH Keys](#ssh-keys)
 
 
@@ -1627,6 +1628,64 @@ response = client.clone_role(role_id='<ROLE-ID>', name='Role Clone')
 
 
 
+# <a name="block-storages"></a>Block Storages
+
+
+**List all available block storages on your account:**
+
+```
+response = client.list_block_storages()
+```
+
+
+**Retrieve a single block storage:**
+
+```
+response = client.get_block_storage(block_storage_id='<BLOCK-STORAGE-ID>')
+```
+
+
+**Create a block storage:**
+
+```
+block_storage = BlockStorage(name='My new block storage',
+                             description='My block storage description',
+                             size=20,
+                             datacenter_id='<DATACENTER-ID>')
+
+response = client.create_block_storage(block_storage)
+```
+
+
+**Modify a block storage:**
+
+```
+response = client.modify_block_storage(block_storage_id='<BLOCK-STORAGE-ID>', name='New name', description='New Description')
+```
+
+
+**Delete a block storage:**
+
+```
+response = client.delete_block_storage(block_storage_id='<BLOCK-STORAGE-ID>')
+```
+
+
+**Attach a block storage to a server:**
+
+```
+response = client.attach_block_storage(block_storage_id='<BLOCK-STORAGE-ID>', server_id='<SERVER-ID>')
+```
+
+
+**Detach a block storage from a server:**
+
+```
+response = client.detach_block_storage(block_storage_id='<BLOCK-STORAGE-ID>')
+```
+
+
+
 # <a name="ssh-keys"></a>SSH Keys
 
 
@@ -1656,7 +1715,7 @@ response = client.create_ssh_key(ssh_key)
 **Modify an ssh key:**
 
 ```
-response = client.modify_ssh_key(ssh_key_id='<SSH-KEY-ID>', 
+response = client.modify_ssh_key(ssh_key_id='<SSH-KEY-ID>',
                                  name='New Name',
                                  description='New Description')
 ```
