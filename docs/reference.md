@@ -26,6 +26,7 @@
 - [VPN's](#vpn)
 - [Roles](#roles)
 - [Block Storages](#block-storages)
+- [SSH Keys](#ssh-keys)
 
 
 ## The 'wait_for' Method
@@ -1681,4 +1682,47 @@ response = client.attach_block_storage(block_storage_id='<BLOCK-STORAGE-ID>', se
 
 ```
 response = client.detach_block_storage(block_storage_id='<BLOCK-STORAGE-ID>')
+```
+
+
+
+# <a name="ssh-keys"></a>SSH Keys
+
+
+**List all available ssh keys on your account:**
+
+```
+response = client.list_ssh_keys()
+```
+
+
+**Retrieve a single ssh key:**
+
+```
+response = client.get_ssh_key(role_id='<SSH-KEY-ID>')
+```
+
+
+**Create an ssh key:**
+
+```
+ssh_key = SshKey(name='Test SSH Key', description='Test Description', public_key='<PUBLIC-KEY>')
+
+response = client.create_ssh_key(ssh_key)
+```
+
+
+**Modify an ssh key:**
+
+```
+response = client.modify_ssh_key(ssh_key_id='<SSH-KEY-ID>',
+                                 name='New Name',
+                                 description='New Description')
+```
+
+
+**Delete an ssh key:**
+
+```
+response = client.delete_ssh_key(ssh_key_id='<SSH-KEY-ID>')
 ```
