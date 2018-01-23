@@ -17,6 +17,8 @@ This guide will show you how to programmatically use the 1&1 library to perform 
   - [Creating a Firewall Policy](#creating-a-firewall-policy)
   - [Creating a Load Balancer](#creating-a-load-balancer)
   - [Creating a Monitoring Policy](#creating-a-monitoring-policy)
+  - [Creating a Block Storage](#creating-a-block-storage)
+  - [Creating an SSH Key](#creating-an-ssh-key)
   - [Updating Server Cores, Memory, and Disk](#updating-server-cores,-memory,-and-disk)
   - [Listing Servers, Images, Shared Storages, etc.](#listing-servers,-images,-shared-storages,-etc.)
     * [Available Parameters](#available-parameters)
@@ -324,6 +326,60 @@ response = client.attach_monitoring_policy_server(monitoring_policy_id='<MONITOR
 ```
 
 
+### Creating a Block Storage
+
+
+```python
+from oneandone.client import OneAndOneService
+from oneandone.client import BlockStorage
+client = OneAndOneService('<API-TOKEN>')
+
+block_storage = BlockStorage(name='My new block storage',
+                             description='My block storage description',
+                             size=20,
+                             server_id='<SERVER-ID>',
+                             datacenter_id='<DATACENTER-ID>')
+```
+
+
+### Creating an SSH Key
+
+
+```python
+from oneandone.client import OneAndOneService
+from oneandone.client import SshKey
+
+client = OneAndOneService('<API-TOKEN>')
+
+
+ssh_key = SshKey(name='Test SSH Key',
+                description='Test Description',
+                public_key='<PUBLIC-KEY>'
+               )
+
+
+new_ssh_key = client.create_ssh_key(ssh_key)
+```
+
+Then, you can pass the ssh key id when creating a server:
+```python
+server1 = Server(name='Test Ssh Server',
+                 description='Server Description',
+                 vcore=1,
+                 cores_per_processor=1,
+                 ram=2,
+                 appliance_id='<IMAGE ID>',
+                 public_key=ssh_key.specs['ssh_key_id']
+                 )
+
+hdd1 = Hdd(size=40, is_main=True)
+
+hdds = [hdd1]
+
+new_server = client.create_server(server=server1, hdds=hdds)
+```
+
+
 ### Updating Server Cores, Memory, and Disk
 
 1&amp;1 allows users to dynamically update cores, memory, and disk independently of each other. This means you will no longer have to upgrade your server to receive an increase in memory. You can now simply increase the instance's memory, which keeps your costs in-line with your resource needs.
@@ -387,6 +443,10 @@ load_balancers = client.list_load_balancers()
 private_networks = client.list_private_networks()
 
 monitoring_policies = client.list_monitoring_policies()
+
+block_storages = client.list_block_storages()
+
+ssh_keys = client.list_ssh_keys()
 ```
 
 

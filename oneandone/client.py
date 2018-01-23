@@ -5616,6 +5616,304 @@ class OneAndOneService(object):
                 raise
 
 
+    # Block Storage Functions
+
+    # 'GET' Methods
+
+    def list_block_storages(self, page=None, per_page=None, sort=None,
+            q=None, fields=None):
+
+        # Perform Request
+        parameters = {
+            'page': page,
+            'per_page': per_page,
+            'sort': sort,
+            'q': q,
+            'fields': fields
+        }
+
+        url = '%s/block_storages' % self.base_url
+
+        r = requests_retry_session().get(url, headers=self.header, params=parameters)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+    def get_block_storage(self, block_storage_id=None):
+
+        # Error Handling
+        if(block_storage_id == None):
+            raise ValueError('block_storage_id is a required parameter')
+
+        # Perform Request
+        url = '%s/block_storages/%s' % (self.base_url, block_storage_id)
+
+        r = requests_retry_session().get(url, headers=self.header)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+    # 'POST' Methods
+
+    def create_block_storage(self, block_storage=None):
+
+        # Perform Request
+        data = {
+            'name': block_storage.name,
+            'description': block_storage.description,
+            'size': block_storage.size,
+            'server': block_storage.server_id,
+            'datacenter_id': block_storage.datacenter_id
+        }
+
+        url = '%s/block_storages' % self.base_url
+
+        r = requests_retry_session().post(url, headers=self.header, json=data)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        # Assign new block_storage_id back to calling BlockStorage object
+        response = r.json()
+
+        block_storage.specs.update(block_storage_id=response['id'])
+        block_storage.specs.update(api_token=self.header)
+
+        return r.json()
+
+    def attach_block_storage(self, block_storage_id=None,
+            server_id=None):
+
+        # Error Handling
+        if(block_storage_id == None):
+            raise ValueError('block_storage_id is a required parameter')
+        if(server_id == None):
+            raise ValueError('server_id is a required parameter.')
+
+        # Perform Request
+        data = {'server': server_id}
+
+        url = ('%s/block_storages/%s/server' %
+            (self.base_url, block_storage_id))
+
+        r = requests_retry_session().post(url, headers=self.header, json=data)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+    # 'PUT' Methods
+
+    def modify_block_storage(self, block_storage_id=None, name=None,
+            description=None, size=None):
+
+        # Error Handling
+        if(block_storage_id == None):
+            raise ValueError('block_storage_id is a required parameter')
+
+        # Perform Request
+        data = {
+            'name': name,
+            'description': description,
+            'size': size
+        }
+
+        url = '%s/block_storages/%s' % (self.base_url, block_storage_id)
+
+        r = requests_retry_session().put(url, headers=self.header, json=data)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+    # 'DELETE' Methods
+
+    def delete_block_storage(self, block_storage_id=None):
+
+        # Error Handling
+        if(block_storage_id == None):
+            raise ValueError('block_storage_id is a required parameter')
+
+        # Perform Request
+        self.header['content-type'] = 'application/json'
+
+        url = '%s/block_storages/%s' % (self.base_url, block_storage_id)
+
+        r = requests_retry_session().delete(url, headers=self.header)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+    def detach_block_storage(self, block_storage_id=None):
+
+        # Error Handling
+        if(block_storage_id == None):
+            raise ValueError('block_storage_id is a required parameter')
+
+        # Perform Request
+        self.header['content-type'] = 'application/json'
+
+        url = ('%s/block_storages/%s/server' %
+            (self.base_url, block_storage_id))
+
+        r = requests_retry_session().delete(url, headers=self.header)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+
+    # Ssh Key Functions
+
+    # 'GET' Methods
+
+    def list_ssh_keys(self, page=None, per_page=None, sort=None, q=None,
+            fields=None):
+
+        # Perform Request
+        parameters = {
+            'page': page,
+            'per_page': per_page,
+            'sort': sort,
+            'q': q,
+            'fields': fields
+        }
+
+        url = '%s/ssh_keys' % self.base_url
+
+        r = requests_retry_session().get(url, headers=self.header, params=parameters)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+    def get_ssh_key(self, ssh_key_id=None):
+
+        # Error Handling
+        if(ssh_key_id == None):
+            raise ValueError('ssh_key_id is a required parameter')
+
+        # Perform Request
+
+        url = '%s/ssh_keys/%s' % (self.base_url, ssh_key_id)
+
+        r = requests_retry_session().get(url, headers=self.header)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+    # 'POST' Methods
+
+    def create_ssh_key(self, ssh_key=None):
+
+        # Perform Request
+        url = '%s/ssh_keys' % self.base_url
+
+        r = requests_retry_session().post(url, headers=self.header, json=ssh_key.specs)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        # Assign new ssh_key_id back to calling SshKey object
+        response = r.json()
+
+        ssh_key.specs.update(ssh_key_id=response['id'])
+        ssh_key.specs.update(api_token=self.header)
+
+        return r.json()
+
+    # 'DELETE' Methods
+
+    def delete_ssh_key(self, ssh_key_id=None):
+
+        # Error Handling
+        if(ssh_key_id == None):
+            raise ValueError('ssh_key_id is a required parameter')
+
+        # Perform Request
+        self.header['content-type'] = 'application/json'
+
+        url = '%s/ssh_keys/%s' % (self.base_url, ssh_key_id)
+
+        r = requests_retry_session().delete(url, headers=self.header)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+    # 'PUT' Methods
+
+    def modify_ssh_key(self, ssh_key_id=None, name=None, description=None):
+
+        # Error Handling
+        if(ssh_key_id == None):
+            raise ValueError('ssh_key_id is a required parameter')
+
+        # Perform Request
+        data = {
+            'name': name,
+            'description': description
+        }
+
+        url = '%s/ssh_keys/%s' % (self.base_url, ssh_key_id)
+
+        r = requests_retry_session().put(url, headers=self.header, json=data)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+
 # Utility Classes
 
 class Server(object):
@@ -5626,7 +5924,7 @@ class Server(object):
             ram=None, appliance_id=None, password=None, power_on=None,
             firewall_policy_id=None, ip_id=None, load_balancer_id=None,
             monitoring_policy_id=None, datacenter_id=None, rsa_key=None,
-            private_network_id=None, server_type=None):
+            private_network_id=None, server_type=None, public_key=None):
 
         self.first_password = None
         self.first_ip = None
@@ -5650,7 +5948,8 @@ class Server(object):
             'datacenter_id': datacenter_id,
             'rsa_key': rsa_key,
             'private_network_id': private_network_id,
-            'server_type': server_type
+            'server_type': server_type,
+            'public_key': public_key
         }
 
         self.base_url = 'https://cloudpanel-api.1and1.com/v1'
@@ -5663,7 +5962,7 @@ class Server(object):
                 'password=%s, power_on=%s, firewall_policy_id=%s, ip_id=%s, '
                 'load_balancer_id=%s, monitoring_policy_id=%s, '
                 'rsa_key=%s, datacenter_id=%s, first_password=%s, '
-                'first_ip=%s' %
+                'first_ip=%s, public_key=%s' %
                     (self.specs['name'], self.specs['description'],
                      self.specs['hardware']['fixed_instance_size_id'],
                      self.specs['hardware']['vcore'],
@@ -5674,7 +5973,7 @@ class Server(object):
                      self.specs['ip_id'], self.specs['load_balancer_id'],
                      self.specs['monitoring_policy_id'],
                      self.specs['rsa_key'], self.specs['datacenter_id'],
-                     self.first_password, self.first_ip))
+                     self.first_password, self.first_ip, self.specs['public_key']))
 
     def get(self):
 
@@ -6605,7 +6904,7 @@ class Process(object):
         return ('Process: process=%s, alert_if=%s, email_notification=%s' %
                 (self.process_set['process'], self.process_set['alert_if'],
                     self.process_set['email_notification']))
-    
+
 
 class Vpn(object):
 
@@ -6669,6 +6968,182 @@ class Vpn(object):
 
             # Update server state and percent values
             vpn_state = response['state']
+
+            # Check for timeout
+            seconds = (time.time() - start)
+            duration = seconds / 60
+            if duration > timeout:
+                print 'The operation timed out after %s minutes.' % timeout
+                return
+
+        return {'duration': duration}
+
+class BlockStorage(object):
+
+    # Init Function
+    def __init__(self, name=None, description=None, size=None,
+            datacenter_id=None, server_id=None):
+
+        self.name = name
+        self.description = description
+        self.size = size
+        self.datacenter_id = datacenter_id
+        self.server_id = server_id
+
+        self.specs = {}
+
+        self.base_url = 'https://cloudpanel-api.1and1.com/v1'
+        self.success_codes = (200, 201, 202)
+        self.good_states = ('ACTIVE', 'ENABLED', 'POWERED_ON', 'POWERED_OFF')
+
+    def __repr__(self):
+        return ('Block Storage: name=%s, description=%s, size=%s, server_id=%s' %
+                (self.name, self.description, self.size, self.datacenter_id, self.server_id))
+
+    def get(self):
+
+        # Perform Request
+        url = ('%s/block_storages/%s' %
+            (self.base_url, self.specs['block_storage_id']))
+
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+    def server(self):
+
+        # Perform Request
+        url = ('%s/block_storages/%s/server' %
+            (self.base_url, self.specs['block_storage_id']))
+
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+    def wait_for(self, timeout=25, interval=5):
+
+        # Capture start time
+        start = time.time()
+        duration = 0
+
+        # Check initial block storage status
+        url = '%s/block_storages/%s' % (self.base_url,
+            self.specs['block_storage_id'])
+
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
+        response = r.json()
+
+        # Store initial block storage state and percent values
+        block_storage_state = response['state']
+
+        # Keep polling the block storage's status until good
+        while block_storage_state not in self.good_states:
+
+            # Wait 15 seconds before polling again
+            time.sleep(interval)
+
+            # Check block storage status again
+            r = requests_retry_session().get(url, headers=self.specs['api_token'])
+            response = r.json()
+
+            # Update block storage state and percent values
+            block_storage_state = response['state']
+
+            # Check for timeout
+            seconds = (time.time() - start)
+            duration = seconds / 60
+            if duration > timeout:
+                print 'The operation timed out after %s minutes.' % timeout
+                return
+
+        return {'duration': duration}
+
+class SshKey(object):
+
+    # Init Function
+    def __init__(self, name=None, description=None,
+                 state=None, servers=None, md5=None,
+                 public_key=None, creation_date=None):
+
+        self.specs = {
+            'name': name,
+            'description': description,
+            'state': state,
+            'servers': servers,
+            'md5': md5,
+            'public_key': public_key,
+            'creation_date': creation_date
+        }
+
+        self.base_url = 'https://cloudpanel-api.1and1.com/v1'
+        self.success_codes = (200, 201, 202)
+        self.good_states = ('ACTIVE', 'ENABLED', 'POWERED_ON', 'POWERED_OFF')
+
+    def __repr__(self):
+        return ('SshKey: name=%s, description=%s, '
+                'state=%s, servers=%s, md5=%s, '
+                'public_key=%s, creation_date=%s, ' %
+                (self.specs['name'], self.specs['description'],
+                 self.specs['state'], self.specs['servers'],
+                 self.specs['md5'], self.specs['public_key'],
+                 self.specs['creation_date']))
+
+    def get(self):
+
+        # Perform Request
+        url = ('%s/ssh_keys/%s' %
+               (self.base_url, self.specs['ssh_key_id']))
+
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+    def wait_for(self, timeout=25, interval=5):
+
+        # Capture start time
+        start = time.time()
+        duration = 0
+
+        # Check initial ssh_key status
+        url = '%s/ssh_keys/%s' % (self.base_url,
+                                  self.specs['ssh_key_id'])
+
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
+        response = r.json()
+
+        # Store initial ssh_key state and percent values
+        ssh_key_state = response['state']
+
+        # Keep polling the ssh_key's status until good
+        while ssh_key_state not in self.good_states:
+
+            # Wait 15 seconds before polling again
+            time.sleep(interval)
+
+            # Check ssh_key status again
+            r = requests_retry_session().get(url, headers=self.specs['api_token'])
+            response = r.json()
+
+            # Update ssh_key state and percent values
+            ssh_key_state = response['state']
 
             # Check for timeout
             seconds = (time.time() - start)
