@@ -4,14 +4,14 @@ from distutils.core import setup
 setup(
     name = "1and1",
     packages = ['oneandone'],
-    version = "1.2.0",
+    version = "1.2.1",
     author = "Tyler Burkhardt (stackpoint.io)",
     author_email = "tyler@stackpointcloud.com",
     description = ("1&1 API Client Library for Python"),
     license = "Apache 2.0",
     keywords = "oneandone 1&1 1and1 api client cloud server",
     url = "https://github.com/1and1/oneandone-cloudserver-sdk-python",
-    download_url = "https://github.com/1and1/oneandone-cloudserver-sdk-python/tarball/1.2.0",
+    download_url = "https://github.com/1and1/oneandone-cloudserver-sdk-python/tarball/1.2.1",
     install_requires = ['requests>=2.0.0'],
     classifiers = [
         'Development Status :: 4 - Beta',

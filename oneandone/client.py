@@ -6,6 +6,12 @@ from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.poolmanager import PoolManager
 from requests.packages.urllib3.util.retry import Retry
 import ssl
+import base64
+try:
+  from cStringIO import StringIO
+except:
+  from StringIO import StringIO
+import zipfile
 
 class MyAdapter(HTTPAdapter):
     def init_poolmanager(self, connections, maxsize, block=False):
@@ -537,6 +543,49 @@ class OneAndOneService(object):
             else:
                 raise
 
+    def list_baremetal_models(self, page=None, per_page=None, sort=None, q=None,
+                     fields=None):
+
+        # Perform Request
+        parameters = {
+            'page': page,
+            'per_page': per_page,
+            'sort': sort,
+            'q': q,
+            'fields': fields
+        }
+
+        url = '%s/servers/baremetal_models' % self.base_url
+
+        r = requests.get(url, headers=self.header, params=parameters)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                             (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+    def get_baremetal_model(self, model_id=None):
+
+        # Error Handling
+        if (model_id == None):
+            raise ValueError('model_id is a required parameter')
+
+        # Perform Request
+        url = '%s/servers/baremetal_models/%s' % (self.base_url, model_id)
+
+        r = requests.get(url, headers=self.header)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                             (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
     # 'PUT' methods
 
     def modify_server(self, server_id=None, name=None, description=None):
@@ -707,7 +756,7 @@ class OneAndOneService(object):
             else:
                 raise
 
-    def modify_server_status(self, server_id=None, action=None, method='SOFTWARE'):
+    def modify_server_status(self, server_id=None, action=None, method='SOFTWARE',recovery_mode=False,recovery_image_id=None):
 
         # Error Handling
         if(server_id == None):
@@ -721,15 +770,26 @@ class OneAndOneService(object):
             raise ValueError(('action must be set to "POWER_ON",'
                               '"POWER_OFF", or "REBOOT".'))
 
-        if(method != 'HARDWARE' and method != 'SOFTWARE'):
+        if method != 'HARDWARE' and method != 'SOFTWARE':
             raise ValueError(('method must be set to either '
                               '"HARDWARE" or "SOFTWARE".'))
+        if recovery_mode and recovery_image_id is None:
+            raise ValueError(('If you want to reboot in recovery mode you must specify an image id recovery_image_id'))
 
         # Perform Request
-        data = {
-            'action': action,
-            'method': method
-        }
+        if recovery_mode:
+            data = {
+                'action': action,
+                'method': method,
+                'recovery_mode':True,
+                'recovery_image_id':recovery_image_id
+            }
+        else:
+            data = {
+                'action': action,
+                'method': method,
+             }
+
 
         url = '%s/servers/%s/status/action' % (self.base_url, server_id)
 
@@ -1366,9 +1426,11 @@ class OneAndOneService(object):
             server.specs['hardware']['hdds'] = hdd
 
         # Clean dictionary
-        for key, value in server.specs['hardware'].items():
-            if value == None:
-                del server.specs['hardware'][key]
+        keys = [k for k, v in server.specs['hardware'].items() if
+                v is None]
+        for x in keys:
+            del server.specs['hardware'][x]
+
 
         # Build URL and perform request
         url = '%s/servers' % self.base_url
@@ -2621,11 +2683,11 @@ class OneAndOneService(object):
             raise ValueError(('health_check_test must be set to "TCP". '
                               '"HTTP" is not currently supported.'))
 
-        if(health_check_interval < 5 and health_check_interval > 300):
+        if(health_check_interval != None and health_check_interval < 5 and health_check_interval > 300):
             raise ValueError(('health_check_interval must be an integer '
                               'between 5 and 300.'))
 
-        if(persistence_time < 30 and persistence_time > 1200):
+        if( persistence_time != None and persistence_time < 30 and persistence_time > 1200):
             raise ValueError(('persistence_time must be an integer '
                               'between 30 and 1200.'))
 
@@ -4420,6 +4482,21 @@ class OneAndOneService(object):
             else:
                 raise
 
+    def show_user_permissions(self):
+
+        # Perform Request
+        url = '%s/users/current_user_permissions' % (self.base_url)
+
+        r = requests.get(url, headers=self.header)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
     def ips_api_access_allowed(self, user_id=None):
 
         # Error Handling
@@ -4738,6 +4815,69 @@ class OneAndOneService(object):
                 raise Exception(error_message)
             else:
                 raise
+
+    def get_pricing(self):
+
+        # Perform Request
+        url = '%s/pricing' % (self.base_url)
+
+        r = requests.get(url, headers=self.header)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+    # Recovery images
+
+    # 'GET' Methods
+
+    def list_recovery_images(self, page=None, per_page=None, sort=None,
+            q=None, fields=None):
+
+        # Perform Request
+        parameters = {
+            'page': page,
+            'per_page': per_page,
+            'sort': sort,
+            'q': q,
+            'fields': fields
+        }
+
+        url = '%s/recovery_appliances' % self.base_url
+
+        r = requests.get(url, headers=self.header, params=parameters)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
+    def get_recovery_image(self,image_id=None):
+
+        # Error Handling
+        if(image_id == None):
+            raise ValueError('appliance_id is a required parameter')
+
+        # Perform Request
+        url = '%s/recovery_appliances/%s' % (self.base_url, image_id)
+
+        r = requests.get(url, headers=self.header)
+
+        # Handle Potential Response Errors
+        if r.status_code not in self.success_codes:
+            error_message = ('Error Code: %s. Error Message: %s.' %
+                (r.status_code, r.text))
+            raise Exception(error_message)
+
+        return r.json()
+
 
 
     # Server Appliance Functions
@@ -5083,7 +5223,6 @@ class OneAndOneService(object):
             else:
                 raise
 
-    def download_config(self, vpn_id=None):
 
         # Error Handling
         if(vpn_id == None):
@@ -5101,8 +5240,13 @@ class OneAndOneService(object):
                 error_message = ('Error Code: %s. Error Message: %s.' %
                     (r.status_code, r.text))
                 raise Exception(error_message)
+                body = r.json()
+                filestring = base64.b64decode(body["config_zip_file"])
+                zipPath = file_path + '.zip'
+                with open(zipPath, 'wb') as zipFile:
+                    zipFile.write(filestring)
 
-            return r.json()
+                    return r.json()
         except http_client.HTTPException:
             if r is not None:
                 error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
@@ -5920,11 +6064,12 @@ class Server(object):
 
     # Init Function
     def __init__(self, name=None, description=None,
-            fixed_instance_size_id=None, vcore=None, cores_per_processor=None,
-            ram=None, appliance_id=None, password=None, power_on=None,
-            firewall_policy_id=None, ip_id=None, load_balancer_id=None,
-            monitoring_policy_id=None, datacenter_id=None, rsa_key=None,
-            private_network_id=None, server_type=None, public_key=None):
+                 fixed_instance_size_id=None, vcore=None, cores_per_processor=None,
+                 ram=None, appliance_id=None, password=None, power_on=None,
+                 firewall_policy_id=None, ip_id=None, load_balancer_id=None,
+                 monitoring_policy_id=None, datacenter_id=None, rsa_key=None,
+                 private_network_id=None, server_type=None,public_key=None, baremetal_model_id=None,
+                 ipv6_range=None, hostname=None):
 
         self.first_password = None
         self.first_ip = None
@@ -5936,7 +6081,8 @@ class Server(object):
                 'fixed_instance_size_id': fixed_instance_size_id,
                 'vcore': vcore,
                 'cores_per_processor': cores_per_processor,
-                'ram': ram
+                'ram': ram,
+                'baremetal_model_id':baremetal_model_id
             },
             'appliance_id': appliance_id,
             'password': password,
@@ -5949,31 +6095,37 @@ class Server(object):
             'rsa_key': rsa_key,
             'private_network_id': private_network_id,
             'server_type': server_type,
-            'public_key': public_key
+ 			'public_key': public_key,
+            'ipv6_range': ipv6_range,
+            'hostname': hostname
         }
 
         self.base_url = 'https://cloudpanel-api.1and1.com/v1'
         self.success_codes = (200, 201, 202)
-        self.good_states = ('ACTIVE', 'ENABLED', 'POWERED_ON', 'POWERED_OFF')
+        self.good_states = ('ACTIVE', 'ENABLED', 'POWERED_ON', 'POWERED_OFF', 'ON RECOVERY')
 
     def __repr__(self):
         return ('Server: name=%s, description=%s, fixed_instance_size_id=%s, '
-                'vcore=%s, cores_per_processor=%s, ram=%s, appliance_id=%s, '
+                'vcore=%s, cores_per_processor=%s, ram=%s, baremetal_model_id=%s, appliance_id=%s, '
                 'password=%s, power_on=%s, firewall_policy_id=%s, ip_id=%s, '
                 'load_balancer_id=%s, monitoring_policy_id=%s, '
                 'rsa_key=%s, datacenter_id=%s, first_password=%s, '
-                'first_ip=%s, public_key=%s' %
-                    (self.specs['name'], self.specs['description'],
-                     self.specs['hardware']['fixed_instance_size_id'],
-                     self.specs['hardware']['vcore'],
-                     self.specs['hardware']['cores_per_processor'],
-                     self.specs['hardware']['ram'],
-                     self.specs['appliance_id'], self.specs['password'],
-                     self.specs['power_on'], self.specs['firewall_policy_id'],
-                     self.specs['ip_id'], self.specs['load_balancer_id'],
-                     self.specs['monitoring_policy_id'],
-                     self.specs['rsa_key'], self.specs['datacenter_id'],
-                     self.first_password, self.first_ip, self.specs['public_key']))
+                'first_ip=%s, public_key=%s, server_type=%s, ipv6_range=%s, hostname=%s' %
+                (self.specs['name'], self.specs['description'],
+                 self.specs['hardware']['fixed_instance_size_id'],
+                 self.specs['hardware']['vcore'],
+                 self.specs['hardware']['cores_per_processor'],
+                 self.specs['hardware']['ram'],
+                 self.specs['hardware']['baremetal_model_id'],
+                 self.specs['appliance_id'], self.specs['password'],
+                 self.specs['power_on'], self.specs['firewall_policy_id'],
+                 self.specs['ip_id'], self.specs['load_balancer_id'],
+                 self.specs['monitoring_policy_id'],
+                 self.specs['rsa_key'], self.specs['datacenter_id'],
+                 self.first_password, self.first_ip,
+                 self.specs['server_type'],
+                 self.specs['ipv6_range'],
+                 self.specs['hostname'],))
 
     def get(self):
 
@@ -6194,8 +6346,7 @@ class Image(object):
 
     # Init Function
     def __init__(self, server_id=None, name=None, description=None,
-            frequency=None, num_images=None, source=None, url=None,
-            os_id=None, type=None):
+            frequency=None, num_images=None, source='server', url=None, os_id=None, isotype=None, type=None):
 
         self.server_id = server_id
         self.name = name
@@ -6205,7 +6356,7 @@ class Image(object):
         self.source = source
         self.url = url
         self.os_id = os_id
-        self.type = type
+        self.type = isotype
 
         self.specs = {}
 
@@ -6217,8 +6368,8 @@ class Image(object):
         return ('Image: server_id=%s, name=%s, description=%s, '
                 'frequency=%s, num_images=%s, source=%s, url=%s'
                 'os_id=%s, type=%s' % (self.server_id, self.name,
-                self.description, self.frequency, self.num_images,
-                self.source, self.url, self.os_id, self.type))
+                                       self.description, self.frequency, self.num_images,
+                                       self.source, self.url, self.os_id, self.type))
 
     def get(self):
 
@@ -6845,7 +6996,7 @@ class MonitoringPolicy(object):
             seconds = (time.time() - start)
             duration = seconds / 60
             if duration > timeout:
-                print 'The operation timed out after %s minutes.' % timeout
+                print ('The operation timed out after %s minutes.' % timeout)
                 return
 
         return {'duration': duration}
@@ -6868,6 +7019,7 @@ class Threshold(object):
                 'critical_value=%s, critical_alert=%s' % (self.entity,
                     self.warning_value, self.warning_alert, self.critical_value,
                     self.critical_alert))
+    
 
 
 class Port(object):
