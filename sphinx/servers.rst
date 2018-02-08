@@ -60,6 +60,22 @@ OneAndOneService Methods
 
    :rtype: JSON
 
+.. function:: list_baremetal_models()
+
+   Returns a list of all baremetal models
+
+   :rtype: JSON
+
+
+.. function:: get_baremetal_model(model_id=None)
+
+   Retrieve information about a baremetal model.
+
+   :param model_id: the unique identifier for the baremetal model.
+   :type model_id: ``str``
+
+   :rtype: JSON
+
 
 .. function:: get_server_hardware(server_id=None)
 
@@ -384,6 +400,12 @@ OneAndOneService Methods
    :param method: the action's method.  Possible values are ``'SOFTWARE'`` or ``'HARDWARE'``.
    :type method: ``str``
 
+   :param recovery_mode: to preform an action as ``'REBOOT'`` in recovery mode.
+   :type recovery_mode: ``boolean``
+
+   :param recovery_image_id: If the recovery mode is required in the rebooting, it is needed to include the recovery image to be used..
+   :type recovery_image_id: ``str``
+
    :rtype: JSON
 
 
@@ -556,6 +578,10 @@ The "Server" Class
       * ``cores_per_processor``
       * ``ram``
       * ``appliance_id``
+      * ``server_type``
+
+   .. note:: The following is required only when the ``server_type`` is set as type baremetal
+      * ``baremetal_model_id``
 
    :param name: server name.
    :type name: ``str``
@@ -589,6 +615,18 @@ The "Server" Class
 
    :param ip_id: the unique identifier for the IP to be assigned.
    :type ip_id: ``str``
+
+   :param server_type: with possible values ``cloud`` or ``baremetal``
+   :type server_type: ``str``
+
+   :param baremetal_model_id: the ID of the baremetal model
+   :type baremetal_model_id: ``str``
+
+   :param ipv6_range: the IPv6 range assigned to the server
+   :type ipv6_range: ``str``
+
+   :param hostname: the hostname assigned to the server
+   :type hostname: ``str``
 
    :param load_balancer_id: the unique identifier for the load balancer to be assigned.
    :type load_balancer_id: ``str``
