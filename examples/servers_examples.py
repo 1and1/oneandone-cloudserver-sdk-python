@@ -26,6 +26,20 @@ client = OneAndOneService('API-TOKEN')
 
 fixed_server = client.get_fixed_server(fixed_server_id='')
 
+# List baremetal models
+from oneandone.client import OneAndOneService
+
+client = OneAndOneService('API-TOKEN')
+
+fixed_servers = client.list_baremetal_models()
+
+# Retrieve information about a baremetal model
+from oneandone.client import OneAndOneService
+
+client = OneAndOneService('API-TOKEN')
+
+fixed_server = client.get_baremetal_model(model_id='')
+
 # Retrieve information about a server's hardware
 from oneandone.client import OneAndOneService
 
@@ -109,7 +123,7 @@ from oneandone.client import OneAndOneService
 client = OneAndOneService('API-TOKEN')
 
 private_network = client.private_network_info(server_id='',
-		private_network_id='')
+                                              private_network_id='')
 
 # List all server snapshots
 from oneandone.client import OneAndOneService
@@ -118,7 +132,7 @@ client = OneAndOneService('API-TOKEN')
 
 snapshots = client.list_server_snapshots(server_id='')
 
-# Create a server
+# Create a cloud server
 from oneandone.client import OneAndOneService
 from oneandone.client import Server, Hdd
 
@@ -129,7 +143,29 @@ server1 = Server(name='Test Server',
                  vcore=1,
                  cores_per_processor=1,
                  ram=2,
-                 appliance_id=''
+                 appliance_id='',
+                 server_type='cloud'
+                 )
+
+hdd1 = Hdd(size=120, is_main=True)
+hdds = [hdd1]
+
+new_server = client.create_server(server=server1, hdds=hdds)
+
+# Create a baremetal server
+from oneandone.client import OneAndOneService
+from oneandone.client import Server, Hdd
+
+client = OneAndOneService('API-TOKEN')
+
+server1 = Server(name='Test Server',
+                 description='Server Description',
+                 vcore=1,
+                 cores_per_processor=1,
+                 ram=2,
+                 appliance_id='',
+                 server_type='baremetal',
+                 baremetal_model_id=''
                  )
 
 hdd1 = Hdd(size=120, is_main=True)
@@ -189,7 +225,7 @@ from oneandone.client import OneAndOneService
 client = OneAndOneService('API-TOKEN')
 
 response = client.modify_server(server_id='', name='New Name',
-		description='New Description')
+                                description='New Description')
 
 # Modify server hardware
 from oneandone.client import OneAndOneService
@@ -218,7 +254,7 @@ from oneandone.client import OneAndOneService
 client = OneAndOneService('API-TOKEN')
 
 response = client.modify_server_status(server_id='', action='REBOOT',
-		method='SOFTWARE')
+                                       method='SOFTWARE')
 
 # Stop a server
 from oneandone.client import OneAndOneService
@@ -289,7 +325,7 @@ from oneandone.client import OneAndOneService
 client = OneAndOneService('API-TOKEN')
 
 response = client.remove_load_balancer(server_id='', ip_id='',
-		load_balancer_id='')
+                                       load_balancer_id='')
 
 # Remove a private network from the server
 from oneandone.client import OneAndOneService

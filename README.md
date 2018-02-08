@@ -12,7 +12,8 @@ This guide will show you how to programmatically use the 1&1 library to perform 
 - [Authentication](#authentication)
 - [Operations](#operations)
   - [Resources and Using the Module](#resources-and-using-the-module)
-  - [Creating a Server](#creating-a-server)
+  - [Creating a Cloud Server](#creating-a-cloud-server)
+  - [Creating a Baremetal Server](#creating-a-baremetal-server)
   - [Creating a Server with SSH Key Access](#creating-a-server-with-ssh-key-access)
   - [Creating a Firewall Policy](#creating-a-firewall-policy)
   - [Creating a Load Balancer](#creating-a-load-balancer)
@@ -90,7 +91,7 @@ Official 1&amp;1 REST API Documentation: <a href='https://cloudpanel-api.1and1.c
 The following "**How To's**" are meant to give you a general overview of some of the things you can do with the 1&amp;1 Python SDK.  For a detailed list of all methods and functionality, please visit the <a href='docs/reference.md'>reference.md</a> file.
 
 
-### Creating a Server
+### Creating a Cloud Server
 
 ```python
 from oneandone.client import OneAndOneService
@@ -104,7 +105,35 @@ server1 = Server(name='Test Server',
                  vcore=1,
                  cores_per_processor=1, 
                  ram=2, 
-                 appliance_id='<IMAGE ID>'
+                 appliance_id='<IMAGE ID>',
+		 server_type='cloud'
+                 )
+
+hdd1 = Hdd(size=120, is_main=True)
+hdd2 = Hdd(size=60, is_main=False)
+
+hdds = [hdd1, hdd2]
+
+new_server = client.create_server(server=server1, hdds=hdds)
+```
+
+### Creating a Baremetal Server
+
+```python
+from oneandone.client import OneAndOneService
+from oneandone.client import Server, Hdd
+
+client = OneAndOneService('<API-TOKEN>')
+
+
+server1 = Server(name='Test Server',
+                 description='Server Description',
+                 vcore=1,
+                 cores_per_processor=1, 
+                 ram=2, 
+                 appliance_id='<IMAGE ID>',
+		 server_type='baremetal',
+		 baremetal_model_id='<MODEL_ID>'	
                  )
 
 hdd1 = Hdd(size=120, is_main=True)
