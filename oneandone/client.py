@@ -5223,7 +5223,7 @@ class OneAndOneService(object):
             else:
                 raise
 
-
+    def download_config(self, vpn_id=None, file_path=None):
         # Error Handling
         if(vpn_id == None):
             raise ValueError('vpn_id is a required parameter')
@@ -6996,7 +6996,7 @@ class MonitoringPolicy(object):
             seconds = (time.time() - start)
             duration = seconds / 60
             if duration > timeout:
-                print ('The operation timed out after %s minutes.' % timeout)
+                print 'The operation timed out after %s minutes.' % timeout
                 return
 
         return {'duration': duration}
