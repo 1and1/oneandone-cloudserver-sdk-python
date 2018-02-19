@@ -990,7 +990,7 @@ class OneAndOneService(object):
 
     # 'DELETE' methods
 
-    def delete_server(self, server_id=None, keep_ips=None):
+    def delete_server(self, server_id=None, keep_ips=None, keep_hdds=None):
 
         # Error Handling
         if(server_id == None):
@@ -998,7 +998,7 @@ class OneAndOneService(object):
 
         # Perform Request
         self.header['content-type'] = 'application/json'
-        parameters = {'keep_ips': keep_ips}
+        parameters = {'keep_ips': keep_ips, 'keep_hdds': keep_hdds}
 
         url = '%s/servers/%s' % (self.base_url, server_id)
 
