@@ -82,7 +82,7 @@ You can now use `client` for any future requests.
 
 **Resources**
 
-Official 1&amp;1 REST API Documentation: <a href='https://cloudpanel-api.1and1.com/documentation/' target='_blank'>https://cloudpanel-api.1and1.com/documentation/1and1/v1/en/documentation.html</a>
+Official 1&amp;1 REST API Documentation: <a href='https://cloudpanel-api.1and1.com/documentation/' target='_blank'>https://cloudpanel-api.1and1.com/documentation/v1/en/api/documentation.html</a>
 
 1&amp;1 Python SDK Method Reference Sheet: <a href='docs/reference.md'>reference.md</a>
 
