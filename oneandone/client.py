@@ -990,7 +990,7 @@ class OneAndOneService(object):
 
     # 'DELETE' methods
 
-    def delete_server(self, server_id=None, keep_ips=None, keep_hdds=None):
+    def delete_server(self, server_id=None, keep_ips=None, keep_hdds=True):
 
         # Error Handling
         if(server_id == None):
