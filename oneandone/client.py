@@ -6068,7 +6068,7 @@ class Server(object):
                  ram=None, appliance_id=None, password=None, power_on=None,
                  firewall_policy_id=None, ip_id=None, load_balancer_id=None,
                  monitoring_policy_id=None, datacenter_id=None, rsa_key=None,
-                 private_network_id=None, server_type=None,public_key=None, baremetal_model_id=None,
+                 private_network_id=None, server_type=None,execution_group=None,public_key=None, baremetal_model_id=None,
                  ipv6_range=None, hostname=None):
 
         self.first_password = None
@@ -6095,6 +6095,7 @@ class Server(object):
             'rsa_key': rsa_key,
             'private_network_id': private_network_id,
             'server_type': server_type,
+            'execution_group': execution_group,
  			'public_key': public_key,
             'ipv6_range': ipv6_range,
             'hostname': hostname
@@ -6110,7 +6111,7 @@ class Server(object):
                 'password=%s, power_on=%s, firewall_policy_id=%s, ip_id=%s, '
                 'load_balancer_id=%s, monitoring_policy_id=%s, '
                 'rsa_key=%s, datacenter_id=%s, first_password=%s, '
-                'first_ip=%s, public_key=%s, server_type=%s, ipv6_range=%s, hostname=%s' %
+                'first_ip=%s, public_key=%s, server_type=%s, execution_group=%s, ipv6_range=%s, hostname=%s' %
                 (self.specs['name'], self.specs['description'],
                  self.specs['hardware']['fixed_instance_size_id'],
                  self.specs['hardware']['vcore'],
@@ -6124,6 +6125,7 @@ class Server(object):
                  self.specs['rsa_key'], self.specs['datacenter_id'],
                  self.first_password, self.first_ip,
                  self.specs['server_type'],
+                 self.specs['execution_group'],
                  self.specs['ipv6_range'],
                  self.specs['hostname'],))
 
@@ -7019,7 +7021,7 @@ class Threshold(object):
                 'critical_value=%s, critical_alert=%s' % (self.entity,
                     self.warning_value, self.warning_alert, self.critical_value,
                     self.critical_alert))
-    
+
 
 
 class Port(object):
