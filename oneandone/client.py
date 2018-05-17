@@ -8,10 +8,11 @@ from requests.packages.urllib3.util.retry import Retry
 import ssl
 import base64
 try:
-  from cStringIO import StringIO
-except:
-  from StringIO import StringIO
+    from cStringIO import StringIO
+except BaseException:
+    from StringIO import StringIO
 import zipfile
+
 
 class MyAdapter(HTTPAdapter):
     def init_poolmanager(self, connections, maxsize, block=False):
@@ -20,7 +21,9 @@ class MyAdapter(HTTPAdapter):
                                        block=block,
                                        ssl_version=ssl.PROTOCOL_TLSv1)
 
-#Retry logic if the API fails to responde
+# Retry logic if the API fails to responde
+
+
 def requests_retry_session(
         retries=5,
         backoff_factor=0.5,
@@ -42,10 +45,15 @@ def requests_retry_session(
 
 # 1and1 Object Classes
 
+
 class OneAndOneService(object):
 
     # Init Function
-    def __init__(self, api_token, api_url='https://cloudpanel-api.1and1.com/v1', enable_logs=False):
+    def __init__(
+            self,
+            api_token,
+            api_url='https://cloudpanel-api.1and1.com/v1',
+            enable_logs=False):
         if api_url == '' or api_url == 'default':
             api_url = 'https://cloudpanel-api.1and1.com/v1'
         self.api_token = api_token
@@ -62,14 +70,14 @@ class OneAndOneService(object):
 
     def __repr__(self):
         return 'OneAndOneService: api_token=%s, base_url=%s' % (self.api_token,
-                self.base_url)
+                                                                self.base_url)
 
     # Server Functions
 
     # 'GET' methods
 
     def list_servers(self, page=None, per_page=None, sort=None, q=None,
-            fields=None):
+                     fields=None):
 
         # Perform Request
         parameters = {
@@ -88,14 +96,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -111,14 +120,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -126,12 +136,12 @@ class OneAndOneService(object):
     def get_fixed_server(self, fixed_server_id=None):
 
         # Error Handling
-        if(fixed_server_id == None):
+        if(fixed_server_id is None):
             raise ValueError('fixed_server_id is a required parameter')
 
         # Perform Request
         url = ('%s/servers/fixed_instance_sizes/%s' %
-            (self.base_url, fixed_server_id))
+               (self.base_url, fixed_server_id))
 
         try:
             r = requests_retry_session().get(url, headers=self.header)
@@ -139,14 +149,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -154,7 +165,7 @@ class OneAndOneService(object):
     def get_server(self, server_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
 
         # Perform Request
@@ -165,14 +176,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -180,7 +192,7 @@ class OneAndOneService(object):
     def get_server_hardware(self, server_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
 
         # Perform Request
@@ -192,14 +204,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -207,7 +220,7 @@ class OneAndOneService(object):
     def list_server_hdds(self, server_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
 
         # Perform Request
@@ -219,14 +232,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -234,14 +248,14 @@ class OneAndOneService(object):
     def get_server_hdd(self, server_id=None, hdd_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
-        if(hdd_id == None):
+        if(hdd_id is None):
             raise ValueError('hdd_id is a required parameter')
 
         # Perform Request
         url = ('%s/servers/%s/hardware/hdds/%s' %
-            (self.base_url, server_id, hdd_id))
+               (self.base_url, server_id, hdd_id))
 
         try:
             r = requests_retry_session().get(url, headers=self.header)
@@ -249,14 +263,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -264,7 +279,7 @@ class OneAndOneService(object):
     def get_server_image(self, server_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
 
         # Perform Request
@@ -276,14 +291,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -291,7 +307,7 @@ class OneAndOneService(object):
     def list_server_ips(self, server_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
 
         # Perform Request
@@ -303,14 +319,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -318,9 +335,9 @@ class OneAndOneService(object):
     def get_server_ip(self, server_id=None, ip_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
-        if(ip_id == None):
+        if(ip_id is None):
             raise ValueError('ip_id is a required parameter')
 
         # Perform Request
@@ -332,14 +349,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -347,14 +365,14 @@ class OneAndOneService(object):
     def list_ip_firewall_policy(self, server_id=None, ip_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
-        if(ip_id == None):
+        if(ip_id is None):
             raise ValueError('ip_id is a required parameter')
 
         # Perform Request
         url = ('%s/servers/%s/ips/%s/firewall_policy' %
-            (self.base_url, server_id, ip_id))
+               (self.base_url, server_id, ip_id))
 
         try:
             r = requests_retry_session().get(url, headers=self.header)
@@ -362,14 +380,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -377,14 +396,14 @@ class OneAndOneService(object):
     def list_ip_load_balancers(self, server_id=None, ip_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
-        if(ip_id == None):
+        if(ip_id is None):
             raise ValueError('ip_id is a required parameter')
 
         # Perform Request
         url = ('%s/servers/%s/ips/%s/load_balancers' %
-            (self.base_url, server_id, ip_id))
+               (self.base_url, server_id, ip_id))
 
         try:
             r = requests_retry_session().get(url, headers=self.header)
@@ -392,14 +411,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -407,7 +427,7 @@ class OneAndOneService(object):
     def get_server_status(self, server_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
 
         # Perform Request
@@ -418,15 +438,16 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
 
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -434,7 +455,7 @@ class OneAndOneService(object):
     def get_server_dvd(self, server_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
 
         # Perform Request
@@ -446,14 +467,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -461,7 +483,7 @@ class OneAndOneService(object):
     def list_server_private_networks(self, server_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
 
         # Perform Request
@@ -473,30 +495,30 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
-
     def private_network_info(self, server_id=None, private_network_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
-        if(private_network_id == None):
+        if(private_network_id is None):
             raise ValueError('private_network_id is a required parameter')
 
         # Perform Request
         url = ('%s/servers/%s/private_networks/%s' %
-            (self.base_url, server_id, private_network_id))
+               (self.base_url, server_id, private_network_id))
 
         try:
             r = requests_retry_session().get(url, headers=self.header)
@@ -504,14 +526,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -519,7 +542,7 @@ class OneAndOneService(object):
     def list_server_snapshots(self, server_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
 
         # Perform Request
@@ -531,20 +554,26 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
-    def list_baremetal_models(self, page=None, per_page=None, sort=None, q=None,
-                     fields=None):
+    def list_baremetal_models(
+            self,
+            page=None,
+            per_page=None,
+            sort=None,
+            q=None,
+            fields=None):
 
         # Perform Request
         parameters = {
@@ -570,7 +599,7 @@ class OneAndOneService(object):
     def get_baremetal_model(self, model_id=None):
 
         # Error Handling
-        if (model_id == None):
+        if (model_id is None):
             raise ValueError('model_id is a required parameter')
 
         # Perform Request
@@ -591,9 +620,9 @@ class OneAndOneService(object):
     def modify_server(self, server_id=None, name=None, description=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
-        if(name == None):
+        if(name is None):
             raise ValueError('name is a required parameter')
 
         # Perform Request
@@ -610,24 +639,30 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
-    def modify_server_hardware(self, server_id=None,
-            fixed_instance_size_id=None, vcore=None, cores_per_processor=None,
-            ram=None, test=False):
+    def modify_server_hardware(
+            self,
+            server_id=None,
+            fixed_instance_size_id=None,
+            vcore=None,
+            cores_per_processor=None,
+            ram=None,
+            test=False):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
 
         # Use 'test' flag to skip this block when running unit test
@@ -639,12 +674,12 @@ class OneAndOneService(object):
             server_status = self.get_server_status(server_id=server_id)
 
             if(server_status['state'] == 'POWERED_ON'):
-                if(vcore != None):
+                if(vcore is not None):
                     if(server_specs['vcore'] > vcore):
                         raise ValueError(('Cannot perform a hot decrease of '
                                           'server CPU.  The new value must be '
                                           'greater than current value.'))
-                if(ram != None):
+                if(ram is not None):
                     if(server_specs['ram'] > ram):
                         raise ValueError(('Cannot perform a hot decrease of '
                                           'server RAM.  The new value must be '
@@ -666,14 +701,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -681,9 +717,9 @@ class OneAndOneService(object):
     def modify_hdd(self, server_id=None, hdd_id=None, size=None, test=False):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
-        if(hdd_id == None):
+        if(hdd_id is None):
             raise ValueError('hdd_id is a required parameter')
 
         # Use 'test' flag to skip this block when running unit test
@@ -692,7 +728,7 @@ class OneAndOneService(object):
             # Make sure size argument is valid.  HDD size can't be decreased.
             old_hdd = self.get_server_hdd(server_id=server_id, hdd_id=hdd_id)
 
-            if(size != None):
+            if(size is not None):
                 if(old_hdd['size'] > size):
                     raise ValueError('HDD size can never be decreased. '
                                      'Must be greater than or equal to the '
@@ -702,7 +738,7 @@ class OneAndOneService(object):
         data = {'size': size}
 
         url = ('%s/servers/%s/hardware/hdds/%s' %
-            (self.base_url, server_id, hdd_id))
+               (self.base_url, server_id, hdd_id))
 
         try:
             r = requests_retry_session().put(url, headers=self.header, json=data)
@@ -710,33 +746,38 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
-    def add_firewall_policy(self, server_id=None, ip_id=None, firewall_id=None):
+    def add_firewall_policy(
+            self,
+            server_id=None,
+            ip_id=None,
+            firewall_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
-        if(ip_id == None):
+        if(ip_id is None):
             raise ValueError('ip_id is a required parameter')
-        if(firewall_id == None):
+        if(firewall_id is None):
             raise ValueError('firewall_id is a required parameter')
 
         # Perform Request
         data = {'id': firewall_id}
 
         url = ('%s/servers/%s/ips/%s/firewall_policy' %
-            (self.base_url, server_id, ip_id))
+               (self.base_url, server_id, ip_id))
 
         try:
             r = requests_retry_session().put(url, headers=self.header, json=data)
@@ -744,24 +785,31 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
-    def modify_server_status(self, server_id=None, action=None, method='SOFTWARE',recovery_mode=False,recovery_image_id=None):
+    def modify_server_status(
+            self,
+            server_id=None,
+            action=None,
+            method='SOFTWARE',
+            recovery_mode=False,
+            recovery_image_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
-        if(action == None):
+        if(action is None):
             raise ValueError('action is a required parameter')
 
         # Make sure user is passing in correct arguments
@@ -774,22 +822,22 @@ class OneAndOneService(object):
             raise ValueError(('method must be set to either '
                               '"HARDWARE" or "SOFTWARE".'))
         if recovery_mode and recovery_image_id is None:
-            raise ValueError(('If you want to reboot in recovery mode you must specify an image id recovery_image_id'))
+            raise ValueError(
+                ('If you want to reboot in recovery mode you must specify an image id recovery_image_id'))
 
         # Perform Request
         if recovery_mode:
             data = {
                 'action': action,
                 'method': method,
-                'recovery_mode':True,
-                'recovery_image_id':recovery_image_id
+                'recovery_mode': True,
+                'recovery_image_id': recovery_image_id
             }
         else:
             data = {
                 'action': action,
                 'method': method,
-             }
-
+            }
 
         url = '%s/servers/%s/status/action' % (self.base_url, server_id)
 
@@ -799,14 +847,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -814,7 +863,7 @@ class OneAndOneService(object):
     def stop_server(self, server_id=None, method='SOFTWARE'):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
 
         # Make sure user is passing in correct arguments
@@ -836,14 +885,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -851,7 +901,7 @@ class OneAndOneService(object):
     def start_server(self, server_id=None, method='SOFTWARE'):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
 
         # Make sure user is passing in correct arguments
@@ -873,14 +923,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -888,9 +939,9 @@ class OneAndOneService(object):
     def load_dvd(self, server_id=None, dvd_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
-        if(dvd_id == None):
+        if(dvd_id is None):
             raise ValueError('dvd_id is a required parameter')
 
         # Perform Request
@@ -904,32 +955,32 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
-
     def restore_snapshot(self, server_id=None, snapshot_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
-        if(snapshot_id == None):
+        if(snapshot_id is None):
             raise ValueError('snapshot_id is a required parameter')
 
         # Perform Request
         self.header['content-type'] = 'application/json'
 
         url = ('%s/servers/%s/snapshots/%s' %
-            (self.base_url, server_id, snapshot_id))
+               (self.base_url, server_id, snapshot_id))
 
         try:
             r = requests_retry_session().put(url, headers=self.header)
@@ -937,25 +988,26 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     def reinstall_image(self, server_id=None, image_id=None, password=None,
-            firewall_id=None):
+                        firewall_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
-        if(image_id == None):
+        if(image_id is None):
             raise ValueError('image_id is a required parameter')
 
         # Create firewall object, if necessary
@@ -976,14 +1028,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -993,7 +1046,7 @@ class OneAndOneService(object):
     def delete_server(self, server_id=None, keep_ips=None, keep_hdds=True):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
 
         # Perform Request
@@ -1003,37 +1056,38 @@ class OneAndOneService(object):
         url = '%s/servers/%s' % (self.base_url, server_id)
 
         try:
-            r = requests_retry_session().delete(url, headers=self.header, params=parameters)
+            r = requests_retry_session().delete(
+                url, headers=self.header, params=parameters)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
-
     def remove_hdd(self, server_id=None, hdd_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
-        if(hdd_id == None):
+        if(hdd_id is None):
             raise ValueError('hdd_id is a required parameter')
 
         # Perform Request
         self.header['content-type'] = 'application/json'
 
         url = ('%s/servers/%s/hardware/hdds/%s' %
-            (self.base_url, server_id, hdd_id))
+               (self.base_url, server_id, hdd_id))
 
         try:
             r = requests_retry_session().delete(url, headers=self.header)
@@ -1041,14 +1095,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -1056,9 +1111,9 @@ class OneAndOneService(object):
     def remove_ip(self, server_id=None, ip_id=None, keep_ip=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
-        if(ip_id == None):
+        if(ip_id is None):
             raise ValueError('ip_id is a required parameter')
 
         # Perform Request
@@ -1068,19 +1123,21 @@ class OneAndOneService(object):
         url = '%s/servers/%s/ips/%s' % (self.base_url, server_id, ip_id)
 
         try:
-            r = requests_retry_session().delete(url, headers=self.header, params=parameters)
+            r = requests_retry_session().delete(
+                url, headers=self.header, params=parameters)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -1088,16 +1145,16 @@ class OneAndOneService(object):
     def remove_firewall_policy(self, server_id=None, ip_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
-        if(ip_id == None):
+        if(ip_id is None):
             raise ValueError('ip_id is a required parameter')
 
         # Perform Request
         self.header['content-type'] = 'application/json'
 
         url = ('%s/servers/%s/ips/%s/firewall_policy' %
-            (self.base_url, server_id, ip_id))
+               (self.base_url, server_id, ip_id))
 
         try:
             r = requests_retry_session().delete(url, headers=self.header)
@@ -1105,34 +1162,35 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     def remove_load_balancer(self, server_id=None, ip_id=None,
-            load_balancer_id=None):
+                             load_balancer_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
-        if(ip_id == None):
+        if(ip_id is None):
             raise ValueError('ip_id is a required parameter')
-        if(load_balancer_id == None):
+        if(load_balancer_id is None):
             raise ValueError('load_balancer_id is a required parameter')
 
         # Perform Request
         self.header['content-type'] = 'application/json'
 
         url = ('%s/servers/%s/ips/%s/load_balancers/%s' %
-            (self.base_url, server_id, ip_id, load_balancer_id))
+               (self.base_url, server_id, ip_id, load_balancer_id))
 
         try:
             r = requests_retry_session().delete(url, headers=self.header)
@@ -1140,14 +1198,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -1155,16 +1214,16 @@ class OneAndOneService(object):
     def remove_private_network(self, server_id=None, private_network_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
-        if(private_network_id == None):
+        if(private_network_id is None):
             raise ValueError('private_network_id is a required parameter')
 
         # Perform Request
         self.header['content-type'] = 'application/json'
 
         url = ('%s/servers/%s/private_networks/%s' %
-            (self.base_url, server_id, private_network_id))
+               (self.base_url, server_id, private_network_id))
 
         try:
             r = requests_retry_session().delete(url, headers=self.header)
@@ -1172,23 +1231,23 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
-
     def eject_dvd(self, server_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
 
         # Perform Request
@@ -1202,14 +1261,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -1217,16 +1277,16 @@ class OneAndOneService(object):
     def delete_snapshot(self, server_id=None, snapshot_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
-        if(snapshot_id == None):
+        if(snapshot_id is None):
             raise ValueError('snapshot_id is a required parameter')
 
         # Perform Request
         self.header['content-type'] = 'application/json'
 
         url = ('%s/servers/%s/snapshots/%s' %
-            (self.base_url, server_id, snapshot_id))
+               (self.base_url, server_id, snapshot_id))
 
         try:
             r = requests_retry_session().delete(url, headers=self.header)
@@ -1234,14 +1294,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -1251,9 +1312,9 @@ class OneAndOneService(object):
     def add_new_ip(self, server_id=None, ip_type=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
-        if(ip_type != None) and (ip_type != 'IPV4'):
+        if(ip_type is not None) and (ip_type != 'IPV4'):
             raise ValueError(("ip_type.  Only type 'IPV4' is currently "
                               "supported."))
 
@@ -1268,48 +1329,50 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     def add_load_balancer(self, server_id=None, ip_id=None,
-            load_balancer_id=None):
+                          load_balancer_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
-        if(ip_id == None):
+        if(ip_id is None):
             raise ValueError('ip_id is a required parameter')
-        if(load_balancer_id == None):
+        if(load_balancer_id is None):
             raise ValueError('load_balancer_id is a required parameter')
 
         # Perform Request
         data = {'load_balancer_id': load_balancer_id}
 
         url = ('%s/servers/%s/ips/%s/load_balancers' %
-            (self.base_url, server_id, ip_id))
+               (self.base_url, server_id, ip_id))
         try:
             r = requests_retry_session().post(url, headers=self.header, json=data)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -1317,9 +1380,9 @@ class OneAndOneService(object):
     def assign_private_network(self, server_id=None, private_network_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
-        if(private_network_id == None):
+        if(private_network_id is None):
             raise ValueError('private_network_id is a required parameter')
 
         # Perform Request
@@ -1333,14 +1396,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -1348,7 +1412,7 @@ class OneAndOneService(object):
     def create_snapshot(self, server_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
 
         # Perform Request
@@ -1362,14 +1426,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -1377,15 +1442,15 @@ class OneAndOneService(object):
     def clone_server(self, server_id=None, name=None, datacenter_id=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
-        if(name == None):
+        if(name is None):
             raise ValueError('name is a required parameter')
 
         # Perform Request
         data = {
-                'name': name,
-                'datacenter_id': datacenter_id
+            'name': name,
+            'datacenter_id': datacenter_id
         }
 
         url = '%s/servers/%s/clone' % (self.base_url, server_id)
@@ -1396,14 +1461,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -1411,7 +1477,7 @@ class OneAndOneService(object):
     def create_server(self, server=None, hdds=None):
 
         # Error Handling
-        if(server == None):
+        if(server is None):
             raise ValueError(('server is a required parameter. Make '
                               'sure you pass a Server object.'))
 
@@ -1431,7 +1497,6 @@ class OneAndOneService(object):
         for x in keys:
             del server.specs['hardware'][x]
 
-
         # Build URL and perform request
         url = '%s/servers' % self.base_url
 
@@ -1441,7 +1506,7 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             # Assign new server_id back to calling Server object
@@ -1454,8 +1519,9 @@ class OneAndOneService(object):
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -1463,9 +1529,9 @@ class OneAndOneService(object):
     def add_hdd(self, server_id=None, hdds=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
-        if(hdds == None):
+        if(hdds is None):
             raise ValueError(('hdds is a required parameter.  Make '
                               'sure you pass a list with at least '
                               'one Hdd object.'))
@@ -1487,25 +1553,25 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
-
 
     # Image Functions
 
     # 'GET' Methods
 
     def list_images(self, page=None, per_page=None, sort=None, q=None,
-            fields=None):
+                    fields=None):
 
         # Perform Request
         parameters = {
@@ -1524,14 +1590,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -1539,7 +1606,7 @@ class OneAndOneService(object):
     def get_image(self, image_id=None):
 
         # Error Handling
-        if(image_id == None):
+        if(image_id is None):
             raise ValueError('image_id is a required parameter')
 
         # Perform Request
@@ -1552,14 +1619,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -1569,13 +1637,13 @@ class OneAndOneService(object):
     def create_image(self, image=None):
 
         # Error Handling
-        if(image.server_id == None):
+        if(image.server_id is None):
             raise ValueError('server_id is a required parameter')
-        if(image.name == None):
+        if(image.name is None):
             raise ValueError('name is a required parameter')
-        if(image.frequency == None):
+        if(image.frequency is None):
             raise ValueError('frequency is a required parameter')
-        if(image.num_images == None):
+        if(image.num_images is None):
             raise ValueError('num_images is a required parameter')
 
         # Perform Request
@@ -1599,7 +1667,7 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             # Assign new image_id back to calling Image object
@@ -1611,8 +1679,9 @@ class OneAndOneService(object):
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -1622,7 +1691,7 @@ class OneAndOneService(object):
     def delete_image(self, image_id=None):
 
         # Error Handling
-        if(image_id == None):
+        if(image_id is None):
             raise ValueError('image_id is a required parameter')
 
         # Perform Request
@@ -1636,14 +1705,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -1651,10 +1721,10 @@ class OneAndOneService(object):
     # 'PUT' Methods
 
     def modify_image(self, image_id=None, name=None, description=None,
-            frequency=None):
+                     frequency=None):
 
         # Error Handling
-        if(image_id == None):
+        if(image_id is None):
             raise ValueError('image_id is a required parameter')
 
         # Perform Request
@@ -1672,25 +1742,25 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
-
 
     # Shared Storage Functions
 
     # 'GET' Methods
 
     def list_shared_storages(self, page=None, per_page=None, sort=None,
-            q=None, fields=None):
+                             q=None, fields=None):
 
         # Perform Request
         parameters = {
@@ -1709,14 +1779,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -1724,7 +1795,7 @@ class OneAndOneService(object):
     def get_shared_storage(self, shared_storage_id=None):
 
         # Error Handling
-        if(shared_storage_id == None):
+        if(shared_storage_id is None):
             raise ValueError('shared_storage_id is a required parameter')
 
         # Perform Request
@@ -1736,14 +1807,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -1751,12 +1823,12 @@ class OneAndOneService(object):
     def list_servers_attached_storage(self, shared_storage_id=None):
 
         # Error Handling
-        if(shared_storage_id == None):
+        if(shared_storage_id is None):
             raise ValueError('shared_storage_id is a required parameter')
 
         # Perform Request
         url = ('%s/shared_storages/%s/servers' %
-            (self.base_url, shared_storage_id))
+               (self.base_url, shared_storage_id))
 
         try:
             r = requests_retry_session().get(url, headers=self.header)
@@ -1764,29 +1836,33 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
-    def get_shared_storage_server(self, shared_storage_id=None, server_id=None):
+    def get_shared_storage_server(
+            self,
+            shared_storage_id=None,
+            server_id=None):
 
         # Error Handling
-        if(shared_storage_id == None):
+        if(shared_storage_id is None):
             raise ValueError('shared_storage_id parameter is required')
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id parameter is required')
 
         # Perform Request
         url = ('%s/shared_storages/%s/servers/%s' %
-            (self.base_url, shared_storage_id, server_id))
+               (self.base_url, shared_storage_id, server_id))
 
         try:
             r = requests_retry_session().get(url, headers=self.header)
@@ -1794,18 +1870,18 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
-
 
     def get_credentials(self):
 
@@ -1818,14 +1894,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -1835,9 +1912,9 @@ class OneAndOneService(object):
     def create_shared_storage(self, shared_storage=None):
 
         # Error Handling
-        if(shared_storage.name == None):
+        if(shared_storage.name is None):
             raise ValueError('name is a required parameter')
-        if(shared_storage.size == None):
+        if(shared_storage.size is None):
             raise ValueError('size is a required parameter')
 
         # Perform Request
@@ -1856,7 +1933,7 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             # Assign new shared_storage_id back to calling SharedStorage object
@@ -1868,19 +1945,20 @@ class OneAndOneService(object):
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     def attach_server_shared_storage(self, shared_storage_id=None,
-            server_ids=None):
+                                     server_ids=None):
 
         # Error Handling
-        if(shared_storage_id == None):
+        if(shared_storage_id is None):
             raise ValueError('shared_storage_id is a required parameter')
-        if(server_ids == None):
+        if(server_ids is None):
             raise ValueError(('server_ids is a required parameter.  '
                               'Must attach at least one server'))
 
@@ -1894,7 +1972,7 @@ class OneAndOneService(object):
         data = {'servers': servers}
 
         url = ('%s/shared_storages/%s/servers' %
-            (self.base_url, shared_storage_id))
+               (self.base_url, shared_storage_id))
 
         try:
             r = requests_retry_session().post(url, headers=self.header, json=data)
@@ -1902,14 +1980,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -1917,10 +1996,10 @@ class OneAndOneService(object):
     # 'PUT' Methods
 
     def modify_shared_storage(self, shared_storage_id=None, name=None,
-            description=None, size=None):
+                              description=None, size=None):
 
         # Error Handling
-        if(shared_storage_id == None):
+        if(shared_storage_id is None):
             raise ValueError('shared_storage_id is a required parameter')
 
         # Perform Request
@@ -1938,14 +2017,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -1953,7 +2033,7 @@ class OneAndOneService(object):
     def change_password(self, password=None):
 
         # Error Handlong
-        if(password == None):
+        if(password is None):
             raise ValueError(('password is a required parameter. '
                               'password must contain at least 8 characters.'))
 
@@ -1968,14 +2048,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -1985,7 +2066,7 @@ class OneAndOneService(object):
     def delete_shared_storage(self, shared_storage_id=None):
 
         # Error Handling
-        if(shared_storage_id == None):
+        if(shared_storage_id is None):
             raise ValueError('shared_storage_id is a required parameter')
 
         # Perform Request
@@ -1999,32 +2080,33 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     def detach_server_shared_storage(self, shared_storage_id=None,
-            server_id=None):
+                                     server_id=None):
 
         # Error Handling
-        if(shared_storage_id == None):
+        if(shared_storage_id is None):
             raise ValueError('shared_storage_id is a required parameter')
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
 
         # Perform Request
         self.header['content-type'] = 'application/json'
 
         url = ('%s/shared_storages/%s/servers/%s' %
-            (self.base_url, shared_storage_id, server_id))
+               (self.base_url, shared_storage_id, server_id))
 
         try:
             r = requests_retry_session().delete(url, headers=self.header)
@@ -2032,25 +2114,25 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
-
 
     # Firewall Policy Functions
 
     # 'GET' Methods
 
     def list_firewall_policies(self, page=None, per_page=None, sort=None,
-            q=None, fields=None):
+                               q=None, fields=None):
 
         # Perform Request
         parameters = {
@@ -2068,23 +2150,23 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
-
     def get_firewall(self, firewall_id=None):
 
         # Error Handling
-        if(firewall_id == None):
+        if(firewall_id is None):
             raise ValueError('firewall_id is a required parameter')
 
         # Perform Request
@@ -2096,14 +2178,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -2111,12 +2194,12 @@ class OneAndOneService(object):
     def list_firewall_servers(self, firewall_id=None):
 
         # Error Handling
-        if(firewall_id == None):
+        if(firewall_id is None):
             raise ValueError('firewall_id is a required parameter')
 
         # Perform Request
         url = ('%s/firewall_policies/%s/server_ips' %
-            (self.base_url, firewall_id))
+               (self.base_url, firewall_id))
 
         try:
             r = requests_retry_session().get(url, headers=self.header)
@@ -2124,14 +2207,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -2139,14 +2223,14 @@ class OneAndOneService(object):
     def get_firewall_server(self, firewall_id=None, server_ip_id=None):
 
         # Error Handling
-        if(firewall_id == None):
+        if(firewall_id is None):
             raise ValueError('firewall_id is a required parameter')
-        if(server_ip_id == None):
+        if(server_ip_id is None):
             raise ValueError('server_ip_id is a required parameter')
 
         # Perform Request
         url = ('%s/firewall_policies/%s/server_ips/%s' %
-            (self.base_url, firewall_id, server_ip_id))
+               (self.base_url, firewall_id, server_ip_id))
 
         try:
             r = requests_retry_session().get(url, headers=self.header)
@@ -2154,14 +2238,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -2169,7 +2254,7 @@ class OneAndOneService(object):
     def list_firewall_policy_rules(self, firewall_id=None):
 
         # Error Handling
-        if(firewall_id == None):
+        if(firewall_id is None):
             raise ValueError('firewall_id is a required parameter')
 
         # Perform Request
@@ -2181,14 +2266,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -2196,14 +2282,14 @@ class OneAndOneService(object):
     def get_firewall_policy_rule(self, firewall_id=None, rule_id=None):
 
         # Error Handling
-        if(firewall_id == None):
+        if(firewall_id is None):
             raise ValueError('firewall_id is a required parameter')
-        if(rule_id == None):
+        if(rule_id is None):
             raise ValueError('rule_id is a required parameter')
 
         # Perform Request
         url = ('%s/firewall_policies/%s/rules/%s' %
-            (self.base_url, firewall_id, rule_id))
+               (self.base_url, firewall_id, rule_id))
 
         try:
             r = requests_retry_session().get(url, headers=self.header)
@@ -2211,14 +2297,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -2228,7 +2315,7 @@ class OneAndOneService(object):
     def modify_firewall(self, firewall_id=None, name=None, description=None):
 
         # Error Handling
-        if(firewall_id == None):
+        if(firewall_id is None):
             raise ValueError('firewall_id is a required parameter')
 
         # Perform Request
@@ -2245,14 +2332,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -2260,14 +2348,14 @@ class OneAndOneService(object):
     # 'POST' Methods
 
     def create_firewall_policy(self, firewall_policy=None,
-            firewall_policy_rules=None):
+                               firewall_policy_rules=None):
 
         # Error Handling
-        if(firewall_policy.specs['name'] == None):
+        if(firewall_policy.specs['name'] is None):
             raise ValueError(('Policy name is required.  Make sure your '
                               'FirewallPolicy object was initialized with '
                               'a name parameter'))
-        if(firewall_policy_rules == None):
+        if(firewall_policy_rules is None):
             raise ValueError(('firewall_policy_rules is required.  Make sure '
                               'you pass a list with at least one '
                               'FirewallPolicyRule object.'))
@@ -2278,19 +2366,19 @@ class OneAndOneService(object):
         for value in firewall_policy_rules:
             rules.append(value.rule_set)
 
-
         # Attach rules and Perform Request
         firewall_policy.specs['rules'] = rules
 
         url = '%s/firewall_policies' % self.base_url
 
         try:
-            r = requests_retry_session().post(url, headers=self.header, json=firewall_policy.specs)
+            r = requests_retry_session().post(
+                url, headers=self.header, json=firewall_policy.specs)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             # Assign new firewall_id back to calling FirewallPolicy object
@@ -2302,19 +2390,20 @@ class OneAndOneService(object):
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     def add_firewall_policy_rule(self, firewall_id=None,
-            firewall_policy_rules=None):
+                                 firewall_policy_rules=None):
 
         # Error Handling
-        if(firewall_id == None):
+        if(firewall_id is None):
             raise ValueError('firewall_id is a required parameter')
-        if(firewall_policy_rules == None):
+        if(firewall_policy_rules is None):
             raise ValueError(('firewall_policy_rules is required.  Make '
                               'sure you pass a list with at least one '
                               'FirewallPolicyRule object'))
@@ -2336,14 +2425,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -2351,9 +2441,9 @@ class OneAndOneService(object):
     def attach_server_firewall_policy(self, firewall_id=None, server_ips=None):
 
         # Error Handling
-        if(firewall_id == None):
+        if(firewall_id is None):
             raise ValueError('firewall_id is a required parameter')
-        if(server_ips == None):
+        if(server_ips is None):
             raise ValueError(('server_ips is required. Make sure you pass '
                               'a list with at least one AttachServer object'))
 
@@ -2367,7 +2457,7 @@ class OneAndOneService(object):
         data = {'server_ips': servers}
 
         url = ('%s/firewall_policies/%s/server_ips' %
-            (self.base_url, firewall_id))
+               (self.base_url, firewall_id))
 
         try:
             r = requests_retry_session().post(url, headers=self.header, json=data)
@@ -2375,14 +2465,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -2392,7 +2483,7 @@ class OneAndOneService(object):
     def delete_firewall(self, firewall_id=None):
 
         # Error Handling
-        if(firewall_id == None):
+        if(firewall_id is None):
             raise ValueError('firewall_id is a required parameter')
 
         # Perform Request
@@ -2406,14 +2497,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -2421,16 +2513,16 @@ class OneAndOneService(object):
     def remove_firewall_rule(self, firewall_id=None, rule_id=None):
 
         # Error Handling
-        if(firewall_id == None):
+        if(firewall_id is None):
             raise ValueError('firewall_id is a required parameter')
-        if(rule_id == None):
+        if(rule_id is None):
             raise ValueError('rule_id is a required parameter')
 
         # Perform Request
         self.header['content-type'] = 'application/json'
 
         url = ('%s/firewall_policies/%s/rules/%s' %
-            (self.base_url, firewall_id, rule_id))
+               (self.base_url, firewall_id, rule_id))
 
         try:
             r = requests_retry_session().delete(url, headers=self.header)
@@ -2438,14 +2530,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -2453,16 +2546,16 @@ class OneAndOneService(object):
     def remove_firewall_server(self, firewall_id=None, server_ip_id=None):
 
         # Error Handling
-        if(firewall_id == None):
+        if(firewall_id is None):
             raise ValueError('firewall_id is a required parameter')
-        if(server_ip_id == None):
+        if(server_ip_id is None):
             raise ValueError('server_ip_id is a required parameter')
 
         # Perform Request
         self.header['content-type'] = 'application/json'
 
         url = ('%s/firewall_policies/%s/server_ips/%s' %
-            (self.base_url, firewall_id, server_ip_id))
+               (self.base_url, firewall_id, server_ip_id))
 
         try:
             r = requests_retry_session().delete(url, headers=self.header)
@@ -2470,25 +2563,25 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
-
 
     # Load Balancer Functions
 
     # 'GET' Methods
 
     def list_load_balancers(self, page=None, per_page=None, sort=None, q=None,
-            fields=None):
+                            fields=None):
 
         # Perform Request
         parameters = {
@@ -2507,14 +2600,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -2522,7 +2616,7 @@ class OneAndOneService(object):
     def get_load_balancer(self, load_balancer_id=None):
 
         # Error Handling
-        if(load_balancer_id == None):
+        if(load_balancer_id is None):
             raise ValueError('load_balancer_id is a required parameter')
 
         # Perform Request
@@ -2534,14 +2628,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -2549,12 +2644,12 @@ class OneAndOneService(object):
     def list_load_balancer_servers(self, load_balancer_id=None):
 
         # Error Handling
-        if(load_balancer_id == None):
+        if(load_balancer_id is None):
             raise ValueError('load_balancer_id is a required parameter')
 
         # Perform Request
         url = ('%s/load_balancers/%s/server_ips' %
-            (self.base_url, load_balancer_id))
+               (self.base_url, load_balancer_id))
 
         try:
             r = requests_retry_session().get(url, headers=self.header)
@@ -2562,30 +2657,31 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     def get_load_balancer_server(self, load_balancer_id=None,
-            server_ip_id=None):
+                                 server_ip_id=None):
 
         # Error Handling
-        if(load_balancer_id == None):
+        if(load_balancer_id is None):
             raise ValueError('load_balancer_id is a required parameter')
-        if(server_ip_id == None):
+        if(server_ip_id is None):
             raise ValueError('server_ip_id is a required parameter')
 
         # Perform Request
         url = ('%s/load_balancers/%s/server_ips/%s' %
-            (self.base_url, load_balancer_id, server_ip_id))
+               (self.base_url, load_balancer_id, server_ip_id))
 
         try:
             r = requests_retry_session().get(url, headers=self.header)
@@ -2593,14 +2689,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -2608,7 +2705,7 @@ class OneAndOneService(object):
     def load_balancer_rules(self, load_balancer_id=None):
 
         # Error Handling
-        if(load_balancer_id == None):
+        if(load_balancer_id is None):
             raise ValueError('load_balancer_id is a required parameter')
 
         # Perform Request
@@ -2620,14 +2717,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -2635,14 +2733,14 @@ class OneAndOneService(object):
     def get_load_balancer_rule(self, load_balancer_id=None, rule_id=None):
 
         # Error Handling
-        if(load_balancer_id == None):
+        if(load_balancer_id is None):
             raise ValueError('load_balancer_id is a required parameter')
-        if(rule_id == None):
+        if(rule_id is None):
             raise ValueError('rule_id is a required parameter')
 
         # Perform Request
         url = ('%s/load_balancers/%s/rules/%s' %
-            (self.base_url, load_balancer_id, rule_id))
+               (self.base_url, load_balancer_id, rule_id))
 
         try:
             r = requests_retry_session().get(url, headers=self.header)
@@ -2650,44 +2748,52 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     # 'PUT' Methods
 
-    def modify_load_balancer(self, load_balancer_id=None, name=None,
-            description=None, health_check_test=None,
-            health_check_interval=None, health_check_path=None,
-            health_check_parse=None, persistence=None, persistence_time=None,
+    def modify_load_balancer(
+            self,
+            load_balancer_id=None,
+            name=None,
+            description=None,
+            health_check_test=None,
+            health_check_interval=None,
+            health_check_path=None,
+            health_check_parse=None,
+            persistence=None,
+            persistence_time=None,
             method=None):
 
         # Error Handling
-        if(load_balancer_id == None):
+        if(load_balancer_id is None):
             raise ValueError('load_balancer_id is a required parameter')
 
-        if(method != None and method != 'ROUND_ROBIN' and
-                   method != 'LEAST_CONNECTIONS'):
+        if(method is not None and method != 'ROUND_ROBIN' and
+           method != 'LEAST_CONNECTIONS'):
             raise ValueError(('method must be set to either "ROUND_ROBIN" '
                               'or "LEAST_CONNECTIONS".'))
 
-        if(health_check_test != None and health_check_test != 'TCP'):
+        if(health_check_test is not None and health_check_test != 'TCP'):
             raise ValueError(('health_check_test must be set to "TCP". '
                               '"HTTP" is not currently supported.'))
 
-        if(health_check_interval != None and health_check_interval < 5 and health_check_interval > 300):
+        if(health_check_interval is not None and health_check_interval < 5 and health_check_interval > 300):
             raise ValueError(('health_check_interval must be an integer '
                               'between 5 and 300.'))
 
-        if( persistence_time != None and persistence_time < 30 and persistence_time > 1200):
+        if(persistence_time is not None and persistence_time < 30 and persistence_time > 1200):
             raise ValueError(('persistence_time must be an integer '
                               'between 30 and 1200.'))
 
@@ -2712,14 +2818,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -2727,17 +2834,17 @@ class OneAndOneService(object):
     # 'POST' Methods
 
     def create_load_balancer(self, load_balancer=None,
-            load_balancer_rules=None):
+                             load_balancer_rules=None):
 
         # Error Handling
-        if(load_balancer == None):
+        if(load_balancer is None):
             raise ValueError(('load_balancer parameter is required.  Must '
                               'pass a LoadBalancer object.'))
-        if(load_balancer_rules == None):
+        if(load_balancer_rules is None):
             raise ValueError(('load_balancer_rules parameter is required. '
                               'Must pass a list with at least one '
                               'LoadBalancerRule object.'))
-        if(load_balancer.specs['method'] != None and
+        if(load_balancer.specs['method'] is not None and
                 load_balancer.specs['method'] != 'ROUND_ROBIN' and
                 load_balancer.specs['method'] != 'LEAST_CONNECTIONS'):
             raise ValueError(('method must be set to either "ROUND_ROBIN" '
@@ -2755,12 +2862,13 @@ class OneAndOneService(object):
         url = '%s/load_balancers' % self.base_url
 
         try:
-            r = requests_retry_session().post(url, headers=self.header, json=load_balancer.specs)
+            r = requests_retry_session().post(
+                url, headers=self.header, json=load_balancer.specs)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             # Assign new load_balancer_id back to calling LoadBalancer object
@@ -2772,19 +2880,20 @@ class OneAndOneService(object):
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     def attach_load_balancer_server(self, load_balancer_id=None,
-            server_ips=None):
+                                    server_ips=None):
 
         # Error Handling
-        if(load_balancer_id == None):
+        if(load_balancer_id is None):
             raise ValueError('load_balancer_id is a required parameter.')
-        if(server_ips == None):
+        if(server_ips is None):
             raise ValueError(('server_ips is a required parameter. Must '
                               'pass a list with at least one AttachServer '
                               'object'))
@@ -2799,7 +2908,7 @@ class OneAndOneService(object):
         data = {'server_ips': servers}
 
         url = ('%s/load_balancers/%s/server_ips' %
-            (self.base_url, load_balancer_id))
+               (self.base_url, load_balancer_id))
 
         try:
             r = requests_retry_session().post(url, headers=self.header, json=data)
@@ -2807,25 +2916,26 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     def add_load_balancer_rule(self, load_balancer_id=None,
-            load_balancer_rules=None):
+                               load_balancer_rules=None):
 
         # Error Handling
-        if(load_balancer_id == None):
+        if(load_balancer_id is None):
             raise ValueError('load_balancer_id is a required parameter.')
-        if(load_balancer_rules == None):
+        if(load_balancer_rules is None):
             raise ValueError(('load_balancer_rules is a required '
                               'parameter. Must pass a list with at least one '
                               'LoadBalancerRule object'))
@@ -2840,7 +2950,7 @@ class OneAndOneService(object):
         data = {'rules': rules}
 
         url = ('%s/load_balancers/%s/rules' %
-            (self.base_url, load_balancer_id))
+               (self.base_url, load_balancer_id))
 
         try:
             r = requests_retry_session().post(url, headers=self.header, json=data)
@@ -2848,14 +2958,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -2865,7 +2976,7 @@ class OneAndOneService(object):
     def delete_load_balancer(self, load_balancer_id=None):
 
         # Error Handling
-        if(load_balancer_id == None):
+        if(load_balancer_id is None):
             raise ValueError('load_balancer_id is a required parameter')
 
         # Perform Request
@@ -2879,32 +2990,33 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     def remove_load_balancer_server(self, load_balancer_id=None,
-            server_ip_id=None):
+                                    server_ip_id=None):
 
         # Error Handling
-        if(load_balancer_id == None):
+        if(load_balancer_id is None):
             raise ValueError('load_balancer_id is a required parameter.')
-        if(server_ip_id == None):
+        if(server_ip_id is None):
             raise ValueError('server_ip_id is a required parameter.')
 
         # Perform Request
         self.header['content-type'] = 'application/json'
 
         url = ('%s/load_balancers/%s/server_ips/%s' %
-            (self.base_url, load_balancer_id, server_ip_id))
+               (self.base_url, load_balancer_id, server_ip_id))
 
         try:
             r = requests_retry_session().delete(url, headers=self.header)
@@ -2912,14 +3024,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -2927,16 +3040,16 @@ class OneAndOneService(object):
     def remove_load_balancer_rule(self, load_balancer_id=None, rule_id=None):
 
         # Error Handling
-        if(load_balancer_id == None):
+        if(load_balancer_id is None):
             raise ValueError('load_balancer_id is a required parameter.')
-        if(rule_id == None):
+        if(rule_id is None):
             raise ValueError('rule_id is a required parameter.')
 
         # Perform Request
         self.header['content-type'] = 'application/json'
 
         url = ('%s/load_balancers/%s/rules/%s' %
-            (self.base_url, load_balancer_id, rule_id))
+               (self.base_url, load_balancer_id, rule_id))
 
         try:
             r = requests_retry_session().delete(url, headers=self.header)
@@ -2944,25 +3057,25 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
-
 
     # Public IP Functions
 
     # 'GET' Methods
 
     def list_public_ips(self, page=None, per_page=None, sort=None, q=None,
-            fields=None):
+                        fields=None):
 
         # Perform Request
         parameters = {
@@ -2981,14 +3094,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -2996,7 +3110,7 @@ class OneAndOneService(object):
     def get_public_ip(self, ip_id=None):
 
         # Error Handling
-        if(ip_id == None):
+        if(ip_id is None):
             raise ValueError('ip_id is a required parameter')
 
         # Perform Request
@@ -3008,14 +3122,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -3023,10 +3138,10 @@ class OneAndOneService(object):
     # 'POST' Methods
 
     def create_public_ip(self, reverse_dns=None, ip_type=None,
-            datacenter_id=None):
+                         datacenter_id=None):
 
         # Error Handling
-        if(ip_type != 'IPV4' and ip_type != None):
+        if(ip_type != 'IPV4' and ip_type is not None):
             raise ValueError('ip_type must be set to "IPV4".')
 
         # Perform Request
@@ -3044,14 +3159,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -3061,7 +3177,7 @@ class OneAndOneService(object):
     def modify_public_ip(self, ip_id=None, reverse_dns=None):
 
         # Error Handling
-        if(ip_id == None):
+        if(ip_id is None):
             raise ValueError('ip_id is a required parameter')
 
         # Perform Request
@@ -3075,14 +3191,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -3092,7 +3209,7 @@ class OneAndOneService(object):
     def delete_public_ip(self, ip_id=None):
 
         # Error Handling
-        if(ip_id == None):
+        if(ip_id is None):
             raise ValueError('ip_id is a required parameter')
 
         # Perform Request
@@ -3106,25 +3223,25 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
-
 
     # Private Network Functions
 
     # 'GET' Methods
 
     def list_private_networks(self, page=None, per_page=None, sort=None,
-            q=None, fields=None):
+                              q=None, fields=None):
 
         # Perform Request
         parameters = {
@@ -3143,14 +3260,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -3158,7 +3276,7 @@ class OneAndOneService(object):
     def get_private_network(self, private_network_id):
 
         # Error Handling
-        if(private_network_id == None):
+        if(private_network_id is None):
             raise ValueError('private_network_id is a required parameter')
 
         # Perform Request
@@ -3170,14 +3288,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -3185,12 +3304,12 @@ class OneAndOneService(object):
     def list_private_network_servers(self, private_network_id=None):
 
         # Error Handling
-        if(private_network_id == None):
+        if(private_network_id is None):
             raise ValueError('private_network_id is a required parameter')
 
         # Perform Request
         url = ('%s/private_networks/%s/servers' %
-            (self.base_url, private_network_id))
+               (self.base_url, private_network_id))
 
         try:
             r = requests_retry_session().get(url, headers=self.header)
@@ -3198,30 +3317,31 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     def get_private_network_server(self, private_network_id=None,
-            server_id=None):
+                                   server_id=None):
 
         # Error Handling
-        if(private_network_id == None):
+        if(private_network_id is None):
             raise ValueError('private_network_id is a required parameter')
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
 
         # Perform Request
         url = ('%s/private_networks/%s/servers/%s' %
-            (self.base_url, private_network_id, server_id))
+               (self.base_url, private_network_id, server_id))
 
         try:
             r = requests_retry_session().get(url, headers=self.header)
@@ -3229,14 +3349,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -3246,7 +3367,7 @@ class OneAndOneService(object):
     def create_private_network(self, private_network=None):
 
         # Error Handling
-        if(private_network.name == None):
+        if(private_network.name is None):
             raise ValueError('name is a required parameter')
 
         # Perform Request
@@ -3266,10 +3387,11 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
-            # Assign new private_network_id back to calling PrivateNetwork object
+            # Assign new private_network_id back to calling PrivateNetwork
+            # object
             response = r.json()
 
             private_network.specs.update(private_network_id=response['id'])
@@ -3278,19 +3400,20 @@ class OneAndOneService(object):
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     def attach_private_network_servers(self, private_network_id=None,
-            server_ids=None):
+                                       server_ids=None):
 
         # Error Handling
-        if(private_network_id == None):
+        if(private_network_id is None):
             raise ValueError('private_network_id is a required parameter')
-        if(server_ids == None):
+        if(server_ids is None):
             raise ValueError(('server_ids is a required parameter.  Make '
                               'sure you pass a list with at least one '
                               'server_id string'))
@@ -3305,7 +3428,7 @@ class OneAndOneService(object):
         data = {'servers': servers}
 
         url = ('%s/private_networks/%s/servers' %
-            (self.base_url, private_network_id))
+               (self.base_url, private_network_id))
 
         try:
             r = requests_retry_session().post(url, headers=self.header, json=data)
@@ -3313,22 +3436,28 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     # 'PUT' Methods
 
-    def modify_private_network(self, private_network_id=None, name=None,
-            description=None, network_address=None, subnet_mask=None):
+    def modify_private_network(
+            self,
+            private_network_id=None,
+            name=None,
+            description=None,
+            network_address=None,
+            subnet_mask=None):
 
         # Perform Request
         data = {
@@ -3346,14 +3475,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -3363,7 +3493,7 @@ class OneAndOneService(object):
     def delete_private_network(self, private_network_id=None):
 
         # Error Handling
-        if(private_network_id == None):
+        if(private_network_id is None):
             raise ValueError('private_network_id is a required parameter')
 
         # Perform Request
@@ -3377,32 +3507,33 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     def remove_private_network_server(self, private_network_id=None,
-            server_id=None):
+                                      server_id=None):
 
         # Error Handling
-        if(private_network_id == None):
+        if(private_network_id is None):
             raise ValueError('private_network_id is a required parameter')
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
 
         # Perform Request
         self.header['content-type'] = 'application/json'
 
         url = ('%s/private_networks/%s/servers/%s' %
-            (self.base_url, private_network_id, server_id))
+               (self.base_url, private_network_id, server_id))
 
         try:
             r = requests_retry_session().delete(url, headers=self.header)
@@ -3410,25 +3541,25 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
-
 
     # Monitoring Center Functions
 
     # 'GET' Methods
 
     def list_server_usages(self, page=None, per_page=None, sort=None,
-            q=None, fields=None):
+                           q=None, fields=None):
 
         # Perform Request
         parameters = {
@@ -3447,29 +3578,30 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     def get_usage(self, server_id=None, period='LAST_24H',
-            start_date=None, end_date=None):
+                  start_date=None, end_date=None):
 
         # Error Handling
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
         if(period == 'CUSTOM'):
-            if(start_date == None):
+            if(start_date is None):
                 raise ValueError(('start_date parameter is required when '
                                   'using CUSTOM period'))
-            if(end_date == None):
+            if(end_date is None):
                 raise ValueError(('end_date parameter is required when '
                                   'using CUSTOM period'))
 
@@ -3488,25 +3620,25 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
-
 
     # Monitoring Policy Functions
 
     # 'GET' Methods
 
     def list_monitoring_policies(self, page=None, per_page=None,
-            sort=None, q=None, fields=None):
+                                 sort=None, q=None, fields=None):
 
         # Perform Request
         parameters = {
@@ -3525,14 +3657,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -3540,12 +3673,12 @@ class OneAndOneService(object):
     def get_monitoring_policy(self, monitoring_policy_id=None):
 
         # Error Handling
-        if(monitoring_policy_id == None):
+        if(monitoring_policy_id is None):
             raise ValueError('monitoring_policy_id is a required parameter')
 
         # Perform Request
         url = ('%s/monitoring_policies/%s' %
-            (self.base_url, monitoring_policy_id))
+               (self.base_url, monitoring_policy_id))
 
         try:
             r = requests_retry_session().get(url, headers=self.header)
@@ -3553,14 +3686,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -3568,12 +3702,12 @@ class OneAndOneService(object):
     def list_monitoring_policy_ports(self, monitoring_policy_id=None):
 
         # Error Handling
-        if(monitoring_policy_id == None):
+        if(monitoring_policy_id is None):
             raise ValueError('monitoring_policy_id is a required parameter')
 
         # Perform Request
         url = ('%s/monitoring_policies/%s/ports' %
-            (self.base_url, monitoring_policy_id))
+               (self.base_url, monitoring_policy_id))
 
         try:
             r = requests_retry_session().get(url, headers=self.header)
@@ -3581,30 +3715,31 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     def get_monitoring_policy_port(self, monitoring_policy_id=None,
-            port_id=None):
+                                   port_id=None):
 
         # Error Handling
-        if(monitoring_policy_id == None):
+        if(monitoring_policy_id is None):
             raise ValueError('monitoring_policy_id is a required parameter')
-        if(port_id == None):
+        if(port_id is None):
             raise ValueError('port_id is a required parameter')
 
         # Perform Request
         url = ('%s/monitoring_policies/%s/ports/%s' %
-            (self.base_url, monitoring_policy_id, port_id))
+               (self.base_url, monitoring_policy_id, port_id))
 
         try:
             r = requests_retry_session().get(url, headers=self.header)
@@ -3612,14 +3747,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -3627,12 +3763,12 @@ class OneAndOneService(object):
     def list_monitoring_policy_processes(self, monitoring_policy_id=None):
 
         # Error Handling
-        if(monitoring_policy_id == None):
+        if(monitoring_policy_id is None):
             raise ValueError('monitoring_policy_id is a required parameter')
 
         # Perform Request
         url = ('%s/monitoring_policies/%s/processes' %
-            (self.base_url, monitoring_policy_id))
+               (self.base_url, monitoring_policy_id))
 
         try:
             r = requests_retry_session().get(url, headers=self.header)
@@ -3640,30 +3776,31 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     def get_monitoring_policy_process(self, monitoring_policy_id=None,
-            process_id=None):
+                                      process_id=None):
 
         # Error Handling
-        if(monitoring_policy_id == None):
+        if(monitoring_policy_id is None):
             raise ValueError('monitoring_policy_id is a required parameter')
-        if(process_id == None):
+        if(process_id is None):
             raise ValueError('process_id is a required parameter')
 
         # Perform Request
         url = ('%s/monitoring_policies/%s/processes/%s' %
-            (self.base_url, monitoring_policy_id, process_id))
+               (self.base_url, monitoring_policy_id, process_id))
 
         try:
             r = requests_retry_session().get(url, headers=self.header)
@@ -3671,14 +3808,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -3686,12 +3824,12 @@ class OneAndOneService(object):
     def list_monitoring_policy_servers(self, monitoring_policy_id=None):
 
         # Error Handling
-        if(monitoring_policy_id == None):
+        if(monitoring_policy_id is None):
             raise ValueError('monitoring_policy_id is a required parameter')
 
         # Perform Request
         url = ('%s/monitoring_policies/%s/servers' %
-            (self.base_url, monitoring_policy_id))
+               (self.base_url, monitoring_policy_id))
 
         try:
             r = requests_retry_session().get(url, headers=self.header)
@@ -3699,30 +3837,31 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     def get_monitoring_policy_server(self, monitoring_policy_id=None,
-            server_id=None):
+                                     server_id=None):
 
         # Error Handling
-        if(monitoring_policy_id == None):
+        if(monitoring_policy_id is None):
             raise ValueError('monitoring_policy_id is a required parameter')
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
 
         # Perform Request
         url = ('%s/monitoring_policies/%s/servers/%s' %
-            (self.base_url, monitoring_policy_id, server_id))
+               (self.base_url, monitoring_policy_id, server_id))
 
         try:
             r = requests_retry_session().get(url, headers=self.header)
@@ -3730,14 +3869,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -3747,14 +3887,14 @@ class OneAndOneService(object):
     def delete_monitoring_policy(self, monitoring_policy_id=None):
 
         # Error Handling
-        if(monitoring_policy_id == None):
+        if(monitoring_policy_id is None):
             raise ValueError('monitoring_policy_id is a required parameter')
 
         # Perform Request
         self.header['content-type'] = 'application/json'
 
         url = ('%s/monitoring_policies/%s' %
-            (self.base_url, monitoring_policy_id))
+               (self.base_url, monitoring_policy_id))
 
         try:
             r = requests_retry_session().delete(url, headers=self.header)
@@ -3762,32 +3902,33 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     def delete_monitoring_policy_port(self, monitoring_policy_id=None,
-            port_id=None):
+                                      port_id=None):
 
         # Error Handling
-        if(monitoring_policy_id == None):
+        if(monitoring_policy_id is None):
             raise ValueError('monitoring_policy_id is a required parameter')
-        if(port_id == None):
+        if(port_id is None):
             raise ValueError('port_id is a required parameter')
 
         # Perform Request
         self.header['content-type'] = 'application/json'
 
         url = ('%s/monitoring_policies/%s/ports/%s' %
-            (self.base_url, monitoring_policy_id, port_id))
+               (self.base_url, monitoring_policy_id, port_id))
 
         try:
             r = requests_retry_session().delete(url, headers=self.header)
@@ -3795,32 +3936,33 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     def delete_monitoring_policy_process(self, monitoring_policy_id=None,
-            process_id=None):
+                                         process_id=None):
 
         # Error Handling
-        if(monitoring_policy_id == None):
+        if(monitoring_policy_id is None):
             raise ValueError('monitoring_policy_id is a required parameter')
-        if(process_id == None):
+        if(process_id is None):
             raise ValueError('process_id is a required parameter')
 
         # Perform Request
         self.header['content-type'] = 'application/json'
 
         url = ('%s/monitoring_policies/%s/processes/%s' %
-            (self.base_url, monitoring_policy_id, process_id))
+               (self.base_url, monitoring_policy_id, process_id))
 
         try:
             r = requests_retry_session().delete(url, headers=self.header)
@@ -3828,32 +3970,33 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     def detach_monitoring_policy_server(self, monitoring_policy_id=None,
-            server_id=None):
+                                        server_id=None):
 
         # Error Handling
-        if(monitoring_policy_id == None):
+        if(monitoring_policy_id is None):
             raise ValueError('monitoring_policy_id is a required parameter')
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter')
 
         # Perform Request
         self.header['content-type'] = 'application/json'
 
         url = ('%s/monitoring_policies/%s/servers/%s' %
-            (self.base_url, monitoring_policy_id, server_id))
+               (self.base_url, monitoring_policy_id, server_id))
 
         try:
             r = requests_retry_session().delete(url, headers=self.header)
@@ -3861,14 +4004,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -3876,21 +4020,22 @@ class OneAndOneService(object):
     # 'POST' Methods
 
     def create_monitoring_policy(self, monitoring_policy=None,
-            thresholds=None, ports=None, processes=None):
+                                 thresholds=None, ports=None, processes=None):
 
         # Error Handling
-        if(monitoring_policy == None):
+        if(monitoring_policy is None):
             raise ValueError(('monitoring_policy is a required parameter. '
                               'Make sure you pass a MonitoringPolicy object.'))
-        if(thresholds == None):
+        if(thresholds is None):
             raise ValueError(('thresholds is a required parameter.  Make '
                               'sure you pass a list with all 5 Threshold '
                               'objects(cpu, ram, disk, transfer, '
                               'internal_ping).'))
-        if(ports == None):
-            raise ValueError(('ports is a required parameter.  Make sure '
-                              'you pass a list with at least one Port object.'))
-        if(processes == None):
+        if(ports is None):
+            raise ValueError(
+                ('ports is a required parameter.  Make sure '
+                 'you pass a list with at least one Port object.'))
+        if(processes is None):
             raise ValueError(('processes is a required parameter.  Make '
                               'sure you pass a list with at least one '
                               'Process object.'))
@@ -3932,15 +4077,16 @@ class OneAndOneService(object):
 
         try:
             r = requests_retry_session().post(url, headers=self.header,
-                    json=monitoring_policy.specs)
+                                              json=monitoring_policy.specs)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
-            # Assign new monitoring_policy_id back to calling MonitoringPolicy object
+            # Assign new monitoring_policy_id back to calling MonitoringPolicy
+            # object
             response = r.json()
 
             monitoring_policy.specs.update(monitoring_policy_id=response['id'])
@@ -3949,8 +4095,9 @@ class OneAndOneService(object):
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -3958,9 +4105,9 @@ class OneAndOneService(object):
     def add_port(self, monitoring_policy_id=None, ports=None):
 
         # Error Handling
-        if(monitoring_policy_id == None):
+        if(monitoring_policy_id is None):
             raise ValueError('monitoring_policy_id is a required parameter')
-        if(ports == None):
+        if(ports is None):
             raise ValueError(('ports is a required parameter. Make sure you '
                               'send in a list with at least one Port object'))
 
@@ -3974,7 +4121,7 @@ class OneAndOneService(object):
         data = {'ports': new_ports}
 
         url = ('%s/monitoring_policies/%s/ports' %
-            (self.base_url, monitoring_policy_id))
+               (self.base_url, monitoring_policy_id))
 
         try:
             r = requests_retry_session().post(url, headers=self.header, json=data)
@@ -3982,14 +4129,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -3997,9 +4145,9 @@ class OneAndOneService(object):
     def add_process(self, monitoring_policy_id=None, processes=None):
 
         # Error Handling
-        if(monitoring_policy_id == None):
+        if(monitoring_policy_id is None):
             raise ValueError('monitoring_policy_id is a required parameter')
-        if(processes == None):
+        if(processes is None):
             raise ValueError(('processes is a required parameter. Make '
                               'sure you send in a list with at least one '
                               'Process object'))
@@ -4014,7 +4162,7 @@ class OneAndOneService(object):
         data = {'processes': new_processes}
 
         url = ('%s/monitoring_policies/%s/processes' %
-            (self.base_url, monitoring_policy_id))
+               (self.base_url, monitoring_policy_id))
 
         try:
             r = requests_retry_session().post(url, headers=self.header, json=data)
@@ -4022,25 +4170,26 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     def attach_monitoring_policy_server(self, monitoring_policy_id=None,
-            servers=None):
+                                        servers=None):
 
         # Error Handling
-        if(monitoring_policy_id == None):
+        if(monitoring_policy_id is None):
             raise ValueError('monitoring_policy_id is a required parameter')
-        if(servers == None):
+        if(servers is None):
             raise ValueError(('servers is a required parameter. Make sure '
                               'you send in a list with at least one '
                               'AttachServer object'))
@@ -4055,7 +4204,7 @@ class OneAndOneService(object):
         data = {'servers': add_servers}
 
         url = ('%s/monitoring_policies/%s/servers' %
-            (self.base_url, monitoring_policy_id))
+               (self.base_url, monitoring_policy_id))
 
         try:
             r = requests_retry_session().post(url, headers=self.header, json=data)
@@ -4063,47 +4212,53 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     # 'PUT' Methods
 
-    def modify_monitoring_policy(self, monitoring_policy_id=None,
-            monitoring_policy=None, thresholds=None, test=False):
+    def modify_monitoring_policy(
+            self,
+            monitoring_policy_id=None,
+            monitoring_policy=None,
+            thresholds=None,
+            test=False):
 
         try:
             # Error Handling
-            if(monitoring_policy_id == None):
-                raise ValueError('monitoring_policy_id is a required parameter')
+            if(monitoring_policy_id is None):
+                raise ValueError(
+                    'monitoring_policy_id is a required parameter')
 
             # Use flag to skip this live API call when running unit test
             if(test == False):
                 # Make request for existing monitoring policy object
                 json = self.get_monitoring_policy(
-                        monitoring_policy_id=monitoring_policy_id)
+                    monitoring_policy_id=monitoring_policy_id)
 
                 # Update policy specs with new values, if necessary.
                 if(monitoring_policy):
                     if(json['name'] != monitoring_policy.specs['name']):
-                        if(monitoring_policy.specs['name'] != None):
+                        if(monitoring_policy.specs['name'] is not None):
                             json['name'] = monitoring_policy.specs['name']
 
                     if(json['description'] !=
-                        monitoring_policy.specs['description']):
-                        if(monitoring_policy.specs['description'] != None):
+                            monitoring_policy.specs['description']):
+                        if(monitoring_policy.specs['description'] is not None):
                             json['description'] = monitoring_policy.specs['description']
 
                     if(json['email'] != monitoring_policy.specs['email']):
-                        if(monitoring_policy.specs['email'] != None):
+                        if(monitoring_policy.specs['email'] is not None):
                             json['email'] = monitoring_policy.specs['email']
 
                 # Unpack thresholds
@@ -4124,7 +4279,7 @@ class OneAndOneService(object):
 
                     # Compare all threshold values and update, if necessary.
                     threshold_entities = ['cpu', 'ram', 'disk', 'transfer',
-                        'internal_ping']
+                                          'internal_ping']
 
                     for value in threshold_entities:
 
@@ -4154,38 +4309,41 @@ class OneAndOneService(object):
                 }
 
                 url = ('%s/monitoring_policies/%s' %
-                    (self.base_url, monitoring_policy_id))
+                       (self.base_url, monitoring_policy_id))
 
                 r = requests_retry_session().put(url, headers=self.header, json=data)
 
             else:
                 # Mock Request for Unit Testing
-                r = requests_retry_session().put(self.base_url + '/monitoring_policies/%s' %
+                r = requests_retry_session().put(
+                    self.base_url + '/monitoring_policies/%s' %
                     (monitoring_policy_id), headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     def modify_port(self, monitoring_policy_id=None, port_id=None, port=None,
-            test=False):
+                    test=False):
 
         try:
             # Error Handling
-            if(monitoring_policy_id == None):
-                raise ValueError('monitoring_policy_id is a required parameter')
-            if(port_id == None):
+            if(monitoring_policy_id is None):
+                raise ValueError(
+                    'monitoring_policy_id is a required parameter')
+            if(port_id is None):
                 raise ValueError('port_id is a required parameter')
 
             # Use flag to skip this live API call when running unit test
@@ -4197,49 +4355,52 @@ class OneAndOneService(object):
 
                 # Update port object with new values, if necessary.
                 if(json['alert_if'] != port.specs['alert_if']):
-                    if(port.specs['alert_if'] != None):
+                    if(port.specs['alert_if'] is not None):
                         json['alert_if'] = port.specs['alert_if']
 
                 if(json['email_notification'] != port.specs['email_notification']):
-                    if(port.specs['email_notification'] != None):
+                    if(port.specs['email_notification'] is not None):
                         json['email_notification'] = port.specs['email_notification']
 
                 # Perform Request
                 data = {'ports': json}
 
                 url = ('%s/monitoring_policies/%s/ports/%s' %
-                    (self.base_url, monitoring_policy_id, port_id))
+                       (self.base_url, monitoring_policy_id, port_id))
 
                 r = requests_retry_session().put(url, headers=self.header, json=data)
 
             else:
                 # Mock Request for Unit Testing
-                r = requests_retry_session().put(self.base_url + '/monitoring_policies/%s/ports/%s' %
-                        (monitoring_policy_id, port_id), headers=self.header)
+                r = requests_retry_session().put(
+                    self.base_url + '/monitoring_policies/%s/ports/%s' %
+                    (monitoring_policy_id, port_id), headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     def modify_process(self, monitoring_policy_id=None, process_id=None,
-            process=None, test=False):
+                       process=None, test=False):
 
         try:
             # Error Handling
-            if(monitoring_policy_id == None):
-                raise ValueError('monitoring_policy_id is a required parameter')
-            if(process_id == None):
+            if(monitoring_policy_id is None):
+                raise ValueError(
+                    'monitoring_policy_id is a required parameter')
+            if(process_id is None):
                 raise ValueError('process_id is a required parameter')
 
             # Use flag to skip this live API call when running unit test
@@ -4252,56 +4413,65 @@ class OneAndOneService(object):
 
                 # Update process object with new values, if necessary.
                 if(json['alert_if'] != process.process_set['alert_if']):
-                    if(process.process_set['alert_if'] != None):
+                    if(process.process_set['alert_if'] is not None):
                         json['alert_if'] = process.process_set['alert_if']
 
                 if(json['email_notification'] !=
-                    process.process_set['email_notification']):
-                    if(process.process_set['email_notification'] != None):
+                        process.process_set['email_notification']):
+                    if(process.process_set['email_notification'] is not None):
                         json['email_notification'] = process.process_set['email_notification']
 
                 # Perform Request
                 data = {'processes': json}
 
                 url = ('%s/monitoring_policies/%s/processes/%s' %
-                    (self.base_url, monitoring_policy_id, process_id))
+                       (self.base_url, monitoring_policy_id, process_id))
 
                 r = requests_retry_session().put(url, headers=self.header, json=data)
 
             else:
                 # Mock Request for Unit Testing
-                r = requests_retry_session().put(self.base_url + '/monitoring_policies/%s/processes/%s' %
+                r = requests_retry_session().put(
+                    self.base_url + '/monitoring_policies/%s/processes/%s' %
                     (monitoring_policy_id, process_id), headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
-
 
     # Log Functions
 
     # 'GET' Methods
 
-    def list_logs(self, page=None, per_page=None, sort=None, q=None,
-            fields=None, period='LAST_24H', start_date=None, end_date=None):
+    def list_logs(
+            self,
+            page=None,
+            per_page=None,
+            sort=None,
+            q=None,
+            fields=None,
+            period='LAST_24H',
+            start_date=None,
+            end_date=None):
 
         # Error Handling
         if(period == 'CUSTOM'):
-            if(start_date == None):
+            if(start_date is None):
                 raise ValueError(('start_date parameter is required when '
                                   'using CUSTOM period'))
-            if(end_date == None):
+            if(end_date is None):
                 raise ValueError(('end_date parameter is required when '
                                   'using CUSTOM period'))
 
@@ -4325,14 +4495,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -4340,7 +4511,7 @@ class OneAndOneService(object):
     def get_log(self, log_id=None):
 
         # Error Handling
-        if(log_id == None):
+        if(log_id is None):
             raise ValueError('log_id parameter is required')
 
         # Perform Request
@@ -4352,25 +4523,25 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
-
 
     # User Functions
 
     # 'GET' Methods
 
     def list_users(self, page=None, per_page=None, sort=None, q=None,
-            fields=None):
+                   fields=None):
 
         # Perform Request
         parameters = {
@@ -4389,14 +4560,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -4404,7 +4576,7 @@ class OneAndOneService(object):
     def get_user(self, user_id=None):
 
         # Error Handling
-        if(user_id == None):
+        if(user_id is None):
             raise ValueError('user_id is a required parameter')
 
         # Perform Request
@@ -4416,14 +4588,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -4431,7 +4604,7 @@ class OneAndOneService(object):
     def api_info(self, user_id=None):
 
         # Error Handling
-        if(user_id == None):
+        if(user_id is None):
             raise ValueError('user_id is a required parameter')
 
         # Perform Request
@@ -4443,14 +4616,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -4458,7 +4632,7 @@ class OneAndOneService(object):
     def show_api_key(self, user_id=None):
 
         # Error Handling
-        if(user_id == None):
+        if(user_id is None):
             raise ValueError('user_id is a required parameter')
 
         # Perform Request
@@ -4470,14 +4644,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -4492,7 +4667,7 @@ class OneAndOneService(object):
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -4500,7 +4675,7 @@ class OneAndOneService(object):
     def ips_api_access_allowed(self, user_id=None):
 
         # Error Handling
-        if(user_id == None):
+        if(user_id is None):
             raise ValueError('user_id is a required parameter')
 
         # Perform Request
@@ -4512,28 +4687,28 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
-
     # 'POST' Methods
 
     def create_user(self, name=None, password=None, email=None,
-            description=None):
+                    description=None):
 
         # Error Handling
-        if(name == None):
+        if(name is None):
             raise ValueError('name is a required parameter')
-        if(password == None):
+        if(password is None):
             raise ValueError('password is a required parameter')
 
         # Perform Request
@@ -4552,14 +4727,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -4567,9 +4743,9 @@ class OneAndOneService(object):
     def add_user_ip(self, user_id=None, user_ips=None):
 
         # Error Handling
-        if(user_id == None):
+        if(user_id is None):
             raise ValueError('user_id is a required parameter')
-        if(user_ips == None):
+        if(user_ips is None):
             raise ValueError(('user_ips is a required parameter. Make '
                               'sure you pass a list with at least '
                               'one IP string.'))
@@ -4591,14 +4767,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -4606,14 +4783,14 @@ class OneAndOneService(object):
     # 'PUT' Methods
 
     def modify_user(self, user_id=None, description=None, email=None,
-            password=None, state=None):
+                    password=None, state=None):
 
         # Error Handling
-        if(user_id == None):
+        if(user_id is None):
             raise ValueError('user_id is a required parameter')
-        if(password != None) and (len(password) < 8):
+        if(password is not None) and (len(password) < 8):
             raise ValueError('password must be at least 8 characters long')
-        if(state != None) and (state != 'ACTIVE') and (state != 'DISABLE'):
+        if(state is not None) and (state != 'ACTIVE') and (state != 'DISABLE'):
             raise ValueError('state should be set to "ACTIVE" or "DISABLE".')
 
         # Perform Request
@@ -4632,14 +4809,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -4647,9 +4825,9 @@ class OneAndOneService(object):
     def modify_user_api(self, user_id=None, active=None):
 
         # Error Handling
-        if(user_id == None):
+        if(user_id is None):
             raise ValueError('user_id is a required parameter')
-        if(active != None) and (active != True) and (active != False):
+        if(active is not None) and (active != True) and (active != False):
             raise ValueError('active parameter only accepts a boolean value')
 
         # Perform Request
@@ -4663,14 +4841,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -4678,7 +4857,7 @@ class OneAndOneService(object):
     def change_api_key(self, user_id=None):
 
         # Error Handling
-        if(user_id == None):
+        if(user_id is None):
             raise ValueError('user_id is a required parameter')
 
         # Perform Request
@@ -4686,21 +4865,21 @@ class OneAndOneService(object):
 
         url = '%s/users/%s/api/key' % (self.base_url, user_id)
 
-
         try:
             r = requests_retry_session().put(url, headers=self.header)
 
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -4710,7 +4889,7 @@ class OneAndOneService(object):
     def delete_user(self, user_id=None):
 
         # Error Handling
-        if(user_id == None):
+        if(user_id is None):
             raise ValueError('user_id is a required parameter')
 
         # Perform Request
@@ -4724,14 +4903,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -4739,9 +4919,9 @@ class OneAndOneService(object):
     def remove_user_ip(self, user_id=None, ip=None):
 
         # Error Handling
-        if(user_id == None):
+        if(user_id is None):
             raise ValueError('user_id is a required parameter')
-        if(ip == None):
+        if(ip is None):
             raise ValueError('ip is a required parameter')
 
         # Perform Request
@@ -4755,32 +4935,40 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
-
 
     # Usage Functions
 
     # 'GET' Methods
 
-    def list_usages(self, page=None, per_page=None, sort=None, q=None,
-            fields=None, period='LAST_24H', start_date=None, end_date=None):
+    def list_usages(
+            self,
+            page=None,
+            per_page=None,
+            sort=None,
+            q=None,
+            fields=None,
+            period='LAST_24H',
+            start_date=None,
+            end_date=None):
 
         # Error Handling
         if(period == 'CUSTOM'):
-            if(start_date == None):
+            if(start_date is None):
                 raise ValueError(('start_date parameter is required when '
                                   'using CUSTOM period'))
-            if(end_date == None):
+            if(end_date is None):
                 raise ValueError(('end_date parameter is required when '
                                   'using CUSTOM period'))
 
@@ -4804,14 +4992,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -4826,7 +5015,7 @@ class OneAndOneService(object):
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -4836,7 +5025,7 @@ class OneAndOneService(object):
     # 'GET' Methods
 
     def list_recovery_images(self, page=None, per_page=None, sort=None,
-            q=None, fields=None):
+                             q=None, fields=None):
 
         # Perform Request
         parameters = {
@@ -4854,15 +5043,15 @@ class OneAndOneService(object):
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
 
-    def get_recovery_image(self,image_id=None):
+    def get_recovery_image(self, image_id=None):
 
         # Error Handling
-        if(image_id == None):
+        if(image_id is None):
             raise ValueError('appliance_id is a required parameter')
 
         # Perform Request
@@ -4873,20 +5062,17 @@ class OneAndOneService(object):
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
-
-
 
     # Server Appliance Functions
 
     # 'GET' Methods
 
-
     def list_appliances(self, page=None, per_page=None, sort=None,
-            q=None, fields=None):
+                        q=None, fields=None):
 
         # Perform Request
         parameters = {
@@ -4905,14 +5091,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -4920,7 +5107,7 @@ class OneAndOneService(object):
     def get_appliance(self, appliance_id=None):
 
         # Error Handling
-        if(appliance_id == None):
+        if(appliance_id is None):
             raise ValueError('appliance_id is a required parameter')
 
         # Perform Request
@@ -4932,25 +5119,25 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
-
 
     # DVD Functions
 
     # 'GET' Methods
 
     def list_dvds(self, page=None, per_page=None, sort=None,
-            q=None, fields=None):
+                  q=None, fields=None):
 
         # Perform Request
         parameters = {
@@ -4969,14 +5156,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -4984,7 +5172,7 @@ class OneAndOneService(object):
     def get_dvd(self, iso_id=None):
 
         # Error Handling
-        if(iso_id == None):
+        if(iso_id is None):
             raise ValueError('iso_id parameter is required')
 
         # Perform Request
@@ -4996,25 +5184,25 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
-
 
     # Datacenter Functions
 
     # 'GET' Methods
 
     def list_datacenters(self, page=None, per_page=None, sort=None,
-            q=None, fields=None):
+                         q=None, fields=None):
 
         # Perform Request
         parameters = {
@@ -5033,14 +5221,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -5048,7 +5237,7 @@ class OneAndOneService(object):
     def get_datacenter(self, datacenter_id=None):
 
         # Error Handling
-        if(datacenter_id == None):
+        if(datacenter_id is None):
             raise ValueError('datacenter_id parameter is required')
 
         # Perform Request
@@ -5060,18 +5249,18 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
-
 
     # Pricing Functions
 
@@ -5088,18 +5277,18 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
-
 
     # Ping Functions
 
@@ -5116,18 +5305,18 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
-
 
     # Ping Auth Functions
 
@@ -5144,26 +5333,25 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
-
-
 
     # VPN Functions
 
     # 'GET' Methods
 
     def list_vpns(self, page=None, per_page=None, sort=None, q=None,
-            fields=None):
+                  fields=None):
 
         # Perform Request
         parameters = {
@@ -5182,14 +5370,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -5197,7 +5386,7 @@ class OneAndOneService(object):
     def get_vpn(self, vpn_id=None):
 
         # Error Handling
-        if(vpn_id == None):
+        if(vpn_id is None):
             raise ValueError('vpn_id is a required parameter')
 
         # Perform Request
@@ -5210,22 +5399,23 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
 
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
     def download_config(self, vpn_id=None, file_path=None):
         # Error Handling
-        if(vpn_id == None):
+        if(vpn_id is None):
             raise ValueError('vpn_id is a required parameter')
 
         # Perform Request
@@ -5238,7 +5428,7 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
                 body = r.json()
                 filestring = base64.b64decode(body["config_zip_file"])
@@ -5249,8 +5439,9 @@ class OneAndOneService(object):
                     return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -5274,7 +5465,7 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             # Assign new image_id back to calling Image object
@@ -5286,8 +5477,9 @@ class OneAndOneService(object):
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -5297,7 +5489,7 @@ class OneAndOneService(object):
     def delete_vpn(self, vpn_id=None):
 
         # Error Handling
-        if(vpn_id == None):
+        if(vpn_id is None):
             raise ValueError('vpn_id is a required parameter')
 
         # Perform Request
@@ -5311,14 +5503,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -5328,7 +5521,7 @@ class OneAndOneService(object):
     def modify_vpn(self, vpn_id=None, name=None, description=None):
 
         # Error Handling
-        if(vpn_id == None):
+        if(vpn_id is None):
             raise ValueError('vpn_id is a required parameter')
 
         # Perform Request
@@ -5345,25 +5538,25 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
-
 
     # Role Functions
 
     # 'GET' Methods
 
     def list_roles(self, page=None, per_page=None, sort=None, q=None,
-            fields=None):
+                   fields=None):
 
         # Perform Request
         parameters = {
@@ -5382,14 +5575,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -5397,7 +5591,7 @@ class OneAndOneService(object):
     def get_role(self, role_id=None):
 
         # Error Handling
-        if(role_id == None):
+        if(role_id is None):
             raise ValueError('role_id is a required parameter')
 
         # Perform Request
@@ -5410,14 +5604,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -5425,7 +5620,7 @@ class OneAndOneService(object):
     def permissions(self, role_id=None):
 
         # Error Handling
-        if(role_id == None):
+        if(role_id is None):
             raise ValueError('role_id is a required parameter')
 
         # Perform Request
@@ -5438,14 +5633,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -5461,7 +5657,7 @@ class OneAndOneService(object):
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -5469,7 +5665,7 @@ class OneAndOneService(object):
     def role_users(self, role_id=None):
 
         # Error Handling
-        if(role_id == None):
+        if(role_id is None):
             raise ValueError('role_id is a required parameter')
 
         # Perform Request
@@ -5482,14 +5678,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -5497,7 +5694,7 @@ class OneAndOneService(object):
     def get_role_user(self, role_id=None, user_id=None):
 
         # Error Handling
-        if(role_id == None):
+        if(role_id is None):
             raise ValueError('role_id is a required parameter')
 
         # Perform Request
@@ -5509,14 +5706,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -5538,23 +5736,23 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
-
     def add_users(self, role_id=None, users=None):
 
         # Error Handling
-        if(role_id == None):
+        if(role_id is None):
             raise ValueError('role_id is a required parameter')
 
         # Perform Request
@@ -5570,14 +5768,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -5585,7 +5784,7 @@ class OneAndOneService(object):
     def clone_role(self, role_id=None, name=None):
 
         # Error Handling
-        if(role_id == None):
+        if(role_id is None):
             raise ValueError('role_id is a required parameter')
 
         # Perform Request
@@ -5601,14 +5800,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -5618,7 +5818,7 @@ class OneAndOneService(object):
     def delete_role(self, role_id=None):
 
         # Error Handling
-        if(role_id == None):
+        if(role_id is None):
             raise ValueError('role_id is a required parameter')
 
         # Perform Request
@@ -5632,14 +5832,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -5647,7 +5848,7 @@ class OneAndOneService(object):
     def remove_user(self, role_id=None, user_id=None):
 
         # Error Handling
-        if(role_id == None):
+        if(role_id is None):
             raise ValueError('role_id is a required parameter')
 
         # Perform Request
@@ -5661,14 +5862,15 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
@@ -5676,10 +5878,10 @@ class OneAndOneService(object):
     # 'PUT' Methods
 
     def modify_role(self, role_id=None, name=None, description=None,
-        state=None):
+                    state=None):
 
         # Error Handling
-        if(role_id == None):
+        if(role_id is None):
             raise ValueError('role_id is a required parameter')
 
         # Perform Request
@@ -5697,26 +5899,41 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
 
-    def modify_permissions(self, role_id=None, servers=None, images=None,
-          shared_storages=None, firewalls=None, load_balancers=None, ips=None,
-          private_networks=None, vpns=None, monitoring_centers=None,
-          monitoring_policies=None, backups=None, logs=None, users=None,
-          roles=None, usages=None, interactive_invoices=None):
+    def modify_permissions(
+            self,
+            role_id=None,
+            servers=None,
+            images=None,
+            shared_storages=None,
+            firewalls=None,
+            load_balancers=None,
+            ips=None,
+            private_networks=None,
+            vpns=None,
+            monitoring_centers=None,
+            monitoring_policies=None,
+            backups=None,
+            logs=None,
+            users=None,
+            roles=None,
+            usages=None,
+            interactive_invoices=None):
 
         # Error Handling
-        if(role_id == None):
+        if(role_id is None):
             raise ValueError('role_id is a required parameter')
 
         # Perform Request
@@ -5747,25 +5964,25 @@ class OneAndOneService(object):
             # Handle Potential Response Errors
             if r.status_code not in self.success_codes:
                 error_message = ('Error Code: %s. Error Message: %s.' %
-                    (r.status_code, r.text))
+                                 (r.status_code, r.text))
                 raise Exception(error_message)
 
             return r.json()
         except http_client.HTTPException:
             if r is not None:
-                error_message = ('Error Code: %s. Error Message: %s. Response Headers :%s' %
-                                 (r.status_code, r.text, r.headers))
+                error_message = (
+                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
+                    (r.status_code, r.text, r.headers))
                 raise Exception(error_message)
             else:
                 raise
-
 
     # Block Storage Functions
 
     # 'GET' Methods
 
     def list_block_storages(self, page=None, per_page=None, sort=None,
-            q=None, fields=None):
+                            q=None, fields=None):
 
         # Perform Request
         parameters = {
@@ -5783,7 +6000,7 @@ class OneAndOneService(object):
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -5791,7 +6008,7 @@ class OneAndOneService(object):
     def get_block_storage(self, block_storage_id=None):
 
         # Error Handling
-        if(block_storage_id == None):
+        if(block_storage_id is None):
             raise ValueError('block_storage_id is a required parameter')
 
         # Perform Request
@@ -5802,7 +6019,7 @@ class OneAndOneService(object):
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -5827,7 +6044,7 @@ class OneAndOneService(object):
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         # Assign new block_storage_id back to calling BlockStorage object
@@ -5839,26 +6056,26 @@ class OneAndOneService(object):
         return r.json()
 
     def attach_block_storage(self, block_storage_id=None,
-            server_id=None):
+                             server_id=None):
 
         # Error Handling
-        if(block_storage_id == None):
+        if(block_storage_id is None):
             raise ValueError('block_storage_id is a required parameter')
-        if(server_id == None):
+        if(server_id is None):
             raise ValueError('server_id is a required parameter.')
 
         # Perform Request
         data = {'server': server_id}
 
         url = ('%s/block_storages/%s/server' %
-            (self.base_url, block_storage_id))
+               (self.base_url, block_storage_id))
 
         r = requests_retry_session().post(url, headers=self.header, json=data)
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -5866,10 +6083,10 @@ class OneAndOneService(object):
     # 'PUT' Methods
 
     def modify_block_storage(self, block_storage_id=None, name=None,
-            description=None, size=None):
+                             description=None, size=None):
 
         # Error Handling
-        if(block_storage_id == None):
+        if(block_storage_id is None):
             raise ValueError('block_storage_id is a required parameter')
 
         # Perform Request
@@ -5886,7 +6103,7 @@ class OneAndOneService(object):
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -5896,7 +6113,7 @@ class OneAndOneService(object):
     def delete_block_storage(self, block_storage_id=None):
 
         # Error Handling
-        if(block_storage_id == None):
+        if(block_storage_id is None):
             raise ValueError('block_storage_id is a required parameter')
 
         # Perform Request
@@ -5909,7 +6126,7 @@ class OneAndOneService(object):
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -5917,32 +6134,31 @@ class OneAndOneService(object):
     def detach_block_storage(self, block_storage_id=None):
 
         # Error Handling
-        if(block_storage_id == None):
+        if(block_storage_id is None):
             raise ValueError('block_storage_id is a required parameter')
 
         # Perform Request
         self.header['content-type'] = 'application/json'
 
         url = ('%s/block_storages/%s/server' %
-            (self.base_url, block_storage_id))
+               (self.base_url, block_storage_id))
 
         r = requests_retry_session().delete(url, headers=self.header)
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
-
 
     # Ssh Key Functions
 
     # 'GET' Methods
 
     def list_ssh_keys(self, page=None, per_page=None, sort=None, q=None,
-            fields=None):
+                      fields=None):
 
         # Perform Request
         parameters = {
@@ -5960,7 +6176,7 @@ class OneAndOneService(object):
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -5968,7 +6184,7 @@ class OneAndOneService(object):
     def get_ssh_key(self, ssh_key_id=None):
 
         # Error Handling
-        if(ssh_key_id == None):
+        if(ssh_key_id is None):
             raise ValueError('ssh_key_id is a required parameter')
 
         # Perform Request
@@ -5980,7 +6196,7 @@ class OneAndOneService(object):
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -5997,7 +6213,7 @@ class OneAndOneService(object):
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         # Assign new ssh_key_id back to calling SshKey object
@@ -6013,7 +6229,7 @@ class OneAndOneService(object):
     def delete_ssh_key(self, ssh_key_id=None):
 
         # Error Handling
-        if(ssh_key_id == None):
+        if(ssh_key_id is None):
             raise ValueError('ssh_key_id is a required parameter')
 
         # Perform Request
@@ -6026,7 +6242,7 @@ class OneAndOneService(object):
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6036,7 +6252,7 @@ class OneAndOneService(object):
     def modify_ssh_key(self, ssh_key_id=None, name=None, description=None):
 
         # Error Handling
-        if(ssh_key_id == None):
+        if(ssh_key_id is None):
             raise ValueError('ssh_key_id is a required parameter')
 
         # Perform Request
@@ -6052,7 +6268,7 @@ class OneAndOneService(object):
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6063,13 +6279,29 @@ class OneAndOneService(object):
 class Server(object):
 
     # Init Function
-    def __init__(self, name=None, description=None,
-                 fixed_instance_size_id=None, vcore=None, cores_per_processor=None,
-                 ram=None, appliance_id=None, password=None, power_on=None,
-                 firewall_policy_id=None, ip_id=None, load_balancer_id=None,
-                 monitoring_policy_id=None, datacenter_id=None, rsa_key=None,
-                 private_network_id=None, server_type=None,public_key=None, baremetal_model_id=None,
-                 ipv6_range=None, hostname=None):
+    def __init__(
+            self,
+            name=None,
+            description=None,
+            fixed_instance_size_id=None,
+            vcore=None,
+            cores_per_processor=None,
+            ram=None,
+            appliance_id=None,
+            password=None,
+            power_on=None,
+            firewall_policy_id=None,
+            ip_id=None,
+            load_balancer_id=None,
+            monitoring_policy_id=None,
+            datacenter_id=None,
+            rsa_key=None,
+            private_network_id=None,
+            server_type=None,
+            public_key=None,
+            baremetal_model_id=None,
+            ipv6_range=None,
+            hostname=None):
 
         self.first_password = None
         self.first_ip = None
@@ -6082,7 +6314,7 @@ class Server(object):
                 'vcore': vcore,
                 'cores_per_processor': cores_per_processor,
                 'ram': ram,
-                'baremetal_model_id':baremetal_model_id
+                'baremetal_model_id': baremetal_model_id
             },
             'appliance_id': appliance_id,
             'password': password,
@@ -6095,50 +6327,63 @@ class Server(object):
             'rsa_key': rsa_key,
             'private_network_id': private_network_id,
             'server_type': server_type,
- 			'public_key': public_key,
+            'public_key': public_key,
             'ipv6_range': ipv6_range,
             'hostname': hostname
         }
 
         self.base_url = 'https://cloudpanel-api.1and1.com/v1'
         self.success_codes = (200, 201, 202)
-        self.good_states = ('ACTIVE', 'ENABLED', 'POWERED_ON', 'POWERED_OFF', 'ON RECOVERY')
+        self.good_states = (
+            'ACTIVE',
+            'ENABLED',
+            'POWERED_ON',
+            'POWERED_OFF',
+            'ON RECOVERY')
 
     def __repr__(self):
-        return ('Server: name=%s, description=%s, fixed_instance_size_id=%s, '
-                'vcore=%s, cores_per_processor=%s, ram=%s, baremetal_model_id=%s, appliance_id=%s, '
-                'password=%s, power_on=%s, firewall_policy_id=%s, ip_id=%s, '
-                'load_balancer_id=%s, monitoring_policy_id=%s, '
-                'rsa_key=%s, datacenter_id=%s, first_password=%s, '
-                'first_ip=%s, public_key=%s, server_type=%s, ipv6_range=%s, hostname=%s' %
-                (self.specs['name'], self.specs['description'],
-                 self.specs['hardware']['fixed_instance_size_id'],
-                 self.specs['hardware']['vcore'],
-                 self.specs['hardware']['cores_per_processor'],
-                 self.specs['hardware']['ram'],
-                 self.specs['hardware']['baremetal_model_id'],
-                 self.specs['appliance_id'], self.specs['password'],
-                 self.specs['power_on'], self.specs['firewall_policy_id'],
-                 self.specs['ip_id'], self.specs['load_balancer_id'],
-                 self.specs['monitoring_policy_id'],
-                 self.specs['rsa_key'], self.specs['datacenter_id'],
-                 self.first_password, self.first_ip,
-                 self.specs['server_type'],
-                 self.specs['ipv6_range'],
-                 self.specs['hostname'],))
+        return (
+            'Server: name=%s, description=%s, fixed_instance_size_id=%s, '
+            'vcore=%s, cores_per_processor=%s, ram=%s, baremetal_model_id=%s, appliance_id=%s, '
+            'password=%s, power_on=%s, firewall_policy_id=%s, ip_id=%s, '
+            'load_balancer_id=%s, monitoring_policy_id=%s, '
+            'rsa_key=%s, datacenter_id=%s, first_password=%s, '
+            'first_ip=%s, public_key=%s, server_type=%s, ipv6_range=%s, hostname=%s' %
+            (self.specs['name'],
+             self.specs['description'],
+             self.specs['hardware']['fixed_instance_size_id'],
+             self.specs['hardware']['vcore'],
+             self.specs['hardware']['cores_per_processor'],
+             self.specs['hardware']['ram'],
+             self.specs['hardware']['baremetal_model_id'],
+             self.specs['appliance_id'],
+             self.specs['password'],
+             self.specs['power_on'],
+             self.specs['firewall_policy_id'],
+             self.specs['ip_id'],
+             self.specs['load_balancer_id'],
+             self.specs['monitoring_policy_id'],
+             self.specs['rsa_key'],
+             self.specs['datacenter_id'],
+             self.first_password,
+             self.first_ip,
+             self.specs['server_type'],
+             self.specs['ipv6_range'],
+             self.specs['hostname'],
+             ))
 
     def get(self):
 
         # Perform Request
         url = ('%s/servers/%s' %
-            (self.base_url, self.specs['server_id']))
+               (self.base_url, self.specs['server_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6147,14 +6392,14 @@ class Server(object):
 
         # Perform Request
         url = ('%s/servers/%s/hardware' %
-            (self.base_url, self.specs['server_id']))
+               (self.base_url, self.specs['server_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6163,14 +6408,14 @@ class Server(object):
 
         # Perform Request
         url = ('%s/servers/%s/hardware/hdds' %
-            (self.base_url, self.specs['server_id']))
+               (self.base_url, self.specs['server_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6179,14 +6424,14 @@ class Server(object):
 
         # Perform Request
         url = ('%s/servers/%s/image' %
-            (self.base_url, self.specs['server_id']))
+               (self.base_url, self.specs['server_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6195,14 +6440,14 @@ class Server(object):
 
         # Perform Request
         url = ('%s/servers/%s/ips' %
-            (self.base_url, self.specs['server_id']))
+               (self.base_url, self.specs['server_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6211,14 +6456,14 @@ class Server(object):
 
         # Perform Request
         url = ('%s/servers/%s/status' %
-            (self.base_url, self.specs['server_id']))
+               (self.base_url, self.specs['server_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6227,14 +6472,14 @@ class Server(object):
 
         # Perform Request
         url = ('%s/servers/%s/dvd' %
-            (self.base_url, self.specs['server_id']))
+               (self.base_url, self.specs['server_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6243,14 +6488,14 @@ class Server(object):
 
         # Perform Request
         url = ('%s/servers/%s/private_networks' %
-            (self.base_url, self.specs['server_id']))
+               (self.base_url, self.specs['server_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6259,14 +6504,14 @@ class Server(object):
 
         # Perform Request
         url = ('%s/servers/%s/snapshots' %
-            (self.base_url, self.specs['server_id']))
+               (self.base_url, self.specs['server_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6288,13 +6533,14 @@ class Server(object):
         percent = response['status']['percent']
 
         # Keep polling the server's status until good
-        while (server_state not in self.good_states) or (percent != None):
+        while (server_state not in self.good_states) or (percent is not None):
 
             # Wait 15 seconds before polling again
             time.sleep(interval)
 
             # Check server status again
-            r = requests_retry_session().get(url, headers=self.specs['api_token'])
+            r = requests_retry_session().get(
+                url, headers=self.specs['api_token'])
             response = r.json()
 
             # Update server state and percent values
@@ -6326,7 +6572,7 @@ class Hdd(object):
 
     def __repr__(self):
         return ('HDD: size=%s, is_main=%s' %
-            (self.specs['size'], self.specs['is_main']))
+                (self.specs['size'], self.specs['is_main']))
 
 
 class AttachServer(object):
@@ -6339,14 +6585,24 @@ class AttachServer(object):
 
     def __repr__(self):
         return ('AttachServer: server_id=%s, rights=%s, server_ip_id=%s' %
-            (self.server_id, self.rights, self.server_ip_id))
+                (self.server_id, self.rights, self.server_ip_id))
 
 
 class Image(object):
 
     # Init Function
-    def __init__(self, server_id=None, name=None, description=None,
-            frequency=None, num_images=None, source='server', url=None, os_id=None, isotype=None, type=None):
+    def __init__(
+            self,
+            server_id=None,
+            name=None,
+            description=None,
+            frequency=None,
+            num_images=None,
+            source='server',
+            url=None,
+            os_id=None,
+            isotype=None,
+            type=None):
 
         self.server_id = server_id
         self.name = name
@@ -6365,24 +6621,32 @@ class Image(object):
         self.good_states = ('ACTIVE', 'ENABLED', 'POWERED_ON', 'POWERED_OFF')
 
     def __repr__(self):
-        return ('Image: server_id=%s, name=%s, description=%s, '
-                'frequency=%s, num_images=%s, source=%s, url=%s'
-                'os_id=%s, type=%s' % (self.server_id, self.name,
-                                       self.description, self.frequency, self.num_images,
-                                       self.source, self.url, self.os_id, self.type))
+        return (
+            'Image: server_id=%s, name=%s, description=%s, '
+            'frequency=%s, num_images=%s, source=%s, url=%s'
+            'os_id=%s, type=%s' %
+            (self.server_id,
+             self.name,
+             self.description,
+             self.frequency,
+             self.num_images,
+             self.source,
+             self.url,
+             self.os_id,
+             self.type))
 
     def get(self):
 
         # Perform Request
         url = ('%s/images/%s' %
-            (self.base_url, self.specs['image_id']))
+               (self.base_url, self.specs['image_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6409,7 +6673,8 @@ class Image(object):
             time.sleep(interval)
 
             # Check server status again
-            r = requests_retry_session().get(url, headers=self.specs['api_token'])
+            r = requests_retry_session().get(
+                url, headers=self.specs['api_token'])
             response = r.json()
 
             # Update server state and percent values
@@ -6429,7 +6694,7 @@ class SharedStorage(object):
 
     # Init Function
     def __init__(self, name=None, description=None, size=None,
-            datacenter_id=None):
+                 datacenter_id=None):
 
         self.name = name
         self.description = description
@@ -6450,14 +6715,14 @@ class SharedStorage(object):
 
         # Perform Request
         url = ('%s/shared_storages/%s' %
-            (self.base_url, self.specs['shared_storage_id']))
+               (self.base_url, self.specs['shared_storage_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6466,14 +6731,14 @@ class SharedStorage(object):
 
         # Perform Request
         url = ('%s/shared_storages/%s/servers' %
-            (self.base_url, self.specs['shared_storage_id']))
+               (self.base_url, self.specs['shared_storage_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6486,7 +6751,7 @@ class SharedStorage(object):
 
         # Check initial image status
         url = '%s/shared_storages/%s' % (self.base_url,
-            self.specs['shared_storage_id'])
+                                         self.specs['shared_storage_id'])
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
         response = r.json()
@@ -6501,7 +6766,8 @@ class SharedStorage(object):
             time.sleep(interval)
 
             # Check server status again
-            r = requests_retry_session().get(url, headers=self.specs['api_token'])
+            r = requests_retry_session().get(
+                url, headers=self.specs['api_token'])
             response = r.json()
 
             # Update server state and percent values
@@ -6521,7 +6787,7 @@ class FirewallPolicyRule(object):
 
     # Init Function
     def __init__(self, protocol=None, port_from=None, port_to=None,
-            source=None):
+                 source=None):
 
         self.rule_set = {
             'protocol': protocol,
@@ -6552,20 +6818,20 @@ class FirewallPolicy(object):
 
     def __repr__(self):
         return ('FirewallPolicy: name=%s, description=%s' %
-            (self.specs['name'], self.specs['description']))
+                (self.specs['name'], self.specs['description']))
 
     def get(self):
 
         # Perform Request
         url = ('%s/firewall_policies/%s' %
-            (self.base_url, self.specs['firewall_id']))
+               (self.base_url, self.specs['firewall_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6574,14 +6840,14 @@ class FirewallPolicy(object):
 
         # Perform Request
         url = ('%s/firewall_policies/%s/server_ips' %
-            (self.base_url, self.specs['firewall_id']))
+               (self.base_url, self.specs['firewall_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6590,14 +6856,14 @@ class FirewallPolicy(object):
 
         # Perform Request
         url = ('%s/firewall_policies/%s/rules' %
-            (self.base_url, self.specs['firewall_id']))
+               (self.base_url, self.specs['firewall_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6609,7 +6875,8 @@ class FirewallPolicy(object):
         duration = 0
 
         # Check initial image status
-        url = '%s/firewall_policies/%s' % (self.base_url, self.specs['firewall_id'])
+        url = '%s/firewall_policies/%s' % (self.base_url,
+                                           self.specs['firewall_id'])
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
         response = r.json()
@@ -6624,7 +6891,8 @@ class FirewallPolicy(object):
             time.sleep(interval)
 
             # Check server status again
-            r = requests_retry_session().get(url, headers=self.specs['api_token'])
+            r = requests_retry_session().get(
+                url, headers=self.specs['api_token'])
             response = r.json()
 
             # Update server state and percent values
@@ -6644,7 +6912,7 @@ class LoadBalancerRule(object):
 
     # Init Function
     def __init__(self, protocol=None, port_balancer=None, port_server=None,
-            source=None):
+                 source=None):
 
         self.rule_set = {
             'protocol': protocol,
@@ -6654,19 +6922,22 @@ class LoadBalancerRule(object):
         }
 
     def __repr__(self):
-        return ('LoadBalancerRule: protocol=%s, port_balancer=%s, '
-                'port_server=%s, source=%s' % (self.rule_set['protocol'],
-                    self.rule_set['port_balancer'],
-                    self.rule_set['port_server'], self.rule_set['source']))
+        return (
+            'LoadBalancerRule: protocol=%s, port_balancer=%s, '
+            'port_server=%s, source=%s' %
+            (self.rule_set['protocol'],
+             self.rule_set['port_balancer'],
+             self.rule_set['port_server'],
+             self.rule_set['source']))
 
 
 class LoadBalancer(object):
 
     # Init Function
     def __init__(self, health_check_path=None, health_check_parse=None,
-            name=None, description=None, health_check_test=None,
-            health_check_interval=None, persistence=None,
-            persistence_time=None, method=None, datacenter_id=None):
+                 name=None, description=None, health_check_test=None,
+                 health_check_interval=None, persistence=None,
+                 persistence_time=None, method=None, datacenter_id=None):
 
         self.specs = {
             'health_check_path': health_check_path,
@@ -6701,14 +6972,14 @@ class LoadBalancer(object):
 
         # Perform Request
         url = ('%s/load_balancers/%s' %
-            (self.base_url, self.specs['load_balancer_id']))
+               (self.base_url, self.specs['load_balancer_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6717,14 +6988,14 @@ class LoadBalancer(object):
 
         # Perform Request
         url = ('%s/load_balancers/%s/server_ips' %
-            (self.base_url, self.specs['load_balancer_id']))
+               (self.base_url, self.specs['load_balancer_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6733,14 +7004,14 @@ class LoadBalancer(object):
 
         # Perform Request
         url = ('%s/load_balancers/%s/rules' %
-            (self.base_url, self.specs['load_balancer_id']))
+               (self.base_url, self.specs['load_balancer_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6753,7 +7024,7 @@ class LoadBalancer(object):
 
         # Check initial image status
         url = '%s/load_balancers/%s' % (self.base_url,
-            self.specs['load_balancer_id'])
+                                        self.specs['load_balancer_id'])
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
         response = r.json()
@@ -6768,7 +7039,8 @@ class LoadBalancer(object):
             time.sleep(interval)
 
             # Check server status again
-            r = requests_retry_session().get(url, headers=self.specs['api_token'])
+            r = requests_retry_session().get(
+                url, headers=self.specs['api_token'])
             response = r.json()
 
             # Update server state and percent values
@@ -6788,7 +7060,7 @@ class PrivateNetwork(object):
 
     # Init Function
     def __init__(self, name=None, description=None, network_address=None,
-            subnet_mask=None, datacenter_id=None):
+                 subnet_mask=None, datacenter_id=None):
 
         self.name = name
         self.description = description
@@ -6803,22 +7075,23 @@ class PrivateNetwork(object):
         self.good_states = ('ACTIVE', 'ENABLED', 'POWERED_ON', 'POWERED_OFF')
 
     def __repr__(self):
-        return ('Private Network: name=%s, description=%s, network_address=%s, '
-                'subnet_mask=%s' % (self.name, self.description,
-                    self.network_address, self.subnet_mask))
+        return (
+            'Private Network: name=%s, description=%s, network_address=%s, '
+            'subnet_mask=%s' %
+            (self.name, self.description, self.network_address, self.subnet_mask))
 
     def get(self):
 
         # Perform Request
         url = ('%s/private_networks/%s' %
-            (self.base_url, self.specs['private_network_id']))
+               (self.base_url, self.specs['private_network_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6827,14 +7100,14 @@ class PrivateNetwork(object):
 
         # Perform Request
         url = ('%s/private_networks/%s/servers' %
-            (self.base_url, self.specs['private_network_id']))
+               (self.base_url, self.specs['private_network_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6847,7 +7120,7 @@ class PrivateNetwork(object):
 
         # Check initial image status
         url = '%s/private_networks/%s' % (self.base_url,
-            self.specs['private_network_id'])
+                                          self.specs['private_network_id'])
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
         response = r.json()
@@ -6862,7 +7135,8 @@ class PrivateNetwork(object):
             time.sleep(interval)
 
             # Check server status again
-            r = requests_retry_session().get(url, headers=self.specs['api_token'])
+            r = requests_retry_session().get(
+                url, headers=self.specs['api_token'])
             response = r.json()
 
             # Update server state and percent values
@@ -6903,14 +7177,14 @@ class MonitoringPolicy(object):
 
         # Perform Request
         url = ('%s/monitoring_policies/%s' %
-            (self.base_url, self.specs['monitoring_policy_id']))
+               (self.base_url, self.specs['monitoring_policy_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6919,14 +7193,14 @@ class MonitoringPolicy(object):
 
         # Perform Request
         url = ('%s/monitoring_policies/%s/ports' %
-            (self.base_url, self.specs['monitoring_policy_id']))
+               (self.base_url, self.specs['monitoring_policy_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6935,14 +7209,14 @@ class MonitoringPolicy(object):
 
         # Perform Request
         url = ('%s/monitoring_policies/%s/processes' %
-            (self.base_url, self.specs['monitoring_policy_id']))
+               (self.base_url, self.specs['monitoring_policy_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6951,14 +7225,14 @@ class MonitoringPolicy(object):
 
         # Perform Request
         url = ('%s/monitoring_policies/%s/servers' %
-            (self.base_url, self.specs['monitoring_policy_id']))
+               (self.base_url, self.specs['monitoring_policy_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -6971,7 +7245,7 @@ class MonitoringPolicy(object):
 
         # Check initial image status
         url = '%s/monitoring_policies/%s' % (self.base_url,
-            self.specs['monitoring_policy_id'])
+                                             self.specs['monitoring_policy_id'])
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
         response = r.json()
@@ -6986,7 +7260,8 @@ class MonitoringPolicy(object):
             time.sleep(interval)
 
             # Check server status again
-            r = requests_retry_session().get(url, headers=self.specs['api_token'])
+            r = requests_retry_session().get(
+                url, headers=self.specs['api_token'])
             response = r.json()
 
             # Update server state and percent values
@@ -7006,7 +7281,7 @@ class Threshold(object):
 
     # Init Function
     def __init__(self, entity=None, warning_value=None, warning_alert=None,
-            critical_value=None, critical_alert=None):
+                 critical_value=None, critical_alert=None):
 
         self.entity = entity
         self.warning_value = warning_value
@@ -7015,18 +7290,21 @@ class Threshold(object):
         self.critical_alert = critical_alert
 
     def __repr__(self):
-        return ('Threshold: entity=%s, warning_value=%s, warning_alert=%s, '
-                'critical_value=%s, critical_alert=%s' % (self.entity,
-                    self.warning_value, self.warning_alert, self.critical_value,
-                    self.critical_alert))
-    
+        return (
+            'Threshold: entity=%s, warning_value=%s, warning_alert=%s, '
+            'critical_value=%s, critical_alert=%s' %
+            (self.entity,
+             self.warning_value,
+             self.warning_alert,
+             self.critical_value,
+             self.critical_alert))
 
 
 class Port(object):
 
     # Init Function
     def __init__(self, protocol=None, port=None, alert_if=None,
-            email_notification=None):
+                 email_notification=None):
 
         self.specs = {
             'protocol': protocol,
@@ -7036,10 +7314,13 @@ class Port(object):
         }
 
     def __repr__(self):
-        return ('Port: protocol=%s, port=%s, alert_if=%s, '
-                'email_notification=%s' % (self.specs['protocol'],
-                    self.specs['port'], self.specs['alert_if'],
-                    self.specs['email_notification']))
+        return (
+            'Port: protocol=%s, port=%s, alert_if=%s, '
+            'email_notification=%s' %
+            (self.specs['protocol'],
+             self.specs['port'],
+             self.specs['alert_if'],
+             self.specs['email_notification']))
 
 
 class Process(object):
@@ -7074,21 +7355,21 @@ class Vpn(object):
         self.good_states = ('ACTIVE', 'ENABLED', 'POWERED_ON', 'POWERED_OFF')
 
     def __repr__(self):
-        return ('Vpn: name=%s, description=%s, datacenter_id=%s' % (self.name,
-            self.description, self.datacenter_id))
+        return ('Vpn: name=%s, description=%s, datacenter_id=%s' %
+                (self.name, self.description, self.datacenter_id))
 
     def get(self):
 
         # Perform Request
         url = ('%s/vpns/%s' %
-            (self.base_url, self.specs['vpn_id']))
+               (self.base_url, self.specs['vpn_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -7115,7 +7396,8 @@ class Vpn(object):
             time.sleep(interval)
 
             # Check server status again
-            r = requests_retry_session().get(url, headers=self.specs['api_token'])
+            r = requests_retry_session().get(
+                url, headers=self.specs['api_token'])
             response = r.json()
 
             # Update server state and percent values
@@ -7130,11 +7412,12 @@ class Vpn(object):
 
         return {'duration': duration}
 
+
 class BlockStorage(object):
 
     # Init Function
     def __init__(self, name=None, description=None, size=None,
-            datacenter_id=None, server_id=None):
+                 datacenter_id=None, server_id=None):
 
         self.name = name
         self.description = description
@@ -7149,21 +7432,21 @@ class BlockStorage(object):
         self.good_states = ('ACTIVE', 'ENABLED', 'POWERED_ON', 'POWERED_OFF')
 
     def __repr__(self):
-        return ('Block Storage: name=%s, description=%s, size=%s, server_id=%s' %
-                (self.name, self.description, self.size, self.datacenter_id, self.server_id))
+        return ('Block Storage: name=%s, description=%s, size=%s, server_id=%s' % (
+            self.name, self.description, self.size, self.datacenter_id, self.server_id))
 
     def get(self):
 
         # Perform Request
         url = ('%s/block_storages/%s' %
-            (self.base_url, self.specs['block_storage_id']))
+               (self.base_url, self.specs['block_storage_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -7172,14 +7455,14 @@ class BlockStorage(object):
 
         # Perform Request
         url = ('%s/block_storages/%s/server' %
-            (self.base_url, self.specs['block_storage_id']))
+               (self.base_url, self.specs['block_storage_id']))
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
 
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -7192,7 +7475,7 @@ class BlockStorage(object):
 
         # Check initial block storage status
         url = '%s/block_storages/%s' % (self.base_url,
-            self.specs['block_storage_id'])
+                                        self.specs['block_storage_id'])
 
         r = requests_retry_session().get(url, headers=self.specs['api_token'])
         response = r.json()
@@ -7207,7 +7490,8 @@ class BlockStorage(object):
             time.sleep(interval)
 
             # Check block storage status again
-            r = requests_retry_session().get(url, headers=self.specs['api_token'])
+            r = requests_retry_session().get(
+                url, headers=self.specs['api_token'])
             response = r.json()
 
             # Update block storage state and percent values
@@ -7221,6 +7505,7 @@ class BlockStorage(object):
                 return
 
         return {'duration': duration}
+
 
 class SshKey(object):
 
@@ -7263,7 +7548,7 @@ class SshKey(object):
         # Handle Potential Response Errors
         if r.status_code not in self.success_codes:
             error_message = ('Error Code: %s. Error Message: %s.' %
-                (r.status_code, r.text))
+                             (r.status_code, r.text))
             raise Exception(error_message)
 
         return r.json()
@@ -7291,7 +7576,8 @@ class SshKey(object):
             time.sleep(interval)
 
             # Check ssh_key status again
-            r = requests_retry_session().get(url, headers=self.specs['api_token'])
+            r = requests_retry_session().get(
+                url, headers=self.specs['api_token'])
             response = r.json()
 
             # Update ssh_key state and percent values
