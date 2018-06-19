@@ -6032,7 +6032,8 @@ class OneAndOneService(object):
             'description': block_storage.description,
             'size': block_storage.size,
             'server': block_storage.server_id,
-            'datacenter_id': block_storage.datacenter_id
+            'datacenter_id': block_storage.datacenter_id,
+            'execution_group': block_storage.execution_group
         }
 
         url = '%s/block_storages' % self.base_url
@@ -6299,7 +6300,8 @@ class Server(object):
             public_key=None,
             baremetal_model_id=None,
             ipv6_range=None,
-            hostname=None):
+            hostname=None,
+            execution_group=None):
 
         self.first_password = None
         self.first_ip = None
@@ -6327,7 +6329,8 @@ class Server(object):
             'server_type': server_type,
             'public_key': public_key,
             'ipv6_range': ipv6_range,
-            'hostname': hostname
+            'hostname': hostname,
+            'execution_group': execution_group
         }
 
         self.base_url = 'https://cloudpanel-api.1and1.com/v1'
@@ -6346,7 +6349,7 @@ class Server(object):
             'password=%s, power_on=%s, firewall_policy_id=%s, ip_id=%s, '
             'load_balancer_id=%s, monitoring_policy_id=%s, '
             'rsa_key=%s, datacenter_id=%s, first_password=%s, '
-            'first_ip=%s, public_key=%s, server_type=%s, ipv6_range=%s, hostname=%s' %
+            'first_ip=%s, public_key=%s, server_type=%s, ipv6_range=%s, execution_group=%s, hostname=%s' %
             (self.specs['name'],
              self.specs['description'],
              self.specs['hardware']['fixed_instance_size_id'],
@@ -6367,6 +6370,7 @@ class Server(object):
              self.first_ip,
              self.specs['server_type'],
              self.specs['ipv6_range'],
+             self.specs['execution_group'],
              self.specs['hostname'],
              ))
 
@@ -7415,13 +7419,14 @@ class BlockStorage(object):
 
     # Init Function
     def __init__(self, name=None, description=None, size=None,
-                 datacenter_id=None, server_id=None):
+                 datacenter_id=None, server_id=None, execution_group=None):
 
         self.name = name
         self.description = description
         self.size = size
         self.datacenter_id = datacenter_id
         self.server_id = server_id
+        self.execution_group = execution_group
 
         self.specs = {}
 
@@ -7430,8 +7435,8 @@ class BlockStorage(object):
         self.good_states = ('ACTIVE', 'ENABLED', 'POWERED_ON', 'POWERED_OFF')
 
     def __repr__(self):
-        return ('Block Storage: name=%s, description=%s, size=%s, server_id=%s' % (
-            self.name, self.description, self.size, self.datacenter_id, self.server_id))
+        return ('Block Storage: name=%s, description=%s, size=%s, execution_group=%s, server_id=%s' % (
+            self.name, self.description, self.size, self.datacenter_id, self.execution_group, self.server_id))
 
     def get(self):
 
