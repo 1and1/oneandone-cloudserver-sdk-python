@@ -38,14 +38,22 @@ new_firewall = client.create_firewall_policy(firewall_policy=fp1,
 print 'Creating firewall policy...'
 print fp1.wait_for()
 
+# Preapare hdds
+hdds = []
+hdd1 = Hdd(size=40, is_main=True)
+hdd2 = Hdd(size=20, is_main=False)
+hdds.append(hdd1)
+hdds.append(hdd2)
 
 # Create Server
 server1 = Server(name='Example App Server',
-  fixed_instance_size_id='65929629F35BBFBA63022008F773F3EB',
-  appliance_id='6C902E5899CC6F7ED18595EBEB542EE1',
+  vcore=2,
+  cores_per_processor=1,
+  ram=2,
+  appliance_id='C5A349786169F140BCBC335675014C08',
   datacenter_id='5091F6D8CBFEF9C26ACE957C652D5D49')
 
-new_server = client.create_server(server=server1)
+new_server = client.create_server(server=server1, hdds=hdds)
 
 ## Wait for the Server to go live
 print 'Creating new server...'
