@@ -4,7 +4,7 @@ from distutils.core import setup
 setup(
     name = "1and1",
     packages = ['oneandone'],
-    version = "1.6.0",
+    version = "1.7.3",
     author = "Tyler Burkhardt (stackpoint.io)",
     author_email = "tyler@stackpointcloud.com",
     description = ("1&1 API Client Library for Python"),
