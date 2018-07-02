@@ -6553,7 +6553,7 @@ class Server(object):
             seconds = (time.time() - start)
             duration = seconds / 60
             if duration > timeout:
-                print 'The operation timed out after %s minutes.' % timeout
+                print('The operation timed out after %s minutes.' % timeout)
                 return
 
             # Parse for first IP address
@@ -6686,7 +6686,7 @@ class Image(object):
             seconds = (time.time() - start)
             duration = seconds / 60
             if duration > timeout:
-                print 'The operation timed out after %s minutes.' % timeout
+                print('The operation timed out after %s minutes.' % timeout)
                 return
 
         return {'duration': duration}
@@ -6779,7 +6779,7 @@ class SharedStorage(object):
             seconds = (time.time() - start)
             duration = seconds / 60
             if duration > timeout:
-                print 'The operation timed out after %s minutes.' % timeout
+                print('The operation timed out after %s minutes.' % timeout)
                 return
 
         return {'duration': duration}
@@ -6904,7 +6904,7 @@ class FirewallPolicy(object):
             seconds = (time.time() - start)
             duration = seconds / 60
             if duration > timeout:
-                print 'The operation timed out after %s minutes.' % timeout
+                print('The operation timed out after %s minutes.' % timeout)
                 return
 
         return {'duration': duration}
@@ -7052,7 +7052,7 @@ class LoadBalancer(object):
             seconds = (time.time() - start)
             duration = seconds / 60
             if duration > timeout:
-                print 'The operation timed out after %s minutes.' % timeout
+                print('The operation timed out after %s minutes.' % timeout)
                 return
 
         return {'duration': duration}
@@ -7148,7 +7148,7 @@ class PrivateNetwork(object):
             seconds = (time.time() - start)
             duration = seconds / 60
             if duration > timeout:
-                print 'The operation timed out after %s minutes.' % timeout
+                print('The operation timed out after %s minutes.' % timeout)
                 return
 
         return {'duration': duration}
@@ -7273,7 +7273,7 @@ class MonitoringPolicy(object):
             seconds = (time.time() - start)
             duration = seconds / 60
             if duration > timeout:
-                print 'The operation timed out after %s minutes.' % timeout
+                print('The operation timed out after %s minutes.' % timeout)
                 return
 
         return {'duration': duration}
@@ -7409,7 +7409,7 @@ class Vpn(object):
             seconds = (time.time() - start)
             duration = seconds / 60
             if duration > timeout:
-                print 'The operation timed out after %s minutes.' % timeout
+                print('The operation timed out after %s minutes.' % timeout)
                 return
 
         return {'duration': duration}
@@ -7504,7 +7504,7 @@ class BlockStorage(object):
             seconds = (time.time() - start)
             duration = seconds / 60
             if duration > timeout:
-                print 'The operation timed out after %s minutes.' % timeout
+                print('The operation timed out after %s minutes.' % timeout)
                 return
 
         return {'duration': duration}
@@ -7590,7 +7590,7 @@ class SshKey(object):
             seconds = (time.time() - start)
             duration = seconds / 60
             if duration > timeout:
-                print 'The operation timed out after %s minutes.' % timeout
+                print('The operation timed out after %s minutes.' % timeout)
                 return
 
         return {'duration': duration}
