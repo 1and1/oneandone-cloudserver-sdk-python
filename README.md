@@ -192,14 +192,14 @@ fp1 = FirewallPolicy(name='Test Firewall Policy',
 
 
 rule1 = FirewallPolicyRule(protocol='TCP',
-                           port_from=80,
-                           port_to=80,
+                           port=80,
+                           action='allow',
                            source='0.0.0.0'
                            )
 
 rule2 = FirewallPolicyRule(protocol='UDP',
-                           port_from=443,
-                           port_to=443,
+                           port=443,
+                           action='allow',
                            source='0.0.0.0'
                            )
 

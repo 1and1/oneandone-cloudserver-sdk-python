@@ -168,19 +168,6 @@ OneAndOneService Methods
    :rtype: JSON
 
 
-.. function:: remove_firewall_server(firewall_id=None, server_ip_id=None)
-
-   Remove a server IP from a firewall policy.
-
-   :param firewall_id: the unique identifier for the firewall policy.
-   :type firewall_id: ``str``
-
-   :param server_ip_id: the unique identifier for a server's IP.  This is different from ``server_id``.
-   :type server_ip_id: ``str``
-
-   :rtype: JSON
-
-
 The "FirewallPolicy" Class
 ==========================
 
