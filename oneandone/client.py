@@ -18,7 +18,8 @@ class MyAdapter(HTTPAdapter):
     def init_poolmanager(self, connections, maxsize, block=False):
         self.poolmanager = PoolManager(num_pools=connections,
                                        maxsize=maxsize,
-                                       block=block)
+                                       block=block,
+                                       ssl_version=getattr(ssl, 'PROTOCOL_TLSv1_2', ssl.PROTOCOL_TLSv1))
 
 # Retry logic if the API fails to responde
 
@@ -38,6 +39,7 @@ def requests_retry_session(
         status_forcelist=status_forcelist,
     )
     adapter = MyAdapter(max_retries=retry)
+    session.mount('http://', adapter)
     session.mount('https://', adapter)
     return session
 
