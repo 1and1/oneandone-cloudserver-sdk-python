@@ -312,13 +312,6 @@ client = OneAndOneService('API-TOKEN')
 
 response = client.remove_ip(server_id='', ip_id='')
 
-# Remove a firewall policy from a server IP
-from oneandone.client import OneAndOneService
-
-client = OneAndOneService('API-TOKEN')
-
-response = client.remove_firewall_policy(server_id='', ip_id='')
-
 # Remove a load balancer from a server IP
 from oneandone.client import OneAndOneService
 

@@ -186,8 +186,7 @@ class TestFirewallPolicy(unittest.TestCase):
 			data = json.load(f)
 
 		firewall_id = data['id']
-		rule1 = FirewallPolicyRule(protocol=data['rules'][2]['protocol'], port_from=data['rules'][2]['port_from'], port_to=data['rules'][2]['port_to'],
-								   source=data['rules'][2]['source'])
+		rule1 = FirewallPolicyRule(protocol=data['rules'][0]['protocol'], port=data['rules'][0]['port'],action=data['rules'][0]['action'], description= data['rules'][0]['description'])
 		rules = [rule1]
 
 		responses.add(responses.POST, 'https://cloudpanel-api.1and1.com/v1/firewall_policies/%s/rules' % firewall_id,
@@ -196,29 +195,8 @@ class TestFirewallPolicy(unittest.TestCase):
 
 		r = self.client.add_firewall_policy_rule(firewall_id=firewall_id, firewall_policy_rules=rules)
 
-		self.assertEqual(r['rules'][2]['protocol'], rule1.rule_set['protocol'])
-		self.assertEqual(r['rules'][2]['port_from'], rule1.rule_set['port_from'])
-		self.assertEqual(r['rules'][2]['port_to'], rule1.rule_set['port_to'])
-		self.assertEqual(r['rules'][2]['source'], rule1.rule_set['source'])
-
-	# 'DELETE' Methods
-	@responses.activate
-	def test_remove_server_firewall(self):
-		
-		with open('mock-api/remove-ip-fp.json') as f:
-			data = json.load(f)
-
-		firewall_id = 'FIREWALL_ID'
-		server_ip_id = 'SERVER_IP_ID'
-
-		responses.add(responses.DELETE, 'https://cloudpanel-api.1and1.com/v1/firewall_policies/%s/server_ips/%s' % (firewall_id, server_ip_id),
-					  body=json.dumps(data), status=202,
-					  content_type="application/json")
-
-		r = self.client.remove_firewall_server(firewall_id=firewall_id, server_ip_id=server_ip_id)
-
-		self.assertEqual(r['state'], 'CONFIGURING')
-		self.assertEqual(r['server_ips'], [])
+		self.assertEqual(r['rules'][0]['protocol'], rule1.rule_set['protocol'])
+		self.assertEqual(r['rules'][0]['port'], rule1.rule_set['port'])
 
 	@responses.activate
 	def test_remove_firewall_rule(self):

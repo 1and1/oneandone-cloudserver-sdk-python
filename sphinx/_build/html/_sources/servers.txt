@@ -474,19 +474,6 @@ OneAndOneService Methods
    :rtype: JSON
 
 
-.. function:: remove_firewall_policy(server_id=None, ip_id=None)
-
-   Remove a firewall policy from the server's IP.
-
-   :param server_id: the unique identifier for the server.
-   :type server_id: ``str``
-
-   :param ip_id: the unique identifier for the server's IP.
-   :type ip_id: ``str``
-
-   :rtype: JSON
-
-
 .. function:: remove_load_balancer(server_id=None, ip_id=None, load_balancer_id=None)
 
    Remove a load balancer from the server's IP.
