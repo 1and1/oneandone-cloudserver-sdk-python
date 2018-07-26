@@ -550,25 +550,6 @@ class TestImage(unittest.TestCase):
         self.assertNotIn(ip_id, r['ips'])
 
     @responses.activate
-    def test_remove_firewall_policy(self):
-        with open('mock-api/remove-firewall-policy.json') as f:
-            data = json.load(f)
-
-        server_id = data['id']
-        ip_id = data['ips'][0]['id']
-
-        responses.add(responses.DELETE,
-                      'https://cloudpanel-api.1and1.com/v1/servers/%s/ips/%s/firewall_policy' % (
-                          server_id, ip_id),
-                      body=json.dumps(data), status=202,
-                      content_type="application/json")
-
-        r = self.client.remove_firewall_policy(server_id=server_id,
-                                               ip_id=ip_id)
-
-        self.assertEqual(r['ips'][0]['firewall_policy'], None)
-
-    @responses.activate
     def test_remove_load_balancer(self):
         with open('mock-api/remove-lb.json') as f:
             data = json.load(f)

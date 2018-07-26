@@ -167,20 +167,6 @@ OneAndOneService Methods
 
    :rtype: JSON
 
-
-.. function:: remove_firewall_server(firewall_id=None, server_ip_id=None)
-
-   Remove a server IP from a firewall policy.
-
-   :param firewall_id: the unique identifier for the firewall policy.
-   :type firewall_id: ``str``
-
-   :param server_ip_id: the unique identifier for a server's IP.  This is different from ``server_id``.
-   :type server_ip_id: ``str``
-
-   :rtype: JSON
-
-
 The "FirewallPolicy" Class
 ==========================
 
@@ -235,6 +221,15 @@ The "FirewallPolicyRule" Class
 
    :param source: IPs from which access is available. Setting ``0.0.0.0`` all IPs are allowed.
    :type source: ``str``
+
+   :param description: Rule description.
+   :type description: ``str``
+
+   :param action: Action to be done in the rule. Deny is only allowed with protocol ANY to deny all ports.
+   :type action: ``str``
+
+   :param port: Port or range of ports to be included in the rule. Can be used instead of port_from, port_to.
+   :type port: ``str``
 
 
 The "AttachServer" Class

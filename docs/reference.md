@@ -488,12 +488,6 @@ response = client.create_server(server=server1, hdds=hdds)
 
 `response = client.remove_ip(server_id='', ip_id='')`
 
-
-**Remove a firewall policy from the IP:**
-
-`response = client.remove_firewall_policy(server_id='', ip_id='')`
-
-
 **Remove a load balancer from the IP:**
 
 `response = client.remove_load_balancer(server_id='', ip_id='', load_balancer_id='')`
@@ -697,9 +691,9 @@ modified_storage = client.modify_shared_storage(shared_storage_id='',
 fp1 = FirewallPolicy(name='Test Firewall Policy', description='Test Description')
 
 
-rule1 = FirewallPolicyRule(protocol='TCP', port_from=80, port_to=80, source='0.0.0.0')
+rule1 = FirewallPolicyRule(protocol='TCP', port=80, source='0.0.0.0', action='allow')
 
-rule2 = FirewallPolicyRule(protocol='UDP', port_from=443, port_to=443, source='0.0.0.0')
+rule2 = FirewallPolicyRule(protocol='UDP', port=443, source='0.0.0.0', action='allow')
 
 rules = [rule1, rule2]
 
@@ -712,9 +706,9 @@ new_firewall = client.create_firewall_policy(firewall_policy=fp1, firewall_polic
 
 *Note:* `firewall_policy_rules` must receive a list with at least one `FirewallPolicyRule` object
 ```
-new_rule1 = FirewallPolicyRule(protocol='TCP', port_from=90, port_to=90, source='0.0.0.0')
+new_rule1 = FirewallPolicyRule(protocol='TCP', port=90, source='0.0.0.0', action='allow')
 
-new_rule2 = FirewallPolicyRule(protocol='TCP', port_from=333, port_to=333, source='0.0.0.0')
+new_rule2 = FirewallPolicyRule(protocol='TCP', port=333, source='0.0.0.0', action='allow')
 
 new_rules = [new_rule1, new_rule2]
 
@@ -754,15 +748,6 @@ response = client.attach_server_firewall_policy(firewall_id='', server_ips=serve
 **Remove a rule from a firewall policy:**
 
 `response = client.remove_firewall_rule(firewall_id='', rule_id='')`
-
-
-**Remove a server from a firewall policy:**
-
-*Note:* `server_ip_id` is different from `server_id`.  Use `list_server_ips()` or `get_server_ip()`
-to retreive the ID for a server IP
-
-`response = client.remove_firewall_server(firewall_id='', server_ip_id='')`
-
 
 
 ## Load Balancers

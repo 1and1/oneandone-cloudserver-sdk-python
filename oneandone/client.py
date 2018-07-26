@@ -1142,39 +1142,6 @@ class OneAndOneService(object):
             else:
                 raise
 
-    def remove_firewall_policy(self, server_id=None, ip_id=None):
-
-        # Error Handling
-        if(server_id is None):
-            raise ValueError('server_id is a required parameter')
-        if(ip_id is None):
-            raise ValueError('ip_id is a required parameter')
-
-        # Perform Request
-        self.header['content-type'] = 'application/json'
-
-        url = ('%s/servers/%s/ips/%s/firewall_policy' %
-               (self.base_url, server_id, ip_id))
-
-        try:
-            r = requests_retry_session().delete(url, headers=self.header)
-
-            # Handle Potential Response Errors
-            if r.status_code not in self.success_codes:
-                error_message = ('Error Code: %s. Error Message: %s.' %
-                                 (r.status_code, r.text))
-                raise Exception(error_message)
-
-            return r.json()
-        except http_client.HTTPException:
-            if r is not None:
-                error_message = (
-                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
-                    (r.status_code, r.text, r.headers))
-                raise Exception(error_message)
-            else:
-                raise
-
     def remove_load_balancer(self, server_id=None, ip_id=None,
                              load_balancer_id=None):
 
@@ -2523,39 +2490,6 @@ class OneAndOneService(object):
 
         url = ('%s/firewall_policies/%s/rules/%s' %
                (self.base_url, firewall_id, rule_id))
-
-        try:
-            r = requests_retry_session().delete(url, headers=self.header)
-
-            # Handle Potential Response Errors
-            if r.status_code not in self.success_codes:
-                error_message = ('Error Code: %s. Error Message: %s.' %
-                                 (r.status_code, r.text))
-                raise Exception(error_message)
-
-            return r.json()
-        except http_client.HTTPException:
-            if r is not None:
-                error_message = (
-                    'Error Code: %s. Error Message: %s. Response Headers :%s' %
-                    (r.status_code, r.text, r.headers))
-                raise Exception(error_message)
-            else:
-                raise
-
-    def remove_firewall_server(self, firewall_id=None, server_ip_id=None):
-
-        # Error Handling
-        if(firewall_id is None):
-            raise ValueError('firewall_id is a required parameter')
-        if(server_ip_id is None):
-            raise ValueError('server_ip_id is a required parameter')
-
-        # Perform Request
-        self.header['content-type'] = 'application/json'
-
-        url = ('%s/firewall_policies/%s/server_ips/%s' %
-               (self.base_url, firewall_id, server_ip_id))
 
         try:
             r = requests_retry_session().delete(url, headers=self.header)
@@ -6564,6 +6498,36 @@ class Server(object):
 
         return {'duration': duration}
 
+    def wait_deleted(self, timeout=25, interval=15):
+
+        # Capture start time
+        start = time.time()
+        duration = 0
+
+        # Check initial server status
+        url = '%s/servers/%s' % (self.base_url, self.specs['server_id'])
+
+        r = requests_retry_session().get(url, headers=self.specs['api_token'])
+        response = r.json()
+
+        # Keep polling the server's status until got 404
+        while r.status_code != 404 :
+
+            # Wait 15 seconds before polling again
+            time.sleep(interval)
+
+            # Check server status again
+            r = requests_retry_session().get(
+                url, headers=self.specs['api_token'])
+
+            # Check for timeout
+            seconds = (time.time() - start)
+            duration = seconds / 60
+            if duration > timeout:
+                print('The operation timed out after %s minutes.' % timeout)
+                return
+        return {'duration': duration}
+
 
 class Hdd(object):
 
@@ -6791,20 +6755,23 @@ class FirewallPolicyRule(object):
 
     # Init Function
     def __init__(self, protocol=None, port_from=None, port_to=None,
-                 source=None):
+                 source=None, action=None, description=None, port=None):
 
         self.rule_set = {
             'protocol': protocol,
             'port_from': port_from,
             'port_to': port_to,
-            'source': source
+            'source': source,
+            'action': action,
+            'description': description,
+            'port': port
         }
 
     def __repr__(self):
         return ('FirewallPolicyRule: protocol=%s, port_from=%s, '
-                'port_to=%s, source=%s' %
+                'port_to=%s, source=%s, action=%s, description=%s, port=%s' %
                 (self.rule_set['protocol'], self.rule_set['port_from'],
-                    self.rule_set['port_to'], self.rule_set['source']))
+                    self.rule_set['port_to'], self.rule_set['source'], self.rule_set['action'], self.rule_set['description'], self.rule_set['port']))
 
 
 class FirewallPolicy(object):
