@@ -2,7 +2,7 @@
 
 The 1&1 Python SDK is a Python library used for interacting with the 1&1 platform over the REST API.
 
-This guide will show you how to programmatically use the 1&1 library to perform common management tasks also available through the 1&1 Control Panel. For more information on the 1&1 Python SDK see the [1&1 Community Portal](https://www.1and1.com/cloud-community/).
+This guide will show you how to programmatically use the 1&1 library to perform common management tasks also available through the 1&1 Control Panel. 
 
 ## Table of Contents
 
@@ -30,8 +30,6 @@ This guide will show you how to programmatically use the 1&1 library to perform 
 ## Overview
 
 The Python Client Library wraps the latest version of the 1&1 REST API. All API operations are performed over SSL and authenticated using your 1&1 API Token. The API can be accessed within an instance running in 1&1 or directly over the Internet from any application that can send an HTTPS request and receive an HTTPS response.
-
-For more information on the 1&1 Cloud Server SDK for Python, visit the [Community Portal](https://www.1and1.com/cloud-community/).
 
 
 ## Getting Started
